@@ -169,6 +169,8 @@ class AvatarConfig:
     source_image: str
     # 描述
     description: str = ""
+    # 预置待机视频路径（Human_Choice/Human_X/idle.mp4）
+    idle_video: Optional[str] = None
     # TTS 配置档案
     tts_profile: TTSProfile = field(default_factory=TTSProfile)
     # 待机配置
@@ -184,6 +186,7 @@ class AvatarConfig:
             "name": self.name,
             "source_image": self.source_image,
             "description": self.description,
+            "idle_video": self.idle_video,
             "tts_profile": self.tts_profile.to_dict(),
             "idle_config": self.idle_config.to_dict(),
             "talking_config": self.talking_config.to_dict(),
@@ -201,6 +204,7 @@ class AvatarConfig:
             name=data["name"],
             source_image=data["source_image"],
             description=data.get("description", ""),
+            idle_video=data.get("idle_video"),
             tts_profile=TTSProfile.from_dict(tts_data) if tts_data else TTSProfile(),
             idle_config=IdleConfig.from_dict(idle_data) if idle_data else IdleConfig(),
             talking_config=TalkingConfig.from_dict(talking_data) if talking_data else TalkingConfig(),
@@ -299,12 +303,18 @@ class AvatarManager:
                 print(f"[AvatarManager] 跳过 {dir_name}：未找到源图像")
                 continue
 
+            # 查找预置待机视频
+            idle_video = self._find_idle_video(subdir)
+            if idle_video:
+                print(f"[AvatarManager] 发现待机视频: {idle_video.name}")
+
             # 创建默认配置
             avatar = AvatarConfig(
                 avatar_id=avatar_id,
                 name=f"数字人 {dir_name[6:]}" if dir_name.startswith("Human_") else dir_name,
                 source_image=str(source_image),
                 description=f"自动发现的数字人 - {dir_name}",
+                idle_video=str(idle_video) if idle_video else None,
                 tts_profile=self._create_default_tts_profile(avatar_id),
             )
 
@@ -322,6 +332,14 @@ class AvatarManager:
             matches = list(directory.glob(f"*{ext}")) + list(directory.glob(f"*{ext.upper()}"))
             if matches:
                 return matches[0]
+        return None
+
+    def _find_idle_video(self, directory: Path) -> Optional[Path]:
+        """在目录中查找预置待机视频（idle.mp4 / idle.webm）"""
+        for name in ["idle.mp4", "idle.webm"]:
+            p = directory / name
+            if p.exists():
+                return p
         return None
 
     def _create_default_tts_profile(self, avatar_id: str) -> TTSProfile:

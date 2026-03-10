@@ -246,6 +246,7 @@ async def list_avatars():
             "name": avatar.name,
             "description": avatar.description,
             "source_image": avatar.source_image,
+            "has_idle_video": bool(avatar.idle_video and os.path.exists(avatar.idle_video)),
         })
 
     return {"avatars": avatars, "current": avatar_manager.get_current_avatar().avatar_id if avatar_manager.get_current_avatar() else None}
@@ -318,7 +319,7 @@ async def get_avatar(avatar_id: str):
 
 @app.get("/idle/{avatar_id}")
 async def get_idle_video(avatar_id: str):
-    """获取待机视频"""
+    """获取待机视频（优先返回 Human_Choice/Human_X/idle.mp4）"""
     if not avatar_manager:
         raise HTTPException(status_code=500, detail="Avatar 管理器未初始化")
 
@@ -326,24 +327,29 @@ async def get_idle_video(avatar_id: str):
     if not avatar:
         raise HTTPException(status_code=404, detail=f"未找到数字人: {avatar_id}")
 
-    if not idle_manager:
-        raise HTTPException(status_code=500, detail="待机管理器未初始化")
+    # 优先返回预置待机视频
+    if avatar.idle_video and os.path.exists(avatar.idle_video):
+        ext = Path(avatar.idle_video).suffix.lower()
+        media_type = "video/webm" if ext == ".webm" else "video/mp4"
+        return FileResponse(
+            avatar.idle_video,
+            media_type=media_type,
+            filename=f"idle_{avatar_id}{ext}",
+        )
 
-    # 获取或生成待机视频
-    video_path = idle_manager.get_idle_video(avatar_id)
+    # 再尝试 idle_manager 缓存（运行时生成的）
+    if idle_manager:
+        video_path = idle_manager.get_idle_video(avatar_id)
+        if video_path and os.path.exists(video_path):
+            return FileResponse(
+                video_path,
+                media_type="video/mp4",
+                filename=f"idle_{avatar_id}.mp4",
+            )
 
-    if not video_path:
-        # 尝试生成
-        get_orchestrator()  # 确保 orchestrator 初始化
-        video_path = idle_manager.generate_idle_video(avatar_id, avatar.source_image)
-
-    if not video_path or not os.path.exists(video_path):
-        raise HTTPException(status_code=404, detail="待机视频不可用")
-
-    return FileResponse(
-        video_path,
-        media_type="video/mp4",
-        filename=f"idle_{avatar_id}.mp4",
+    raise HTTPException(
+        status_code=404,
+        detail=f"待机视频不可用，请在 digital_human/Human_Choice/{avatar_id.replace('human_', 'Human_')}/idle.mp4 放置待机视频",
     )
 
 

@@ -198,7 +198,7 @@ class IdleVideoCache:
 
     def __init__(self, cache_dir: Optional[str] = None):
         if cache_dir is None:
-            cache_dir = tempfile.gettempdir() / "digital_human_idle_cache"
+            cache_dir = Path(tempfile.gettempdir()) / "digital_human_idle_cache"
 
         self.cache_dir = Path(cache_dir)
         self.cache_dir.mkdir(parents=True, exist_ok=True)

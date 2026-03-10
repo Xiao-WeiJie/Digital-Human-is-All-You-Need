@@ -13,4 +13,5 @@ val/
 *.db
 chroma_data/
 *.pt
-
+train.js
+Psychology2e_WEB.pdf

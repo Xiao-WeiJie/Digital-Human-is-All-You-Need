@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Digital Human - 数字人交互系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="app-container">
+        <!-- 头部 -->
+        <header class="app-header">
+            <h1>Digital Human</h1>
+            <div class="connection-status" id="connectionStatus">
+                <span class="status-dot"></span>
+                <span class="status-text">未连接</span>
+            </div>
+        </header>
+
+        <!-- 主内容区 -->
+        <main class="main-content">
+            <!-- 数字人显示区 -->
+            <section class="avatar-section">
+                <div class="avatar-container">
+                    <!-- 数字人视频/图像 -->
+                    <div class="avatar-display" id="avatarDisplay">
+                        <video id="avatarVideo" autoplay loop muted playsinline>
+                            <source src="" type="video/mp4">
+                        </video>
+                        <div class="avatar-placeholder" id="avatarPlaceholder">
+                            <div class="placeholder-content">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 3c1.66 0 3 1.34 3 3s-1.34 3-3 3-3-1.34-3-3 1.34-3 3-3zm0 14.2c-2.5 0-4.71-1.28-6-3.22.03-1.99 4-3.08 6-3.08 1.99 0 5.97 1.09 6 3.08-1.29 1.94-3.5 3.22-6 3.22z"/>
+                                </svg>
+                                <span>请选择数字人</span>
+                            </div>
+                        </div>
+                        <!-- 状态指示器 -->
+                        <div class="state-indicator" id="stateIndicator">
+                            <span class="state-icon"></span>
+                            <span class="state-text">待机</span>
+                        </div>
+                    </div>
+
+                    <!-- 数字人切换 -->
+                    <div class="avatar-switcher">
+                        <label>选择数字人</label>
+                        <div class="avatar-options" id="avatarOptions">
+                            <!-- 动态填充 -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 交互区域 -->
+            <section class="interaction-section">
+                <!-- 会话历史 -->
+                <div class="conversation-panel">
+                    <div class="conversation-header">
+                        <h3>会话</h3>
+                        <button class="btn-reset" id="resetSessionBtn" title="重置会话">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M17.65 6.35C16.2 4.9 14.21 4 12 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08c-.82 2.33-3.04 4-5.65 4-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/>
+                            </svg>
+                        </button>
+                    </div>
+                    <div class="conversation-history" id="conversationHistory">
+                        <div class="welcome-message">
+                            <p>你好！我是你的数字人助手。</p>
+                            <p>你可以通过文字或语音与我交流。</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 输入区域 -->
+                <div class="input-panel">
+                    <!-- 文本输入 -->
+                    <div class="text-input-area">
+                        <textarea id="textInput" placeholder="输入文字与我交流..." rows="2"></textarea>
+                        <button class="btn-send" id="sendTextBtn">
+                            <svg viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/>
+                            </svg>
+                            发送
+                        </button>
+                    </div>
+
+                    <!-- 语音输入 -->
+                    <div class="voice-input-area">
+                        <div class="voice-controls">
+                            <button class="btn-voice" id="recordBtn">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M12 14c1.66 0 2.99-1.34 2.99-3L15 5c0-1.66-1.34-3-3-3S9 3.34 9 5v6c0 1.66 1.34 3 3 3zm5.3-3c0 3-2.54 5.1-5.3 5.1S6.7 14 6.7 11H5c0 3.41 2.72 6.23 6 6.72V21h2v-3.28c3.28-.48 6-3.3 6-6.72h-1.7z"/>
+                                </svg>
+                                <span>按住说话</span>
+                            </button>
+                            <span class="recording-indicator" id="recordingIndicator">
+                                <span class="dot"></span>
+                                录音中...
+                            </span>
+                        </div>
+
+                        <!-- 文件上传 -->
+                        <div class="file-upload-area">
+                            <label for="audioFileInput" class="btn-upload">
+                                <svg viewBox="0 0 24 24" fill="currentColor">
+                                    <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>
+                                </svg>
+                                上传音频
+                            </label>
+                            <input type="file" id="audioFileInput" accept="audio/*" style="display: none;">
+                            <span class="file-name" id="uploadedFileName"></span>
+                            <button class="btn-upload-send" id="sendAudioBtn" style="display: none;">
+                                发送音频
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 进度显示 -->
+                <div class="progress-panel" id="progressPanel" style="display: none;">
+                    <div class="progress-step" data-step="asr">
+                        <span class="step-icon">🎤</span>
+                        <span class="step-text">语音识别</span>
+                        <span class="step-status"></span>
+                    </div>
+                    <div class="progress-step" data-step="llm">
+                        <span class="step-icon">🧠</span>
+                        <span class="step-text">AI 思考</span>
+                        <span class="step-status"></span>
+                    </div>
+                    <div class="progress-step" data-step="tts">
+                        <span class="step-icon">🔊</span>
+                        <span class="step-text">语音合成</span>
+                        <span class="step-status"></span>
+                    </div>
+                    <div class="progress-step" data-step="video">
+                        <span class="step-icon">🎬</span>
+                        <span class="step-text">视频生成</span>
+                        <span class="step-status"></span>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- 页脚 -->
+        <footer class="app-footer">
+            <p>Digital Human Phase 2 &copy; 2026</p>
+        </footer>
+    </div>
+
+    <!-- 配置面板 -->
+    <div class="settings-panel" id="settingsPanel">
+        <div class="settings-header">
+            <h3>设置</h3>
+            <button class="btn-close" id="closeSettingsBtn">&times;</button>
+        </div>
+        <div class="settings-content">
+            <div class="setting-group">
+                <label>服务器地址</label>
+                <input type="text" id="serverUrlInput" value="ws://localhost:8000/ws">
+            </div>
+            <div class="setting-group">
+                <label>API 地址</label>
+                <input type="text" id="apiUrlInput" value="http://localhost:8000">
+            </div>
+        </div>
+    </div>
+
+    <!-- 设置按钮 -->
+    <button class="settings-toggle" id="settingsToggle">
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M19.14 12.94c.04-.31.06-.63.06-.94 0-.31-.02-.63-.06-.94l2.03-1.58c.18-.14.23-.41.12-.61l-1.92-3.32c-.12-.22-.37-.29-.59-.22l-2.39.96c-.5-.38-1.03-.7-1.62-.94l-.36-2.54c-.04-.24-.24-.41-.48-.41h-3.84c-.24 0-.43.17-.47.41l-.36 2.54c-.59.24-1.13.57-1.62.94l-2.39-.96c-.22-.08-.47 0-.59.22L2.74 8.87c-.12.21-.08.47.12.61l2.03 1.58c-.04.31-.06.63-.06.94s.02.63.06.94l-2.03 1.58c-.18.14-.23.41-.12.61l1.92 3.32c.12.22.37.29.59.22l2.39-.96c.5.38 1.03.7 1.62.94l.36 2.54c.05.24.24.41.48.41h3.84c.24 0 .44-.17.47-.41l.36-2.54c.59-.24 1.13-.56 1.62-.94l2.39.96c.22.08.47 0 .59-.22l1.92-3.32c.12-.22.07-.47-.12-.61l-2.01-1.58zM12 15.6c-1.98 0-3.6-1.62-3.6-3.6s1.62-3.6 3.6-3.6 3.6 1.62 3.6 3.6-1.62 3.6-3.6 3.6z"/>
+        </svg>
+    </button>
+
+    <script src="app.js"></script>
+</body>
+</html>

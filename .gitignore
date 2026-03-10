@@ -1,0 +1,15 @@
+ffmpeg-6.1/
+frontend/
+nv-codec-headers/
+results/
+*.bz2
+start_server.py
+test_log.txt
+*.wav
+*.checkpoints/
+grid-sample3d-trt-plugin/
+eval_output/
+val/
+chroma_data/
+*.db
+*.pt

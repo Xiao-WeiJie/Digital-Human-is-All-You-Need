@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(conda run:*)",
+      "Bash(pytest:*)",
+      "Bash(python:*)",
+      "Bash(pip install:*)",
+      "Bash(conda install:*)",
+      "Bash(echo:*)",
+      "Bash(pip config:*)",
+      "Bash(export:*)"
+    ]
+  }
+}

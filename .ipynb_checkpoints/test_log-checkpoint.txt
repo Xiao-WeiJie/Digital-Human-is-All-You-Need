@@ -1,172 +1,0 @@
-WARNING:root:trust_remote_code: True
-WARNING:root:trust_remote_code: False
-======================================================================
-  数字人完整语音链路测试
-======================================================================
-
-[Step 1/6] 加载配置...
-  用户音频: test.wav
-  源图像: /root/autodl-tmp/digital_human/Human_Choice/Human_1/qys.png
-  TTS API: http://127.0.0.1:9880
-  参考音频: /root/autodl-tmp/qys.wav
-  API Key: 已设置
-
-[OK] 配置验证通过
-
-======================================================================
-[Step 2/6] SenseVoice ASR 语音识别...
-======================================================================
-[SenseVoice] 正在初始化模型: SenseVoice/iic/SenseVoiceSmall
-funasr version: 1.3.1.
-Check update of funasr, and it would cost few times. You may disable it by set `disable_update=True` in AutoModel
-You are using the latest version of funasr-1.3.1
-Loading remote code successfully: /root/autodl-tmp/SenseVoice/model.py
-Downloading Model from https://www.modelscope.cn to directory: /root/.cache/modelscope/hub/models/iic/speech_fsmn_vad_zh-cn-16k-common-pytorch
-[SenseVoice] 模型初始化完成，耗时 5.06s
-  0%|[34m                                                                                                                                                                                                    [0m| 0/1 [00:00<?, ?it/s][0m{'load_data': '0.010', 'extract_feat': '0.003', 'forward': '0.069', 'batch_size': '1', 'rtf': '0.013'}, : 100%|[34m██████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00, 14.50it/s][0mrtf_avg: 0.013: 100%|[34m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00, 14.45it/s][0mrtf_avg: 0.013: 100%|[34m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00, 14.32it/s][0m
-  0%|[31m                                                                                                                                                                                                    [0m| 0/1 [00:00<?, ?it/s][0m
-  0%|[34m                                                                                                                                                                                                    [0m| 0/1 [00:00<?, ?it/s][0m[A
-100%|[34m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  7.69it/s][0m[A
-{'load_data': '0.000', 'extract_feat': '0.004', 'forward': '0.130', 'batch_size': '1', 'rtf': '0.024'}, : 100%|[34m██████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  7.69it/s][0m[A
-rtf_avg: 0.024: 100%|[34m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  7.69it/s][0m[Artf_avg: 0.024: 100%|[34m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  7.44it/s][0m
-100%|[31m████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  6.85it/s][0mrtf_avg: 0.025, time_speech:  5.440, time_escape: 0.139: 100%|[31m███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  6.85it/s][0mrtf_avg: 0.025, time_speech:  5.440, time_escape: 0.139: 100%|[31m███████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████[0m| 1/1 [00:00<00:00,  6.84it/s][0m
-Some weights of the model checkpoint at /root/autodl-tmp/FasterLivePortrait/checkpoints/chinese-hubert-base were not used when initializing HubertModel: ['encoder.pos_conv_embed.conv.weight_g', 'encoder.pos_conv_embed.conv.weight_v']
-- This IS expected if you are initializing HubertModel from the checkpoint of a model trained on another task or with another architecture (e.g. initializing a BertForSequenceClassification model from a BertForPreTraining model).
-- This IS NOT expected if you are initializing HubertModel from the checkpoint of a model that you expect to be exactly identical (initializing a BertForSequenceClassification model from a BertForSequenceClassification model).
-Some weights of HubertModel were not initialized from the model checkpoint at /root/autodl-tmp/FasterLivePortrait/checkpoints/chinese-hubert-base and are newly initialized: ['encoder.pos_conv_embed.conv.parametrizations.weight.original0', 'encoder.pos_conv_embed.conv.parametrizations.weight.original1']
-You should probably TRAIN this model on a down-stream task to be able to use it for predictions and inference.
-[SenseVoice] 识别完成，耗时 0.27s
-[SenseVoice] 识别结果: 我一辈子只能做一次的美食，竟然不是因为难，而是马上面临失传。😡
-  识别文本: 我一辈子只能做一次的美食，竟然不是因为难，而是马上面临失传。😡
-  耗时: 0.27s
-[OK] 语音识别完成
-
-======================================================================
-[Step 3/6] RAG/LLM 生成回复...
-======================================================================
-[RAG] 正在初始化 PsyMind 系统...
-============================================================
-  🧠 PsyMind — 心理健康科普对话系统 初始化中...
-============================================================
-  [数据库] SQLite: /root/autodl-tmp/Psychology_Rag/db/psymind.db
-
-🔨 正在初始化知识库...
-  [向量库] 持久化目录: /root/autodl-tmp/Psychology_Rag/db/chroma_data
-  [向量库] factual_kb:   20022 个文档块
-  [向量库] guardrail_kb: 3 个文档块
-  [共情库] empathy_examples: 200 条 (SQLite)
-✅ 全部知识库已从磁盘加载，无需重建
-
-
-  📊 存储统计:
-     Chroma 科普核心库: 20022 个文档块
-     Chroma 安全护栏库: 3 个文档块
-     SQLite 共情示例:   200 条
-     SQLite 历史会话:   5 个
-     SQLite 历史消息:   10 条
-============================================================
-  ✅ 系统初始化完成！
-============================================================
-[RAG] PsyMind 系统初始化完成
-  [路由] 意图分类: emotional
-  用户: 我一辈子只能做一次的美食，竟然不是因为难，而是马上面临失传。😡
-  AI: 听起来你对这道美食有很深的感情呢。它承载着你的努力和心意，却因为传承问题让你感到难过。这种失落感真的很让人揪心。
-
-你知道吗？很多传统手艺的消失其实和我们每个人都有关系。就像有些老一辈人觉得"现在没人愿意学"，就干脆不教了。但其实只要有人愿意学，就还有希望。你愿意分享这道美食的故事吗？也许我们可以一起想想怎么让它继续流传下去。
-[OK] 回复生成完成
-
-======================================================================
-[Step 4/6] GPT-SoVITS 语音合成...
-======================================================================
-[TTS] GPT-SoVITS API 可用: http://127.0.0.1:9880
-  合成文本: 听起来你对这道美食有很深的感情呢。它承载着你的努力和心意，却因为传承问题让你感到难过。这种失落感真的...
-[TTS] 合成文本: 听起来你对这道美食有很深的感情呢。它承载着你的努力和心意，却因为传承问题让你感到难过。这种失落感真的...
-[TTS] 调用 GPT-SoVITS API: http://127.0.0.1:9880/tts
-[TTS] 文本: 听起来你对这道美食有很深的感情呢。它承载着你的努力和心意，却因为传承问题让你感到难过。这种失落感真的...
-[TTS] GPT-SoVITS 合成完成，耗时 10.46s
-  耗时: 10.47s
-  音频: /tmp/tmp_37jmtiw.wav
-[OK] 语音合成完成
-
-======================================================================
-[Step 5/6] FasterLivePortrait 生成视频...
-======================================================================
-  源图像: /root/autodl-tmp/digital_human/Human_Choice/Human_1/qys.png
-  驱动音频: /tmp/tmp_37jmtiw.wav
-  正在生成视频...
-[LivePortrait] 正在初始化模型...
-load Human Model >>>
-loading model: warping_spade
-{'name': 'WarpingSpadeModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/warping_spade-fix.trt'}
-loading model: motion_extractor
-{'name': 'MotionExtractorModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/motion_extractor.trt'}
-loading model: landmark
-{'name': 'LandmarkModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/landmark.trt'}
-loading model: face_analysis
-{'name': 'FaceAnalysisModel', 'predict_type': 'trt', 'model_path': ['/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/retinaface_det_static.trt', '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/face_2dpose_106_static.trt']}
-loading model: app_feat_extractor
-{'name': 'AppearanceFeatureExtractorModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/appearance_feature_extractor.trt'}
-trt
-loading model: stitching
-{'name': 'StitchingModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/stitching.trt'}
-loading model: stitching_eye_retarget
-{'name': 'StitchingModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/stitching_eye.trt'}
-loading model: stitching_lip_retarget
-{'name': 'StitchingModel', 'predict_type': 'trt', 'model_path': '/root/autodl-tmp/FasterLivePortrait/checkpoints/liveportrait_onnx/stitching_lip.trt'}
-[LivePortrait] 模型初始化完成，耗时 6.08s
-using hubert chinese ori
-[LivePortrait] 从音频生成运动序列: /tmp/tmp_37jmtiw.wav
-  0%|                                                                                                                                                                                                   | 0/50 [00:00<?, ?it/s] 50%|████████████████████████████████████████████████████████████████████████████████████████████▌                                                                                            | 25/50 [00:00<00:00, 249.69it/s]100%|█████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 50/50 [00:00<00:00, 259.27it/s]
-0it [00:00, ?it/s]0it [00:00, ?it/s]
-[LivePortrait] 运动序列生成完成，耗时 0.37s
-[LivePortrait] 帧数: 0, FPS: 25
-process source:/root/autodl-tmp/digital_human/Human_Choice/Human_1/qys.png >>>>>>>>
-  0%|                                                                                                                                                                                                    | 0/1 [00:00<?, ?it/s]100%|████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████████| 1/1 [00:00<00:00, 10.42it/s]
-finish process source:/root/autodl-tmp/digital_human/Human_Choice/Human_1/qys.png >>>>>>>>
-[LivePortrait] 源图像准备完成
-0it [00:00, ?it/s]0it [00:00, ?it/s]
-[LivePortrait] FFmpeg 错误: ffmpeg version 4.2.7-0ubuntu0.1 Copyright (c) 2000-2022 the FFmpeg developers
-  built with gcc 9 (Ubuntu 9.4.0-1ubuntu1~20.04.1)
-  configuration: --prefix=/usr --extra-version=0ubuntu0.1 --toolchain=hardened --libdir=/usr/lib/x86_64-linux-gnu --incdir=/usr/include/x86_64-linux-gnu --arch=amd64 --enable-gpl --disable-stripping --enable-avresample --disable-filter=resample --enable-avisynth --enable-gnutls --enable-ladspa --enable-libaom --enable-libass --enable-libbluray --enable-libbs2b --enable-libcaca --enable-libcdio --enable-libcodec2 --enable-libflite --enable-libfontconfig --enable-libfreetype --enable-libfribidi --enable-libgme --enable-libgsm --enable-libjack --enable-libmp3lame --enable-libmysofa --enable-libopenjpeg --enable-libopenmpt --enable-libopus --enable-libpulse --enable-librsvg --enable-librubberband --enable-libshine --enable-libsnappy --enable-libsoxr --enable-libspeex --enable-libssh --enable-libtheora --enable-libtwolame --enable-libvidstab --enable-libvorbis --enable-libvpx --enable-libwavpack --enable-libwebp --enable-libx265 --enable-libxml2 --enable-libxvid --enable-libzmq --enable-libzvbi --enable-lv2 --enable-omx --enable-openal --enable-opencl --enable-opengl --enable-sdl2 --enable-libdc1394 --enable-libdrm --enable-libiec61883 --enable-nvenc --enable-chromaprint --enable-frei0r --enable-libx264 --enable-shared
-  libavutil      56. 31.100 / 56. 31.100
-  libavcodec     58. 54.100 / 58. 54.100
-  libavformat    58. 29.100 / 58. 29.100
-  libavdevice    58.  8.100 / 58.  8.100
-  libavfilter     7. 57.100 /  7. 57.100
-  libavresample   4.  0.  0 /  4.  0.  0
-  libswscale      5.  5.100 /  5.  5.100
-  libswresample   3.  5.100 /  3.  5.100
-  libpostproc    55.  5.100 / 55.  5.100
-Input #0, mov,mp4,m4a,3gp,3g2,mj2, from '/root/autodl-tmp/results/out_digital_human/qys.png-motion_1772895688.pkl-org.mp4':
-  Metadata:
-    major_brand     : isom
-    minor_version   : 512
-    compatible_brands: isomiso2mp41
-    encoder         : Lavf59.27.100
-  Duration: 00:00:00.00, bitrate: N/A
-[wav @ 0x557548fa6e40] Estimating duration from bitrate, this may be inaccurate
-Guessed Channel Layout for Input Stream #1.0 : mono
-Input #1, wav, from '/tmp/tmp_37jmtiw.wav':
-  Duration: 00:00:37.32, bitrate: 256 kb/s
-    Stream #1:0: Audio: pcm_s16le ([1][0][0][0] / 0x0001), 16000 Hz, mono, s16, 256 kb/s
-Stream map '0:v' matches no streams.
-To ignore this, add a trailing '?' to the map.
-
-[LivePortrait] 视频渲染完成（含音频），耗时 0.25s
-  耗时: 8.36s
-  视频: /root/autodl-tmp/results/out_digital_human/qys.png-motion_1772895688.pkl-org.mp4
-[OK] 视频生成完成
-
-======================================================================
-[Step 6/6] 测试完成!
-======================================================================
-
-结果汇总:
-  用户输入: 我一辈子只能做一次的美食，竟然不是因为难，而是马上面临失传。😡
-  AI 回复: 听起来你对这道美食有很深的感情呢。它承载着你的努力和心意，却因为传承问题让你感到难过。这种失落感真的很让人揪心。
-
-你知道吗？很多传统手艺的消失其实和我们每个人都有关系。就像有些老一辈人觉得"现在没人愿意学"，就干脆不教了。但其实只要有人愿意学，就还有希望。你愿意分享这道美食的故事吗？也许我们可以一起想想怎么让它继续流传下去。
-  输出视频: /root/autodl-tmp/results/out_digital_human/qys.png-motion_1772895688.pkl-org.mp4
-
-测试通过!
-======================================================================

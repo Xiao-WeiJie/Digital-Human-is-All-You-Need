@@ -1,5 +1,4 @@
 results/
-frontend/
 ffmpeg-6.1/
 nv-codec-headers/
 *.bz2
@@ -15,3 +14,4 @@ chroma_data/
 *.pt
 train.js
 Psychology2e_WEB.pdf
+LiveTalking/

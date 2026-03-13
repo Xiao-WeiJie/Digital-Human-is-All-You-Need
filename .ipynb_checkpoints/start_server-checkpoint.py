@@ -1,160 +1,183 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Digital Human Phase 2 - Start Server
+Digital Human 启动脚本
 
-启动数字人后端服务器。
-
-用法:
-    python start_server.py                    # 默认启动
-    python start_server.py --port 8080        # 指定端口
-    python start_server.py --reload           # 开发模式
-    python start_server.py --host 0.0.0.0     # 允许外部访问
+快速启动实时数字人服务（LiveTalking + FasterLivePortrait）。
+配置优先级: 命令行参数 > digital_human/config.py
 """
 
-import argparse
+import os
 import sys
+import argparse
 from pathlib import Path
 
-# 添加项目根目录到路径
+# 添加项目路径
 PROJECT_ROOT = Path(__file__).parent
 sys.path.insert(0, str(PROJECT_ROOT))
 
-from digital_human.config import get_config, ServerConfig
+from digital_human.config import get_default_config
 
 
-def check_environment():
+def check_environment(config=None):
     """检查环境配置"""
-    config = get_config()
-    server_config = config.server
+    print("=" * 60)
+    print("  Digital Human 环境检查")
+    print("=" * 60)
 
-    print("=" * 60)
-    print("  Digital Human Phase 2 - 环境检查")
-    print("=" * 60)
+    issues = []
+
+    # 检查 DASHSCOPE_API_KEY（优先从配置文件读取）
+    api_key = None
+    if config and hasattr(config, 'psychology_rag'):
+        api_key = config.psychology_rag.dashscope_api_key
+    if not api_key:
+        api_key = os.environ.get("DASHSCOPE_API_KEY")
+
+    if not api_key:
+        issues.append("❌ DASHSCOPE_API_KEY 未设置")
+    else:
+        print("✅ DASHSCOPE_API_KEY 已设置")
+
+    # 检查 GPT-SoVITS
+    gpt_sovits_url = os.environ.get("GPT_SOVITS_API_URL", "http://127.0.0.1:9880")
+    try:
+        import requests
+        response = requests.get(f"{gpt_sovits_url}/", timeout=5)
+        print(f"✅ GPT-SoVITS 服务可访问: {gpt_sovits_url}")
+    except:
+        print(f"⚠️ GPT-SoVITS 服务不可访问: {gpt_sovits_url} (可选)")
 
     # 检查 Python 版本
     py_version = sys.version_info
-    print(f"Python 版本: {py_version.major}.{py_version.minor}.{py_version.micro}")
-
-    if py_version < (3, 8):
-        print("错误: 需要 Python 3.8 或更高版本")
-        sys.exit(1)
-
-    # 检查环境变量
-    dashscope_key = config.rag.dashscope_api_key
-    if dashscope_key:
-        print(f"DASHSCOPE_API_KEY: 已设置 ({dashscope_key[:8]}...)")
+    if py_version >= (3, 8):
+        print(f"✅ Python 版本: {py_version.major}.{py_version.minor}")
     else:
-        print("警告: DASHSCOPE_API_KEY 未设置")
-        print("       请设置环境变量: export DASHSCOPE_API_KEY=your-key")
+        issues.append(f"❌ Python 版本过低: {py_version.major}.{py_version.minor}，需要 >= 3.8")
 
-    gptsovits_url = config.gpt_sovits.api_url
-    if gptsovits_url:
-        print(f"GPT_SOVITS_API_URL: {gptsovits_url}")
-    else:
-        print("GPT_SOVITS_API_URL: 未设置 (将使用默认 Kokoro TTS)")
+    # 检查 PyTorch
+    try:
+        import torch
+        print(f"✅ PyTorch 版本: {torch.__version__}")
+        if torch.cuda.is_available():
+            print(f"✅ CUDA 可用: {torch.cuda.get_device_name(0)}")
+        else:
+            print("⚠️ CUDA 不可用，将使用 CPU（速度较慢）")
+    except ImportError:
+        issues.append("❌ PyTorch 未安装")
 
-    # 检查 Avatar 资源
-    avatar_dir = server_config.avatar_dir
-    if avatar_dir.exists():
-        avatars = list(avatar_dir.glob("Human_*"))
-        print(f"Avatar 资源目录: {avatar_dir}")
-        print(f"发现 {len(avatars)} 个数字人: {[a.name for a in avatars]}")
-    else:
-        print(f"警告: Avatar 资源目录不存在: {avatar_dir}")
+    # 检查关键模块
+    modules = [
+        ("aiohttp", "Web 服务"),
+        ("aiortc", "WebRTC"),
+        ("omegaconf", "配置管理"),
+    ]
 
-    # 检查前端
-    frontend_dir = server_config.frontend_dir
-    if frontend_dir.exists():
-        print(f"前端目录: {frontend_dir}")
-    else:
-        print(f"警告: 前端目录不存在: {frontend_dir}")
+    for module, name in modules:
+        try:
+            __import__(module)
+            print(f"✅ {name} 依赖已安装")
+        except ImportError:
+            issues.append(f"❌ {name} 依赖未安装: {module}")
 
     print("=" * 60)
 
+    if issues:
+        print("\n⚠️ 发现以下问题：")
+        for issue in issues:
+            print(f"  {issue}")
+        print("\n请先解决上述问题后再启动系统。")
+        return False
 
-def check_dependencies():
-    """检查依赖"""
-    config = get_config()
+    print("\n✅ 环境检查通过！")
+    return True
 
-    print("\n检查依赖包...")
 
-    required = [
-        "fastapi",
-        "uvicorn",
-        "httpx",
-        "pydantic",
-    ]
-
-    optional = [
-        ("funasr", "SenseVoice ASR"),
-        ("torch", "PyTorch"),
-        ("omegaconf", "OmegaConf"),
-    ]
-
-    # 只有启用 Kokoro 时才检查
-    if config.gpt_sovits.enable_kokoro_fallback:
-        optional.append(("kokoro", "Kokoro TTS"))
-    else:
-        print("  [跳过] Kokoro TTS (已在配置中禁用)")
-
-    missing_required = []
-    for pkg in required:
-        try:
-            __import__(pkg)
-            print(f"  [OK] {pkg}")
-        except ImportError:
-            print(f"  [缺失] {pkg}")
-            missing_required.append(pkg)
-
-    for pkg, desc in optional:
-        try:
-            __import__(pkg)
-            print(f"  [OK] {pkg} ({desc})")
-        except ImportError:
-            print(f"  [可选缺失] {pkg} ({desc})")
-        except Exception as e:
-            # 可选包导入时有其他错误（如版本不兼容），只打印警告
-            print(f"  [警告] {pkg} ({desc}) - {type(e).__name__}: {e}")
-
-    if missing_required:
-        print(f"\n请安装缺失的依赖: pip install {' '.join(missing_required)}")
-        sys.exit(1)
-
-    print()
+def find_avatar():
+    """查找默认 Avatar"""
+    human_choice_dir = PROJECT_ROOT / "Human_Choice"
+    if human_choice_dir.exists():
+        for human_dir in human_choice_dir.iterdir():
+            if human_dir.is_dir():
+                for ext in ["*.png", "*.jpg", "*.jpeg"]:
+                    for img in human_dir.glob(ext):
+                        return str(img)
+    return None
 
 
 def main():
-    config = get_config()
+    # 加载配置文件中的默认值
+    config = get_default_config()
     server_config = config.server
 
-    parser = argparse.ArgumentParser(description="Digital Human Phase 2 Server")
-    parser.add_argument("--host", default=server_config.host, help=f"服务器地址 (default: {server_config.host})")
-    parser.add_argument("--port", type=int, default=server_config.port, help=f"端口号 (default: {server_config.port})")
-    parser.add_argument("--reload", action="store_true", default=server_config.reload, help="开发模式（自动重载）")
-    parser.add_argument("--skip-check", action="store_true", default=server_config.skip_check, help="跳过环境检查")
+    parser = argparse.ArgumentParser(
+        description="Digital Human 启动脚本 - 实时数字人交互系统",
+        formatter_class=argparse.RawDescriptionHelpFormatter,
+    )
+
+    parser.add_argument(
+        "command",
+        nargs="?",  # 可选参数
+        choices=["api", "cli", "check"],
+        default=server_config.default_command,
+        help=f"启动模式: api(实时数字人服务), cli(命令行交互), check(环境检查)，默认: {server_config.default_command}"
+    )
+
+    parser.add_argument(
+        "--host",
+        type=str,
+        default=server_config.host,
+        help=f"服务监听地址，默认: {server_config.host}"
+    )
+
+    parser.add_argument(
+        "--port",
+        type=int,
+        default=server_config.port,
+        help=f"服务监听端口，默认: {server_config.port}"
+    )
+
+    parser.add_argument(
+        "-i", "--source",
+        type=str,
+        default=config.default_avatar_path,
+        help="源图像（Avatar）路径"
+    )
 
     args = parser.parse_args()
 
-    # 环境检查
-    if not args.skip_check:
-        check_environment()
-        check_dependencies()
+    if args.command == "check":
+        check_environment(config)
+        return
 
-    # 启动服务器
-    print(f"\n启动服务器: http://{args.host}:{args.port}")
-    print(f"API 文档: http://{args.host}:{args.port}/docs")
-    print(f"前端页面: http://{args.host}:{args.port}/")
-    print()
+    # 检查环境
+    if server_config.auto_check_env and not check_environment(config):
+        sys.exit(1)
 
-    import uvicorn
+    if args.command == "api":
+        print(f"\n启动实时数字人服务: http://{args.host}:{args.port}")
+        print(f"前端页面: http://localhost:{args.port}/webrtcapi.html")
+        print(f"Dashboard: http://localhost:{args.port}/dashboard.html")
+        print("\n按 Ctrl+C 停止服务\n")
 
-    uvicorn.run(
-        "digital_human.api_server:app",
-        host=args.host,
-        port=args.port,
-        reload=args.reload,
-    )
+        # 使用 LiveTalking 服务器（支持 WebRTC 实时传输）
+        from live_talking_server.app import run_server
+        run_server(host=args.host, port=args.port)
+
+    elif args.command == "cli":
+        # 查找 Avatar
+        avatar = args.source or find_avatar()
+        if not avatar:
+            print("❌ 未找到 Avatar，请使用 -i 参数指定")
+            sys.exit(1)
+
+        print(f"\n使用 Avatar: {avatar}")
+        print("启动命令行交互模式...\n")
+
+        from digital_human.cli import main as cli_main
+        # 重构 sys.argv 以传递给 CLI
+        sys.argv = ["cli.py", "--mode", "interactive", "--source", avatar]
+        cli_main()
 
 
 if __name__ == "__main__":

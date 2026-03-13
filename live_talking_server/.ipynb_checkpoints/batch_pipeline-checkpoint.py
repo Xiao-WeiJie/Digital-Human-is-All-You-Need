@@ -1,0 +1,640 @@
+# -*- coding: utf-8 -*-
+"""
+数字人批量视频生成流水线
+
+默认使用 GPT-SoVITS TTS，支持 SenseVoice ASR
+"""
+
+import os
+import sys
+import time
+import asyncio
+import logging
+from pathlib import Path
+from typing import Optional, Tuple, Dict, Any
+from dataclasses import dataclass
+
+# 使用统一的 logger
+try:
+    from logger import logger
+except ImportError:
+    logger = logging.getLogger(__name__)
+    logger.setLevel(logging.INFO)
+    handler = logging.StreamHandler()
+    handler.setFormatter(logging.Formatter('%(levelname)s:%(name)s:%(message)s'))
+    logger.addHandler(handler)
+
+# 导入配置
+from digital_human.config import get_default_config, DigitalHumanConfig
+
+# 导入视频生成器
+try:
+    from batch_video_generator import BatchVideoGenerator, VideoGenerationResult, BatchVideoGeneratorSimple
+except ImportError:
+    try:
+        from live_talking_server.batch_video_generator import BatchVideoGenerator, VideoGenerationResult, BatchVideoGeneratorSimple
+    except ImportError:
+        from .batch_video_generator import BatchVideoGenerator, VideoGenerationResult, BatchVideoGeneratorSimple
+
+
+@dataclass
+class PipelineResult:
+    """流水线处理结果"""
+    video_path: str
+    video_url: str
+    response_text: str
+    user_text: str
+    total_time: float
+    metrics: dict
+    audio_duration: float
+    success: bool
+    error_message: str = ""
+
+
+class SenseVoiceASR:
+    """SenseVoice 语音识别"""
+
+    def __init__(self, config=None):
+        self.config = config or get_default_config().sensevoice
+        self.model = None
+
+    def _init_model(self):
+        if self.model is None:
+            try:
+                from funasr import AutoModel
+                self.model = AutoModel(
+                    model=self.config.model_name,
+                    model_path=self.config.model_path if os.path.exists(self.config.model_path) else None
+                )
+                logger.info("[ASR] SenseVoice model loaded")
+            except Exception as e:
+                logger.error(f"[ASR] Failed to load model: {e}")
+
+    def recognize(self, audio_path: str) -> str:
+        """识别音频"""
+        self._init_model()
+
+        if self.model is None:
+            logger.warning("[ASR] Model not available, returning empty text")
+            return ""
+
+        try:
+            result = self.model.generate(
+                input=audio_path,
+                language=self.config.language
+            )
+            if result and len(result) > 0:
+                text = result[0].get("text", "")
+                logger.info(f"[ASR] Recognized: {text}")
+                return text
+        except Exception as e:
+            logger.error(f"[ASR] Recognition error: {e}")
+
+        return ""
+
+
+class GPTSoVITSTTS:
+    """GPT-SoVITS TTS 语音合成"""
+
+    def __init__(self, config=None):
+        self.config = config or get_default_config().gpt_sovits
+        self.server_url = self.config.server_url
+        self.ref_audio = self.config.ref_audio
+        self.ref_text = self.config.ref_text
+
+    def generate(self, text: str, output_path: str) -> Tuple[str, float]:
+        """
+        生成语音
+
+        Args:
+            text: 输入文本
+            output_path: 输出文件路径
+
+        Returns:
+            Tuple[str, float]: (音频路径, 音频时长)
+        """
+        import requests
+        import soundfile as sf
+        import io
+        import wave
+        import struct
+
+        logger.info(f"[GPT-SoVITS] Starting generation for text: {text[:50]}...")
+        logger.info(f"[GPT-SoVITS] Server URL: {self.server_url}")
+        logger.info(f"[GPT-SoVITS] Ref audio: {self.ref_audio}")
+        logger.info(f"[GPT-SoVITS] Ref text: {self.ref_text}")
+
+        # 检查配置
+        if not self.server_url:
+            raise RuntimeError("GPT-SoVITS server URL is not configured!")
+        if not self.ref_audio:
+            raise RuntimeError("GPT-SoVITS ref_audio is not configured!")
+
+        # 使用非流式模式直接生成 WAV 格式
+        req = {
+            'text': text,
+            'text_lang': 'zh',
+            'ref_audio_path': self.ref_audio,
+            'prompt_text': self.ref_text,
+            'prompt_lang': 'zh',
+            'media_type': 'wav',  # 直接生成 WAV 格式
+            'streaming_mode': False  # 非流式模式，返回完整 WAV 文件
+        }
+
+        logger.info(f"[GPT-SoVITS] Sending request to {self.server_url}/tts")
+
+        # 非流式请求，直接获取完整响应
+        try:
+            response = requests.post(
+                f"{self.server_url}/tts",
+                json=req,
+                timeout=120
+            )
+            logger.info(f"[GPT-SoVITS] Response status: {response.status_code}")
+        except Exception as e:
+            logger.error(f"[GPT-SoVITS] Request failed: {e}")
+            raise
+
+        if response.status_code != 200:
+            logger.error(f"[GPT-SoVITS] Error response: {response.text[:500]}")
+            raise RuntimeError(f"GPT-SoVITS error: {response.text}")
+
+        # 直接获取响应内容
+        audio_data = response.content
+        logger.info(f"[GPT-SoVITS] Received {len(audio_data)} bytes")
+
+        if len(audio_data) == 0:
+            raise RuntimeError("GPT-SoVITS returned empty audio")
+
+        # 打印文件头用于调试
+        header_hex = audio_data[:16].hex() if len(audio_data) >= 16 else audio_data.hex()
+        logger.info(f"[GPT-SoVITS] Audio header: {header_hex}")
+
+        # 检测格式
+        header = audio_data[:4]
+        if header == b'OggS':
+            logger.info("[GPT-SoVITS] Detected OGG format")
+        elif header == b'RIFF':
+            logger.info("[GPT-SoVITS] Detected WAV format")
+            # 修复 WAV 头中的文件大小字段
+            audio_data = self._fix_wav_header(audio_data)
+        else:
+            logger.warning(f"[GPT-SoVITS] Unknown format header: {header.hex()}")
+
+        # 直接保存为文件
+        with open(output_path, 'wb') as f:
+            f.write(audio_data)
+
+        # 获取时长
+        try:
+            info = sf.info(output_path)
+            logger.info(f"[GPT-SoVITS] Generated audio: {info.duration:.2f}s, format={info.format}, samplerate={info.samplerate}")
+            return output_path, info.duration
+        except Exception as e:
+            logger.error(f"[GPT-SoVITS] Failed to read audio info: {e}")
+            raise RuntimeError(f"Invalid audio format from GPT-SoVITS: {e}")
+
+    def _fix_wav_header(self, audio_data: bytes) -> bytes:
+        """修复 WAV 文件头中的文件大小字段"""
+        import struct
+
+        if len(audio_data) < 44:
+            return audio_data
+
+        # WAV 文件结构:
+        # RIFF header (4 bytes) + file size (4 bytes) + WAVE (4 bytes)
+        # fmt chunk + data chunk
+
+        # 查找 data chunk
+        data_pos = audio_data.find(b'data')
+        if data_pos == -1:
+            logger.warning("[GPT-SoVITS] Cannot find 'data' chunk in WAV")
+            return audio_data
+
+        # data chunk 格式: "data" (4 bytes) + data_size (4 bytes) + audio_data
+        data_size_offset = data_pos + 4
+        actual_data_size = len(audio_data) - (data_size_offset + 4)
+
+        # 修复 RIFF 头中的文件大小 (总大小 - 8)
+        riff_size = len(audio_data) - 8
+        fixed_data = bytearray(audio_data)
+        fixed_data[4:8] = struct.pack('<I', riff_size)
+
+        # 修复 data chunk 中的数据大小
+        fixed_data[data_size_offset:data_size_offset+4] = struct.pack('<I', actual_data_size)
+
+        logger.info(f"[GPT-SoVITS] Fixed WAV header: riff_size={riff_size}, data_size={actual_data_size}")
+
+        return bytes(fixed_data)
+
+
+class EdgeTTSFallback:
+    """EdgeTTS 备用 TTS"""
+
+    async def generate(self, text: str, output_path: str) -> Tuple[str, float]:
+        """使用 EdgeTTS 生成音频"""
+        import edge_tts
+        import soundfile as sf
+        import io
+
+        voice = "zh-CN-YunxiaNeural"
+        communicate = edge_tts.Communicate(text, voice)
+
+        # 收集音频数据
+        audio_data = io.BytesIO()
+        async for chunk in communicate.stream():
+            if chunk["type"] == "audio":
+                audio_data.write(chunk["data"])
+
+        # 保存到文件
+        audio_data.seek(0)
+        with open(output_path, 'wb') as f:
+            f.write(audio_data.read())
+
+        # 获取时长
+        audio_data.seek(0)
+        info = sf.info(audio_data)
+        return output_path, info.duration
+
+
+class DigitalHumanBatchPipeline:
+    """
+    数字人批量处理流水线
+
+    流程:
+    1. ASR识别（如果是语音输入）
+    2. Psychology_Rag 生成回复
+    3. GPT-SoVITS TTS 生成音频
+    4. BatchVideoGenerator 生成视频
+    """
+
+    def __init__(
+        self,
+        output_dir: str = "/tmp/digital_human_videos",
+        dashscope_api_key: str = None,
+        gpt_sovits_server: str = None,
+        tts_ref_file: str = None,
+        tts_ref_text: str = None,
+        use_asr: bool = False,
+        pipeline=None,
+        joyvasa_pipeline=None,
+        default_source_image: str = None,
+        config: DigitalHumanConfig = None
+    ):
+        self.config = config or get_default_config()
+        self.output_dir = Path(output_dir)
+        self.output_dir.mkdir(parents=True, exist_ok=True)
+
+        self.temp_dir = self.output_dir / "temp"
+        self.temp_dir.mkdir(exist_ok=True)
+
+        self.use_asr = use_asr
+
+        # 初始化 ASR（可选）
+        if use_asr:
+            self.asr = SenseVoiceASR(self.config.sensevoice)
+        else:
+            self.asr = None
+
+        # 初始化 LLM
+        self.psy_mind = None
+        try:
+            from system import PsyMindSystem
+            self.psy_mind = PsyMindSystem(
+                api_key=dashscope_api_key or self.config.dashscope.api_key
+            )
+            logger.info("[Pipeline] Psychology_Rag initialized")
+        except Exception as e:
+            logger.warning(f"[Pipeline] Psychology_Rag init failed: {e}, will use simple LLM")
+
+        # 初始化 TTS（默认使用 GPT-SoVITS）
+        self.tts = GPTSoVITSTTS(self.config.gpt_sovits)
+        self.tts_fallback = EdgeTTSFallback()
+
+        # 初始化视频生成器
+        self.video_generator = BatchVideoGeneratorSimple(
+            pipeline=pipeline,
+            joyvasa_pipeline=joyvasa_pipeline,
+            output_dir=str(self.output_dir)
+        )
+
+        # 默认源图像
+        self.default_source_image = default_source_image
+
+        # 记录最后处理的文本
+        self.last_user_text = ""
+        self.last_response_text = ""
+
+        logger.info(f"[Pipeline] Initialized, output: {self.output_dir}")
+
+    async def process_input(
+        self,
+        user_text: str = None,
+        user_audio_path: str = None,
+        source_image: str = None,
+        session_id: str = None
+    ) -> PipelineResult:
+        """
+        处理输入，生成视频
+
+        Args:
+            user_text: 用户输入文本
+            user_audio_path: 用户输入音频路径（需要 ASR）
+            source_image: 源图像路径（可选，使用默认）
+            session_id: 会话 ID
+
+        Returns:
+            PipelineResult: 处理结果
+        """
+        start_time = time.time()
+        source_image = source_image or self.default_source_image
+        metrics = {}
+
+        try:
+            # ========== Step 1: ASR 识别（如果是语音输入） ==========
+            if user_audio_path and not user_text and use_asr:
+                t1 = time.time()
+                logger.info("[Pipeline] Step 1: ASR recognition...")
+                user_text = await self._asr_recognize(user_audio_path)
+                metrics['asr_time'] = time.time() - t1
+                logger.info(f"[Pipeline] ASR: {metrics['asr_time']:.2f}s, text: {user_text}")
+
+            if not user_text:
+                return PipelineResult(
+                    video_path="", video_url="",
+                    response_text="", user_text="",
+                    total_time=0, metrics=metrics,
+                    audio_duration=0, success=False,
+                    error_message="No input text provided"
+                )
+
+            self.last_user_text = user_text
+
+            # ========== Step 2: LLM 生成回复 ==========
+            t2 = time.time()
+            logger.info("[Pipeline] Step 2: LLM generating response...")
+
+            if self.psy_mind:
+                response_text = await self.psy_mind.process_message(user_text, session_id or "default")
+            else:
+                response_text = await self._simple_llm_response(user_text)
+
+            self.last_response_text = response_text
+            metrics['llm_time'] = time.time() - t2
+            logger.info(f"[Pipeline] LLM: {metrics['llm_time']:.2f}s, response length: {len(response_text)}")
+
+            # ========== Step 3: TTS 生成音频（默认使用 GPT-SoVITS） ==========
+            t3 = time.time()
+            logger.info("[Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...")
+            audio_path, audio_duration = await self._tts_generate(response_text)
+            metrics['tts_time'] = time.time() - t3
+            logger.info(f"[Pipeline] TTS: {metrics['tts_time']:.2f}s, audio duration: {audio_duration:.2f}s")
+
+            # ========== Step 4: 生成视频 ==========
+            t4 = time.time()
+            logger.info("[Pipeline] Step 4: Generating video...")
+            video_result = self.video_generator.generate(
+                audio_path=audio_path,
+                source_image_path=source_image,
+                session_id=session_id
+            )
+            metrics['video_time'] = video_result.total_time
+            metrics['joyvasa_time'] = video_result.metrics.get('joyvasa_time', 0)
+            metrics['render_time'] = video_result.metrics.get('render_time', 0)
+            metrics['ffmpeg_time'] = video_result.metrics.get('ffmpeg_time', 0)
+            logger.info(f"[Pipeline] Video: {metrics['video_time']:.2f}s")
+
+            # ========== 清理临时音频 ==========
+            try:
+                if audio_path and os.path.exists(audio_path):
+                    os.remove(audio_path)
+            except:
+                pass
+
+            # 计算总耗时
+            total_time = time.time() - start_time
+            metrics['total_time'] = total_time
+
+            # 检查是否超时
+            if total_time > 30:
+                logger.warning(f"[Pipeline] Generation timeout: {total_time:.2f}s > 30s")
+
+            # 生成视频 URL
+            video_filename = os.path.basename(video_result.video_path)
+            video_url = f"/videos/{video_filename}"
+
+            logger.info(f"[Pipeline] Completed in {total_time:.2f}s")
+
+            return PipelineResult(
+                video_path=video_result.video_path,
+                video_url=video_url,
+                response_text=response_text,
+                user_text=user_text,
+                total_time=total_time,
+                metrics=metrics,
+                audio_duration=audio_duration,
+                success=True
+            )
+
+        except Exception as e:
+            logger.exception(f"[Pipeline] Error: {e}")
+            return PipelineResult(
+                video_path="", video_url="",
+                response_text="", user_text=user_text or "",
+                total_time=time.time() - start_time,
+                metrics=metrics, audio_duration=0,
+                success=False, error_message=str(e)
+            )
+
+    async def _asr_recognize(self, audio_path: str) -> str:
+        """ASR 语音识别"""
+        if self.asr is None:
+            return ""
+        loop = asyncio.get_event_loop()
+        return await loop.run_in_executor(None, self.asr.recognize, audio_path)
+
+    async def _simple_llm_response(self, user_text: str) -> str:
+        """简单 LLM 回复（当 Psychology_Rag 不可用时）"""
+        try:
+            from openai import AsyncOpenAI
+
+            client = AsyncOpenAI(
+                api_key=self.config.dashscope.api_key,
+                base_url=self.config.dashscope.base_url
+            )
+
+            response = await client.chat.completions.create(
+                model=self.config.dashscope.model_name,
+                messages=[
+                    {"role": "system", "content": "你是一个友好、专业的心理健康助手。请用简洁、温暖的语言回复用户。"},
+                    {"role": "user", "content": user_text}
+                ],
+                max_tokens=self.config.dashscope.max_tokens,
+                temperature=self.config.dashscope.temperature
+            )
+
+            return response.choices[0].message.content
+
+        except Exception as e:
+            logger.error(f"LLM error: {e}")
+            return f"抱歉，我现在无法回复。您说的是：{user_text}"
+
+    async def _tts_generate(self, text: str) -> Tuple[str, float]:
+        """
+        TTS 生成音频（默认使用 GPT-SoVITS）
+
+        Returns:
+            Tuple[str, float]: (音频文件路径, 音频时长)
+        """
+        # 生成临时音频文件路径
+        audio_path = str(self.temp_dir / f"tts_{int(time.time() * 1000)}.wav")
+
+        logger.info(f"[TTS] Starting TTS generation for text: {text[:50]}...")
+        logger.info(f"[TTS] GPT-SoVITS server: {self.tts.server_url}")
+        logger.info(f"[TTS] Ref audio: {self.tts.ref_audio}")
+
+        # 优先使用 GPT-SoVITS
+        try:
+            loop = asyncio.get_event_loop()
+            result = await loop.run_in_executor(
+                None,
+                self.tts.generate,
+                text,
+                audio_path
+            )
+            logger.info(f"[TTS] GPT-SoVITS success: path={result[0]}, duration={result[1]:.2f}s")
+            return result
+        except Exception as e:
+            logger.warning(f"[TTS] GPT-SoVITS failed: {e}, using EdgeTTS fallback")
+            try:
+                result = await self.tts_fallback.generate(text, audio_path)
+                logger.info(f"[TTS] EdgeTTS success: path={result[0]}, duration={result[1]:.2f}s")
+                return result
+            except Exception as e2:
+                logger.error(f"[TTS] EdgeTTS also failed: {e2}")
+                raise RuntimeError("All TTS methods failed")
+
+    def cleanup(self):
+        """清理临时文件"""
+        try:
+            import shutil
+            if self.temp_dir.exists():
+                shutil.rmtree(self.temp_dir)
+            self.video_generator.cleanup()
+        except Exception as e:
+            logger.warning(f"Cleanup error: {e}")
+
+
+class BatchPipelineManager:
+    """
+    批量流水线管理器
+
+    管理多个会话的流水线实例
+    """
+
+    def __init__(self):
+        self.config = get_default_config()
+        self._pipelines: Dict[str, DigitalHumanBatchPipeline] = {}
+        self._initialized = False
+        self.joyvasa_pipeline = None
+        self.default_source_image = None
+
+    def initialize(
+        self,
+        pipeline=None,
+        joyvasa_pipeline=None,
+        config=None,
+        default_source_image: str = None,
+        dashscope_api_key: str = None,
+        gpt_sovits_server: str = None,
+        tts_ref_file: str = None,
+        tts_ref_text: str = None,
+        output_dir: str = None
+    ):
+        """初始化管理器"""
+
+        # 使用传入的配置或创建默认配置
+        if config:
+            self.config = config
+
+        # 兼容旧版调用：如果传递了单独的参数，覆盖配置
+        if dashscope_api_key:
+            self.config.dashscope.api_key = dashscope_api_key
+        if gpt_sovits_server:
+            self.config.gpt_sovits.server_url = gpt_sovits_server
+        if tts_ref_file:
+            self.config.gpt_sovits.ref_audio = tts_ref_file
+        if tts_ref_text:
+            self.config.gpt_sovits.ref_text = tts_ref_text
+        if output_dir:
+            self.config.output_dir = output_dir
+
+        # 保存 pipeline 引用（兼容 app.py）
+        self.pipeline = pipeline
+        self.joyvasa_pipeline = joyvasa_pipeline or pipeline
+        self.default_source_image = default_source_image
+        self._initialized = True
+
+        logger.info("[BatchPipelineManager] Initialized")
+        logger.info(f"  - GPT-SoVITS: {self.config.gpt_sovits.server_url}")
+        logger.info(f"  - Output: {self.config.output_dir}")
+
+    def get_or_create_pipeline(self, session_id: str) -> DigitalHumanBatchPipeline:
+        """获取或创建流水线实例"""
+        if not self._initialized:
+            raise RuntimeError("BatchPipelineManager not initialized")
+
+        if session_id not in self._pipelines:
+            self._pipelines[session_id] = DigitalHumanBatchPipeline(
+                output_dir=self.config.output_dir,
+                config=self.config,
+                pipeline=self.pipeline,
+                joyvasa_pipeline=self.joyvasa_pipeline,
+                default_source_image=self.default_source_image
+            )
+
+        return self._pipelines[session_id]
+
+    def cleanup_session(self, session_id: str):
+        """清理会话"""
+        if session_id in self._pipelines:
+            self._pipelines[session_id].cleanup()
+            del self._pipelines[session_id]
+
+    async def process(
+        self,
+        session_id: str,
+        user_text: str = None,
+        user_audio_path: str = None,
+        source_image: str = None
+    ) -> 'PipelineResult':
+        """处理输入，生成视频"""
+        pipeline = self.get_or_create_pipeline(session_id)
+        return await pipeline.process_input(
+            user_text=user_text,
+            user_audio_path=user_audio_path,
+            source_image=source_image,
+            session_id=session_id
+        )
+
+    def cleanup_all(self):
+        """清理所有会话"""
+        for session_id in list(self._pipelines.keys()):
+            self.cleanup_session(session_id)
+        logger.info("[BatchPipelineManager] All sessions cleaned up")
+
+
+# 全局管理器实例
+_batch_pipeline_manager: Optional[BatchPipelineManager] = None
+
+
+def get_batch_pipeline_manager() -> BatchPipelineManager:
+    """获取全局批量流水线管理器"""
+    global _batch_pipeline_manager
+    if _batch_pipeline_manager is None:
+        _batch_pipeline_manager = BatchPipelineManager()
+    return _batch_pipeline_manager
+
+
+# 导出全局实例（兼容 app.py 的导入方式）
+batch_pipeline_manager = get_batch_pipeline_manager()

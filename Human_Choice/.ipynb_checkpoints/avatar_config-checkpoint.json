@@ -1,0 +1,22 @@
+{
+    "avatars": {
+        "human_1": {
+            "name": "数字人1",
+            "source_image": "Human_1/qys.png",
+            "idle_video": "Human_1/qys.mp4",
+            "description": "默认数字人形象"
+        },
+        "human_2": {
+            "name": "数字人2",
+            "source_image": "Human_2/wzx.png",
+            "idle_video": "Human_2/idle.mp4",
+            "description": "备用数字人形象"
+        }
+    },
+    "default_avatar": "human_1",
+    "settings": {
+        "frame_rate": 25,
+        "audio_sample_rate": 16000,
+        "batch_size": 16
+    }
+}

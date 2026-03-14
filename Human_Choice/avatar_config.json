@@ -4,13 +4,41 @@
             "name": "数字人1",
             "source_image": "Human_1/qys.png",
             "idle_video": "Human_1/qys.mp4",
-            "description": "默认数字人形象"
+            "description": "默认数字人形象",
+            "tts": {
+                "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_1",
+                "default_ref": {
+                    "audio": "default.wav",
+                    "text": "清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。"
+                },
+                "emotion_refs": {
+                    "default": ["default.wav", "清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。"],
+                    "happy": ["happy.wav", "真是太棒了，我非常开心能够见到你。"],
+                    "sad": ["sad.wav", "有些事情，想起来心里还是会难过。"],
+                    "calm": ["calm.wav", "让我们慢慢来，一步一步解决这个问题。"],
+                    "question": ["question.wav", "你知道这是怎么回事吗？"]
+                }
+            }
         },
         "human_2": {
             "name": "数字人2",
             "source_image": "Human_2/wzx.png",
-            "idle_video": "Human_2/idle.mp4",
-            "description": "备用数字人形象"
+            "idle_video": "Human_2/wzx.mp4",
+            "description": "备用数字人形象",
+            "tts": {
+                "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_2",
+                "default_ref": {
+                    "audio": "default.wav",
+                    "text": "愿你每天都被温柔以待，平安顺遂。"
+                },
+                "emotion_refs": {
+                    "default": ["default.wav", "愿你每天都被温柔以待，平安顺遂。"],
+                    "happy": ["happy.wav", "哈哈！太棒啦！真的太开心，太满足了！"],
+                    "sad": ["sad.wav", "心里有点难过，感觉不太好受。"],
+                    "calm": ["calm.wav", "先别着急，我们慢慢理清思路。"],
+                    "question": ["question.wav", "你知道这个到底是怎么回事吗？"]
+                }
+            }
         }
     },
     "default_avatar": "human_1",

@@ -381,13 +381,29 @@ class BatchVideoGeneratorSimple:
         t1 = time.time()
         logger.info("[SimpleBatch] Running JoyVASA...")
 
-        # 检查音频文件
+        # 验证音频文件存在且有效
+        if not os.path.exists(audio_path):
+            raise RuntimeError(f"Audio file not found: {audio_path}")
+
+        audio_file_size = os.path.getsize(audio_path)
+        logger.info(f"[SimpleBatch] Audio file size: {audio_file_size} bytes")
+
+        if audio_file_size == 0:
+            raise RuntimeError(f"Audio file is empty: {audio_path}")
+
+        # 检查音频文件信息
+        audio_duration = 0
         try:
             import soundfile as sf
             audio_info = sf.info(audio_path)
-            logger.info(f"[SimpleBatch] Audio file: {audio_path}, duration={audio_info.duration:.2f}s, samplerate={audio_info.samplerate}, format={audio_info.format}")
+            audio_duration = audio_info.duration
+            logger.info(f"[SimpleBatch] Audio file: {audio_path}, duration={audio_duration:.2f}s, samplerate={audio_info.samplerate}, format={audio_info.format}")
+
+            if audio_duration < 0.1:
+                raise RuntimeError(f"Audio duration too short: {audio_duration:.2f}s")
         except Exception as e:
-            logger.warning(f"[SimpleBatch] Failed to read audio info: {e}")
+            logger.error(f"[SimpleBatch] Failed to read audio info: {e}")
+            raise RuntimeError(f"Invalid audio file: {e}")
 
         try:
             motion_info = self.joyvasa.gen_motion_sequence(audio_path)
@@ -401,7 +417,8 @@ class BatchVideoGeneratorSimple:
         logger.info(f"[SimpleBatch] JoyVASA: {n_frames} frames in {metrics['joyvasa_time']:.2f}s")
 
         if n_frames == 0:
-            raise RuntimeError(f"JoyVASA generated 0 frames. Audio file: {audio_path}")
+            logger.error(f"[SimpleBatch] JoyVASA generated 0 frames for audio: {audio_path}, duration: {audio_duration:.2f}s")
+            raise RuntimeError(f"JoyVASA generated 0 frames. Audio file: {audio_path}, duration: {audio_duration:.2f}s")
 
         # Step 2: 准备源图像
         t2 = time.time()
@@ -454,10 +471,33 @@ class BatchVideoGeneratorSimple:
         self._write_frames_video(frames, temp_video)
         metrics['write_time'] = time.time() - t4
 
+        # 获取音频时长（在验证之前）
+        audio_duration = 0
+        try:
+            import soundfile as sf
+            info = sf.info(audio_path)
+            audio_duration = info.duration
+            logger.info(f"[SimpleBatch] Audio duration: {audio_duration:.2f}s")
+        except Exception as e:
+            logger.warning(f"[SimpleBatch] Failed to get audio duration: {e}")
+
         # Step 5: FFmpeg 合成
         t5 = time.time()
         self._merge_av(temp_video, audio_path, output_video)
         metrics['ffmpeg_time'] = time.time() - t5
+
+        # 验证最终视频时长
+        try:
+            probe_cmd = [self.ffmpeg.replace('ffmpeg', 'ffprobe'), '-v', 'error',
+                        '-show_entries', 'format=duration',
+                        '-of', 'default=noprint_wrappers=1:nokey=1', output_video]
+            probe_result = subprocess.run(probe_cmd, capture_output=True, text=True)
+            final_duration = float(probe_result.stdout.strip())
+            logger.info(f"[SimpleBatch] Final video duration: {final_duration:.2f}s, expected: {audio_duration:.2f}s")
+            if abs(final_duration - audio_duration) > 0.5:
+                logger.warning(f"[SimpleBatch] Duration mismatch! Video: {final_duration:.2f}s, Audio: {audio_duration:.2f}s")
+        except Exception as e:
+            logger.warning(f"[SimpleBatch] Failed to verify video duration: {e}")
 
         # 清理
         try:
@@ -468,15 +508,6 @@ class BatchVideoGeneratorSimple:
         metrics['total_time'] = time.time() - start_time
         logger.info(f"[SimpleBatch] Total: {metrics['total_time']:.2f}s")
 
-        # 获取音频时长
-        audio_duration = 0
-        try:
-            import soundfile as sf
-            info = sf.info(audio_path)
-            audio_duration = info.duration
-        except:
-            pass
-
         return VideoGenerationResult(
             video_path=output_video,
             total_time=metrics['total_time'],
@@ -486,33 +517,71 @@ class BatchVideoGeneratorSimple:
         )
 
     def _write_frames_video(self, frames: list, output_path: str, fps: int = 25):
-        """写入视频文件"""
+        """写入视频文件 - 使用 FFmpeg 确保正确的时间戳"""
         if not frames:
             raise ValueError("No frames")
 
         h, w = frames[0].shape[:2]
-        fourcc = cv2.VideoWriter_fourcc(*'mp4v')
-        writer = cv2.VideoWriter(output_path, fourcc, fps, (w, h))
 
+        # 使用 FFmpeg 管道方式写入，确保正确的时间戳元数据
+        cmd = [
+            self.ffmpeg, '-y',
+            '-f', 'rawvideo',
+            '-vcodec', 'rawvideo',
+            '-s', f'{w}x{h}',
+            '-pix_fmt', 'bgr24',
+            '-r', str(fps),
+            '-i', '-',
+            '-c:v', 'libx264',
+            '-preset', 'fast',
+            '-crf', '18',
+            '-pix_fmt', 'yuv420p',
+            output_path
+        ]
+
+        process = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
         for frame in frames:
-            writer.write(frame)
-        writer.release()
+            process.stdin.write(frame.tobytes())
+        process.stdin.close()
+        process.wait()
+
+        if process.returncode != 0:
+            stderr = process.stderr.read().decode('utf-8', errors='ignore')
+            raise RuntimeError(f"FFmpeg video encoding failed: {stderr}")
 
     def _merge_av(self, video_path: str, audio_path: str, output_path: str):
         """FFmpeg 合成音视频"""
+        # 使用 copy 模式避免重新编码，保留正确的时间戳
         cmd = [
             self.ffmpeg, '-y',
             '-i', video_path,
             '-i', audio_path,
-            '-c:v', 'libx264', '-preset', 'fast', '-crf', '23',
+            '-c:v', 'copy',  # 直接复制视频流，避免重新编码导致的时间戳问题
             '-c:a', 'aac', '-b:a', '128k',
-            '-pix_fmt', 'yuv420p',
+            '-movflags', '+faststart',  # 优化流式播放
+            '-map', '0:v:0',  # 使用第一个输入的视频流
+            '-map', '1:a:0',  # 使用第二个输入的音频流
             '-shortest',
             output_path
         ]
 
         result = subprocess.run(cmd, capture_output=True, text=True)
         if result.returncode != 0:
-            raise RuntimeError(f"FFmpeg failed: {result.stderr}")
+            logger.warning(f"[SimpleBatch] FFmpeg copy mode failed, trying re-encode: {result.stderr[:500]}")
+            # 回退到重新编码模式
+            cmd_fallback = [
+                self.ffmpeg, '-y',
+                '-i', video_path,
+                '-i', audio_path,
+                '-c:v', 'libx264', '-preset', 'fast', '-crf', '23',
+                '-c:a', 'aac', '-b:a', '128k',
+                '-pix_fmt', 'yuv420p',
+                '-movflags', '+faststart',
+                '-shortest',
+                output_path
+            ]
+            result = subprocess.run(cmd_fallback, capture_output=True, text=True)
+            if result.returncode != 0:
+                raise RuntimeError(f"FFmpeg failed: {result.stderr}")
 
         return output_path

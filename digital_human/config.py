@@ -42,11 +42,18 @@ _AVATAR_CONFIG = _load_avatar_config()
 class GPTSoVITSConfig:
     """GPT-SoVITS TTS 配置"""
     server_url: str = "http://127.0.0.1:9880"
+    language: str = "zh"
+    default_tts: str = "gpt-sovits"
+
+    # 全局回退参考音频（当数字人没有配置时使用）
     ref_audio: str = "/root/autodl-tmp/qys.wav"
     ref_text: str = "清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。"
-    language: str = "zh"
-    # 默认使用 GPT-SoVITS
-    default_tts: str = "gpt-sovits"
+
+    # TTS 采样参数（影响情感丰富度）
+    temperature: float = 1.1      # 1.0-1.5，越大越随机/丰富
+    top_k: int = 10               # 5-15
+    top_p: float = 0.95           # 0.9-1.0
+    speed_factor: float = 1.0     # 语速
 
     def __post_init__(self):
         # 环境变量覆盖
@@ -67,7 +74,7 @@ class GPTSoVITSConfig:
 class SenseVoiceConfig:
     """SenseVoice ASR 配置"""
     model_name: str = "iic/SenseVoiceSmall"
-    model_path: str = "/root/autodl-tmp/SenseVoice/iic/SenseVoiceSmall/model.pt"
+    model_path: str = "/root/autodl-tmp/SenseVoice/iic/SenseVoiceSmall"  # 使用 model_name 自动下载，或设置绝对路径
     language: str = "auto"
     use_gpu: bool = True
 
@@ -76,7 +83,8 @@ class SenseVoiceConfig:
         if env_model_path:
             self.model_path = env_model_path
         elif not self.model_path:
-            self.model_path = str(Path(DEFAULT_PATHS["sensevoice"]) / "models" / "iic_SenseVoiceSmall")
+            # 默认使用项目根目录下的 SenseVoice
+            self.model_path = str(Path(DEFAULT_PATHS["sensevoice"]) / "iic" / "SenseVoiceSmall")
 
 
 @dataclass
@@ -102,6 +110,8 @@ class AvatarInfo:
     source_image: str
     idle_video: Optional[str] = None
     description: str = ""
+    # TTS 参考音频配置
+    tts_config: Dict[str, Any] = field(default_factory=dict)
 
     def get_full_source_path(self) -> str:
         """获取源图像完整路径"""
@@ -123,6 +133,41 @@ class AvatarInfo:
     def get_source_image_url(self) -> str:
         """获取源图像URL"""
         return f"/human_choice/{self.source_image}"
+
+    def get_tts_ref(self, emotion: str = "default") -> tuple:
+        """
+        获取 TTS 参考音频路径和文本
+
+        Args:
+            emotion: 情感类型 (default/happy/sad/calm/question)
+
+        Returns:
+            (ref_audio_path, ref_text)
+        """
+        if not self.tts_config:
+            # 没有配置，返回空
+            return "", ""
+
+        ref_audio_dir = self.tts_config.get("ref_audio_dir", "")
+
+        # 尝试获取指定情感的参考音频
+        emotion_refs = self.tts_config.get("emotion_refs", {})
+        if emotion in emotion_refs:
+            audio_file, text = emotion_refs[emotion]
+            return f"{ref_audio_dir}/{audio_file}", text
+
+        # 回退到默认
+        default_ref = self.tts_config.get("default_ref", {})
+        if default_ref:
+            audio = default_ref.get("audio", "")
+            text = default_ref.get("text", "")
+            return f"{ref_audio_dir}/{audio}", text
+
+        return "", ""
+
+    def get_tts_ref_dir(self) -> str:
+        """获取参考音频目录"""
+        return self.tts_config.get("ref_audio_dir", "")
 
 
 @dataclass
@@ -146,7 +191,8 @@ class AvatarConfig:
                 name=info.get("name", avatar_id),
                 source_image=info.get("source_image", ""),
                 idle_video=info.get("idle_video"),
-                description=info.get("description", "")
+                description=info.get("description", ""),
+                tts_config=info.get("tts", {})
             )
 
     def get_avatar(self, avatar_id: str) -> Optional[AvatarInfo]:
@@ -206,6 +252,9 @@ class DigitalHumanConfig:
     # 服务配置
     host: str = "0.0.0.0"
     port: int = 8010
+
+    # 功能开关
+    use_asr: bool = True  # 启用 ASR 语音识别
 
     # 输出目录
     output_dir: str = field(default_factory=lambda: DEFAULT_PATHS["output"])

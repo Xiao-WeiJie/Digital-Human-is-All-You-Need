@@ -1642,3 +1642,2094 @@ ValueError: not enough values to unpack (expected 10, got 7)
 2026-03-13 09:51:15,296 - logger - INFO - [Pipeline] Video: 13.30s
 2026-03-13 09:51:15,687 - logger - INFO - [Pipeline] Completed in 19.80s
 2026-03-13 09:51:15,688 - logger - INFO - [BatchGenerate] Completed in 19.80s
+2026-03-13 10:11:32,386 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 10:11:32,387 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 10:11:38,081 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 10:12:14,713 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 10:12:16,578 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 10:12:19,672 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 10:12:19,672 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 10:12:19,961 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 10:12:19,965 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 10:12:19,965 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 10:12:19,966 - logger - INFO - Initializing batch pipeline...
+2026-03-13 10:12:19,967 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 10:12:19,968 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 10:12:19,968 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 10:12:19,968 - logger - INFO - Batch pipeline initialized
+2026-03-13 10:12:19,969 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 10:12:19,969 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 10:12:19,969 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 10:12:19,969 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 10:19:05,899 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 10:19:13,416 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 10:19:17,101 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 10:19:18,186 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 10:19:21,733 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 10:19:21,733 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 10:19:22,017 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 10:19:22,021 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 10:19:22,187 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 10:19:22,187 - logger - INFO - Initializing batch pipeline...
+2026-03-13 10:19:22,189 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 10:19:22,189 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 10:19:22,189 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 10:19:22,189 - logger - INFO - Batch pipeline initialized
+2026-03-13 10:19:22,191 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 10:19:22,191 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 10:19:22,191 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 10:19:22,191 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 10:27:46,838 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 10:27:47,990 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 10:27:48,187 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 10:27:48,188 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 10:27:48,188 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 10:27:49,943 - logger - INFO - [Pipeline] LLM: 1.76s, response length: 57
+2026-03-13 10:27:49,943 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 10:27:49,944 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 10:27:49,944 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 10:27:49,944 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:27:49,944 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 10:27:49,944 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 10:27:49,945 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:27:49,945 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 10:27:49,945 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 10:27:53,402 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 10:27:53,402 - logger - INFO - [GPT-SoVITS] Received 352044 bytes
+2026-03-13 10:27:53,402 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 10:27:53,402 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 10:27:53,403 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=352036, data_size=352000
+2026-03-13 10:27:55,090 - logger - INFO - [GPT-SoVITS] Generated audio: 11.00s, format=WAV, samplerate=16000
+2026-03-13 10:27:55,091 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773368869943.wav, duration=11.00s
+2026-03-13 10:27:55,091 - logger - INFO - [Pipeline] TTS: 5.15s, audio duration: 11.00s
+2026-03-13 10:27:55,091 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 10:27:55,091 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 10:27:55,092 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773368869943.wav, duration=11.00s, samplerate=16000, format=WAV
+2026-03-13 10:27:56,509 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 10:27:56,510 - logger - INFO - [SimpleBatch] JoyVASA: 275 frames in 1.42s
+2026-03-13 10:27:56,510 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] Source prepared in 0.21s
+2026-03-13 10:27:56,724 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 10:27:57,783 - logger - INFO - [SimpleBatch] Rendered 50/275 frames
+2026-03-13 10:27:58,729 - logger - INFO - [SimpleBatch] Rendered 100/275 frames
+2026-03-13 10:27:59,931 - logger - INFO - [SimpleBatch] Rendered 150/275 frames
+2026-03-13 10:28:00,843 - logger - INFO - [SimpleBatch] Rendered 200/275 frames
+2026-03-13 10:28:01,571 - logger - INFO - [SimpleBatch] Rendered 250/275 frames
+2026-03-13 10:28:01,933 - logger - INFO - [SimpleBatch] Rendered 275 frames in 5.21s
+2026-03-13 10:28:08,888 - logger - INFO - [SimpleBatch] Total: 13.80s
+2026-03-13 10:28:08,892 - logger - INFO - [Pipeline] Video: 13.80s
+2026-03-13 10:28:10,888 - logger - INFO - [Pipeline] Completed in 22.70s
+2026-03-13 10:28:10,889 - logger - INFO - [BatchGenerate] Completed in 22.70s
+2026-03-13 10:28:47,559 - logger - INFO - [BatchGenerate] Processing: text=你能给我讲个笑话吗, avatar=human_1
+2026-03-13 10:28:47,561 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 10:28:49,888 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 10:28:49,889 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 10:28:49,889 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 10:28:54,006 - logger - INFO - [Pipeline] LLM: 4.12s, response length: 216
+2026-03-13 10:28:54,007 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 10:28:54,007 - logger - INFO - [TTS] Starting TTS generation for text: 当然可以！😄  
+来一个轻松的小笑话：
+
+> 为什么心理学家从不玩捉迷藏？  
+> ——因为……  ...
+2026-03-13 10:28:54,007 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 10:28:54,007 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:28:54,008 - logger - INFO - [GPT-SoVITS] Starting generation for text: 当然可以！😄  
+来一个轻松的小笑话：
+
+> 为什么心理学家从不玩捉迷藏？  
+> ——因为……  ...
+2026-03-13 10:28:54,008 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 10:28:54,008 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:28:54,008 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 10:28:54,008 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 10:29:08,378 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 10:29:08,378 - logger - INFO - [GPT-SoVITS] Received 1138604 bytes
+2026-03-13 10:29:08,378 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 10:29:08,378 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 10:29:08,380 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=1138596, data_size=1138560
+2026-03-13 10:29:10,993 - logger - INFO - [GPT-SoVITS] Generated audio: 35.58s, format=WAV, samplerate=16000
+2026-03-13 10:29:10,994 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773368934007.wav, duration=35.58s
+2026-03-13 10:29:10,994 - logger - INFO - [Pipeline] TTS: 16.99s, audio duration: 35.58s
+2026-03-13 10:29:10,994 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 10:29:10,994 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 10:29:10,995 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773368934007.wav, duration=35.58s, samplerate=16000, format=WAV
+2026-03-13 10:29:14,023 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 10:29:14,024 - logger - INFO - [SimpleBatch] JoyVASA: 889 frames in 3.03s
+2026-03-13 10:29:14,024 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] Source prepared in 0.21s
+2026-03-13 10:29:14,232 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 10:29:15,205 - logger - INFO - [SimpleBatch] Rendered 50/889 frames
+2026-03-13 10:29:15,958 - logger - INFO - [SimpleBatch] Rendered 100/889 frames
+2026-03-13 10:29:16,695 - logger - INFO - [SimpleBatch] Rendered 150/889 frames
+2026-03-13 10:29:17,433 - logger - INFO - [SimpleBatch] Rendered 200/889 frames
+2026-03-13 10:29:18,162 - logger - INFO - [SimpleBatch] Rendered 250/889 frames
+2026-03-13 10:29:18,894 - logger - INFO - [SimpleBatch] Rendered 300/889 frames
+2026-03-13 10:29:19,626 - logger - INFO - [SimpleBatch] Rendered 350/889 frames
+2026-03-13 10:29:20,348 - logger - INFO - [SimpleBatch] Rendered 400/889 frames
+2026-03-13 10:29:21,074 - logger - INFO - [SimpleBatch] Rendered 450/889 frames
+2026-03-13 10:29:21,803 - logger - INFO - [SimpleBatch] Rendered 500/889 frames
+2026-03-13 10:29:22,629 - logger - INFO - [SimpleBatch] Rendered 550/889 frames
+2026-03-13 10:29:23,361 - logger - INFO - [SimpleBatch] Rendered 600/889 frames
+2026-03-13 10:29:24,090 - logger - INFO - [SimpleBatch] Rendered 650/889 frames
+2026-03-13 10:29:24,825 - logger - INFO - [SimpleBatch] Rendered 700/889 frames
+2026-03-13 10:29:25,565 - logger - INFO - [SimpleBatch] Rendered 750/889 frames
+2026-03-13 10:29:26,301 - logger - INFO - [SimpleBatch] Rendered 800/889 frames
+2026-03-13 10:29:27,043 - logger - INFO - [SimpleBatch] Rendered 850/889 frames
+2026-03-13 10:29:27,620 - logger - INFO - [SimpleBatch] Rendered 889 frames in 13.39s
+2026-03-13 10:29:41,588 - logger - INFO - [SimpleBatch] Total: 30.59s
+2026-03-13 10:29:41,595 - logger - INFO - [Pipeline] Video: 30.59s
+2026-03-13 10:29:43,588 - logger - WARNING - [Pipeline] Generation timeout: 53.70s > 30s
+2026-03-13 10:29:43,588 - logger - INFO - [Pipeline] Completed in 53.70s
+2026-03-13 10:29:43,589 - logger - INFO - [BatchGenerate] Completed in 53.70s
+2026-03-13 10:31:45,088 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 10:31:45,089 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 10:31:45,386 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 10:31:45,387 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 10:31:45,387 - logger - ERROR - [Pipeline] Error: name 'use_asr' is not defined
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/batch_pipeline.py", line 355, in process_input
+    if user_audio_path and not user_text and use_asr:
+NameError: name 'use_asr' is not defined
+2026-03-13 10:34:56,187 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 10:34:56,187 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 10:34:56,187 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 10:34:56,188 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 10:35:02,692 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 10:35:24,819 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 10:35:26,823 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 10:35:30,613 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 10:35:30,614 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 10:35:31,013 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 10:35:31,019 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 10:35:31,019 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 10:35:31,020 - logger - INFO - Initializing batch pipeline...
+2026-03-13 10:35:31,022 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 10:35:31,022 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 10:35:31,022 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 10:35:31,022 - logger - INFO - Batch pipeline initialized
+2026-03-13 10:35:31,024 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 10:35:31,024 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 10:35:31,024 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 10:35:31,024 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 10:35:38,735 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 10:35:39,089 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 10:35:39,389 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 10:35:39,389 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 10:35:39,389 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 10:35:41,282 - logger - INFO - [Pipeline] LLM: 1.89s, response length: 57
+2026-03-13 10:35:41,282 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 10:35:41,282 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 10:35:41,282 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 10:35:41,282 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:35:41,283 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 10:35:41,283 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 10:35:41,283 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 10:35:41,283 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 10:35:41,283 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 10:35:44,395 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 10:35:44,487 - logger - INFO - [GPT-SoVITS] Received 348204 bytes
+2026-03-13 10:35:44,487 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 10:35:44,487 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 10:35:44,487 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=348196, data_size=348160
+2026-03-13 10:35:44,589 - logger - INFO - [GPT-SoVITS] Generated audio: 10.88s, format=WAV, samplerate=16000
+2026-03-13 10:35:44,591 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773369341282.wav, duration=10.88s
+2026-03-13 10:35:44,591 - logger - INFO - [Pipeline] TTS: 3.31s, audio duration: 10.88s
+2026-03-13 10:35:44,591 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 10:35:44,591 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 10:35:44,591 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773369341282.wav, duration=10.88s, samplerate=16000, format=WAV
+2026-03-13 10:35:46,050 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 10:35:46,050 - logger - INFO - [SimpleBatch] JoyVASA: 272 frames in 1.46s
+2026-03-13 10:35:46,050 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 10:35:46,257 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 10:35:46,587 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 10:35:46,587 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 10:35:46,587 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 10:35:46,587 - logger - INFO - [SimpleBatch] Source prepared in 0.54s
+2026-03-13 10:35:46,587 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 10:35:47,646 - logger - INFO - [SimpleBatch] Rendered 50/272 frames
+2026-03-13 10:35:48,585 - logger - INFO - [SimpleBatch] Rendered 100/272 frames
+2026-03-13 10:35:49,374 - logger - INFO - [SimpleBatch] Rendered 150/272 frames
+2026-03-13 10:35:50,097 - logger - INFO - [SimpleBatch] Rendered 200/272 frames
+2026-03-13 10:35:50,822 - logger - INFO - [SimpleBatch] Rendered 250/272 frames
+2026-03-13 10:35:51,143 - logger - INFO - [SimpleBatch] Rendered 272 frames in 4.56s
+2026-03-13 10:35:57,487 - logger - INFO - [SimpleBatch] Total: 12.90s
+2026-03-13 10:35:57,489 - logger - INFO - [Pipeline] Video: 12.90s
+2026-03-13 10:35:58,188 - logger - INFO - [Pipeline] Completed in 18.80s
+2026-03-13 10:35:58,188 - logger - INFO - [BatchGenerate] Completed in 18.80s
+2026-03-13 10:51:59,487 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 10:51:59,487 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 10:52:05,346 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 10:52:12,207 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 10:52:13,922 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 10:52:17,108 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 10:52:17,109 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 10:52:17,311 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 10:52:17,314 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 10:52:17,314 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 10:52:17,314 - logger - INFO - Initializing batch pipeline...
+2026-03-13 10:52:17,316 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 10:52:17,316 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 10:52:17,316 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 10:52:17,316 - logger - INFO - Batch pipeline initialized
+2026-03-13 10:52:17,317 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 10:52:17,317 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 10:52:17,317 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 10:52:17,317 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 11:00:09,723 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 11:00:09,724 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 11:00:09,887 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 11:00:09,887 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 11:00:09,887 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 11:00:11,798 - logger - INFO - [Pipeline] LLM: 1.91s, response length: 60
+2026-03-13 11:00:11,799 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 11:00:11,799 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-13 11:00:11,799 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 11:00:11,799 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 11:00:11,799 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-13 11:00:11,799 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 11:00:11,799 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 11:00:11,800 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 11:00:11,800 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 11:00:15,579 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 11:00:15,580 - logger - INFO - [GPT-SoVITS] Received 366124 bytes
+2026-03-13 11:00:15,580 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 11:00:15,580 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 11:00:15,580 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=366116, data_size=366080
+2026-03-13 11:00:15,789 - logger - INFO - [GPT-SoVITS] Generated audio: 11.44s, format=WAV, samplerate=16000
+2026-03-13 11:00:15,790 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773370811799.wav, duration=11.44s
+2026-03-13 11:00:15,790 - logger - INFO - [Pipeline] TTS: 3.99s, audio duration: 11.44s
+2026-03-13 11:00:15,790 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 11:00:15,790 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 11:00:15,791 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773370811799.wav, duration=11.44s, samplerate=16000, format=WAV
+2026-03-13 11:00:16,925 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 11:00:17,187 - logger - INFO - [SimpleBatch] JoyVASA: 286 frames in 1.40s
+2026-03-13 11:00:17,187 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 11:00:17,368 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 11:00:17,387 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 11:00:17,387 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 11:00:17,387 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 11:00:17,387 - logger - INFO - [SimpleBatch] Source prepared in 0.20s
+2026-03-13 11:00:17,387 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 11:00:18,235 - logger - INFO - [SimpleBatch] Rendered 50/286 frames
+2026-03-13 11:00:18,993 - logger - INFO - [SimpleBatch] Rendered 100/286 frames
+2026-03-13 11:00:19,846 - logger - INFO - [SimpleBatch] Rendered 150/286 frames
+2026-03-13 11:00:20,587 - logger - INFO - [SimpleBatch] Rendered 200/286 frames
+2026-03-13 11:00:21,307 - logger - INFO - [SimpleBatch] Rendered 250/286 frames
+2026-03-13 11:00:22,108 - logger - INFO - [SimpleBatch] Rendered 286 frames in 4.72s
+2026-03-13 11:00:33,487 - logger - INFO - [SimpleBatch] Total: 17.70s
+2026-03-13 11:00:33,489 - logger - INFO - [Pipeline] Video: 17.70s
+2026-03-13 11:00:33,489 - logger - INFO - [Pipeline] Completed in 23.60s
+2026-03-13 11:00:33,489 - logger - INFO - [BatchGenerate] Completed in 23.60s
+2026-03-13 11:07:55,688 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 11:07:55,689 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 11:08:06,166 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 11:08:13,661 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 11:08:14,727 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 11:08:18,232 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 11:08:18,232 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 11:08:18,522 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 11:08:18,526 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 11:08:18,526 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 11:08:18,526 - logger - INFO - Initializing batch pipeline...
+2026-03-13 11:08:18,528 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 11:08:18,529 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 11:08:18,529 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 11:08:18,529 - logger - INFO - Batch pipeline initialized
+2026-03-13 11:08:18,530 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 11:08:18,530 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 11:08:18,530 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 11:08:18,530 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 15:58:58,051 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 15:59:08,124 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 15:59:09,497 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 15:59:11,668 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 15:59:11,669 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 15:59:11,912 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 15:59:11,915 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 15:59:11,916 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 15:59:11,916 - logger - INFO - Initializing batch pipeline...
+2026-03-13 15:59:11,917 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 15:59:11,918 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 15:59:11,918 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 15:59:11,918 - logger - INFO - Batch pipeline initialized
+2026-03-13 15:59:11,919 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 15:59:11,919 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 15:59:11,919 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 15:59:11,919 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 15:59:23,719 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 15:59:23,719 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 15:59:23,719 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 15:59:23,719 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 15:59:23,719 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 15:59:25,661 - logger - INFO - [Pipeline] LLM: 1.94s, response length: 57
+2026-03-13 15:59:25,661 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 15:59:25,661 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 15:59:25,661 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 15:59:25,661 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 15:59:25,661 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 15:59:25,662 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 15:59:25,662 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 15:59:25,662 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 15:59:25,662 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 15:59:34,069 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 15:59:34,069 - logger - INFO - [GPT-SoVITS] Received 329004 bytes
+2026-03-13 15:59:34,070 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 15:59:34,070 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 15:59:34,070 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=328996, data_size=328960
+2026-03-13 15:59:34,073 - logger - INFO - [GPT-SoVITS] Generated audio: 10.28s, format=WAV, samplerate=16000
+2026-03-13 15:59:34,074 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773388765661.wav, duration=10.28s
+2026-03-13 15:59:34,074 - logger - INFO - [Pipeline] TTS: 8.41s, audio duration: 10.28s
+2026-03-13 15:59:34,074 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 15:59:34,074 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 15:59:34,075 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773388765661.wav, duration=10.28s, samplerate=16000, format=WAV
+2026-03-13 15:59:35,009 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 15:59:35,010 - logger - INFO - [SimpleBatch] JoyVASA: 257 frames in 0.94s
+2026-03-13 15:59:35,010 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] Source prepared in 0.14s
+2026-03-13 15:59:35,145 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 15:59:36,028 - logger - INFO - [SimpleBatch] Rendered 50/257 frames
+2026-03-13 15:59:36,817 - logger - INFO - [SimpleBatch] Rendered 100/257 frames
+2026-03-13 15:59:37,636 - logger - INFO - [SimpleBatch] Rendered 150/257 frames
+2026-03-13 15:59:38,454 - logger - INFO - [SimpleBatch] Rendered 200/257 frames
+2026-03-13 15:59:39,243 - logger - INFO - [SimpleBatch] Rendered 250/257 frames
+2026-03-13 15:59:39,355 - logger - INFO - [SimpleBatch] Rendered 257 frames in 4.21s
+2026-03-13 15:59:41,440 - logger - INFO - [SimpleBatch] Total: 7.37s
+2026-03-13 15:59:41,441 - logger - INFO - [Pipeline] Video: 7.37s
+2026-03-13 15:59:41,442 - logger - INFO - [Pipeline] Completed in 17.72s
+2026-03-13 15:59:41,442 - logger - INFO - [BatchGenerate] Completed in 17.72s
+2026-03-13 16:00:38,661 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 16:00:38,662 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:00:38,663 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:00:38,663 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:00:38,663 - logger - ERROR - [Pipeline] Error: name 'use_asr' is not defined
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/batch_pipeline.py", line 355, in process_input
+    if user_audio_path and not user_text and use_asr:
+NameError: name 'use_asr' is not defined
+2026-03-13 16:10:39,071 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:10:39,071 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:10:39,071 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:10:44,444 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:10:49,811 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:10:51,244 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:10:53,794 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:10:53,795 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:10:54,086 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:10:54,089 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:10:54,090 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:10:54,090 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:10:54,095 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:10:54,095 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:10:54,096 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:10:54,096 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:10:54,097 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:10:54,097 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:10:54,097 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:10:54,097 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 16:11:32,218 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 16:11:32,219 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:11:32,220 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:11:32,220 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:11:32,220 - logger - INFO - [Pipeline] Step 1: ASR recognition...
+2026-03-13 16:11:35,693 - logger - ERROR - [ASR] Failed to load model: iic/SenseVoiceSmall is not registered
+2026-03-13 16:11:35,693 - logger - WARNING - [ASR] Model not available, returning empty text
+2026-03-13 16:11:35,694 - logger - INFO - [Pipeline] ASR: 3.47s, text: 
+2026-03-13 16:12:29,603 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:12:29,603 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:12:34,828 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:12:44,351 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:12:45,801 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:12:48,269 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:12:48,269 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:12:48,573 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:12:48,577 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:12:48,577 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:12:48,577 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:12:48,580 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:12:48,580 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:12:48,580 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:12:48,580 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:12:48,581 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:12:48,581 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:12:48,581 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:12:48,581 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 16:13:02,124 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 16:13:02,125 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:13:02,125 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:13:02,126 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:13:02,126 - logger - INFO - [Pipeline] Step 1: ASR recognition...
+2026-03-13 16:13:05,510 - logger - ERROR - [ASR] Failed to load model: expected str, bytes or os.PathLike object, not NoneType
+2026-03-13 16:13:05,510 - logger - WARNING - [ASR] Model not available, returning empty text
+2026-03-13 16:13:05,511 - logger - INFO - [Pipeline] ASR: 3.38s, text: 
+2026-03-13 16:16:43,520 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:16:43,520 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:16:47,968 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:16:52,860 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:16:54,272 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:16:56,942 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:16:56,942 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:16:57,210 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:16:57,214 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:16:57,215 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:16:57,215 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:16:57,217 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:16:57,217 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:16:57,217 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:16:57,217 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:16:57,218 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:16:57,218 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:16:57,218 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:16:57,218 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 16:17:10,148 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 16:17:10,148 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:17:10,148 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:17:10,148 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:17:10,148 - logger - INFO - [Pipeline] Step 1: ASR recognition...
+2026-03-13 16:17:13,807 - logger - ERROR - [ASR] Failed to load model: expected str, bytes or os.PathLike object, not NoneType
+2026-03-13 16:17:13,807 - logger - WARNING - [ASR] Model not available, returning empty text
+2026-03-13 16:17:13,808 - logger - INFO - [Pipeline] ASR: 3.66s, text: 
+2026-03-13 16:22:08,879 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:22:08,879 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:22:13,794 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:22:18,609 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:22:20,010 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:22:22,804 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:22:22,805 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:22:23,106 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:22:23,110 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:22:23,110 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:22:23,110 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:22:23,112 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:22:23,112 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:22:23,112 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:22:23,112 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:22:23,113 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:22:23,113 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:22:23,113 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:22:23,114 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 16:23:12,038 - logger - INFO - [BatchGenerate] Processing: text=audio, avatar=human_1
+2026-03-13 16:23:12,039 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:23:12,039 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:23:12,039 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:23:12,039 - logger - INFO - [Pipeline] Step 1: ASR recognition...
+2026-03-13 16:23:19,790 - logger - INFO - [ASR] SenseVoice model loaded
+2026-03-13 16:23:20,134 - logger - INFO - [ASR] Recognized: <|zh|><|NEUTRAL|><|Speech|><|woitn|>你好你好你好
+2026-03-13 16:23:20,135 - logger - INFO - [Pipeline] ASR: 8.10s, text: <|zh|><|NEUTRAL|><|Speech|><|woitn|>你好你好你好
+2026-03-13 16:23:20,135 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 16:23:22,329 - logger - INFO - [Pipeline] LLM: 2.19s, response length: 52
+2026-03-13 16:23:22,329 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 16:23:22,330 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+是想聊聊心情、压力，还是有什么想倾诉或探讨的呢？我在这里，愿意认真听你...
+2026-03-13 16:23:22,330 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 16:23:22,330 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:23:22,330 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+是想聊聊心情、压力，还是有什么想倾诉或探讨的呢？我在这里，愿意认真听你...
+2026-03-13 16:23:22,330 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 16:23:22,330 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:23:22,331 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 16:23:22,331 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 16:23:25,908 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 16:23:25,909 - logger - INFO - [GPT-SoVITS] Received 339244 bytes
+2026-03-13 16:23:25,909 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 16:23:25,909 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 16:23:25,909 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=339236, data_size=339200
+2026-03-13 16:23:25,912 - logger - INFO - [GPT-SoVITS] Generated audio: 10.60s, format=WAV, samplerate=16000
+2026-03-13 16:23:25,913 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773390202329.wav, duration=10.60s
+2026-03-13 16:23:25,913 - logger - INFO - [Pipeline] TTS: 3.58s, audio duration: 10.60s
+2026-03-13 16:23:25,913 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 16:23:25,913 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 16:23:25,914 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773390202329.wav, duration=10.60s, samplerate=16000, format=WAV
+2026-03-13 16:23:27,050 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 16:23:27,050 - logger - INFO - [SimpleBatch] JoyVASA: 265 frames in 1.14s
+2026-03-13 16:23:27,051 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] Source prepared in 0.18s
+2026-03-13 16:23:27,227 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 16:23:28,088 - logger - INFO - [SimpleBatch] Rendered 50/265 frames
+2026-03-13 16:23:28,898 - logger - INFO - [SimpleBatch] Rendered 100/265 frames
+2026-03-13 16:23:29,722 - logger - INFO - [SimpleBatch] Rendered 150/265 frames
+2026-03-13 16:23:30,528 - logger - INFO - [SimpleBatch] Rendered 200/265 frames
+2026-03-13 16:23:31,326 - logger - INFO - [SimpleBatch] Rendered 250/265 frames
+2026-03-13 16:23:31,568 - logger - INFO - [SimpleBatch] Rendered 265 frames in 4.34s
+2026-03-13 16:23:33,680 - logger - INFO - [SimpleBatch] Total: 7.77s
+2026-03-13 16:23:33,681 - logger - INFO - [Pipeline] Video: 7.77s
+2026-03-13 16:23:33,682 - logger - INFO - [Pipeline] Completed in 21.64s
+2026-03-13 16:23:33,682 - logger - INFO - [BatchGenerate] Completed in 21.64s
+2026-03-13 16:31:31,334 - logger - INFO - [BatchGenerate] Processing: text=你能给我讲一个笑话吗, avatar=human_1
+2026-03-13 16:31:31,335 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:31:31,335 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:31:31,335 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:31:31,335 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 16:31:34,115 - logger - INFO - [Pipeline] LLM: 2.78s, response length: 153
+2026-03-13 16:31:34,116 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 16:31:34,116 - logger - INFO - [TTS] Starting TTS generation for text: 当然可以！😄  
+来一个轻松的小笑话：
+
+> 为什么心理学家从不玩捉迷藏？  
+> ——因为……  ...
+2026-03-13 16:31:34,116 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 16:31:34,116 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:31:34,116 - logger - INFO - [GPT-SoVITS] Starting generation for text: 当然可以！😄  
+来一个轻松的小笑话：
+
+> 为什么心理学家从不玩捉迷藏？  
+> ——因为……  ...
+2026-03-13 16:31:34,116 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 16:31:34,116 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:31:34,116 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 16:31:34,117 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 16:31:45,479 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 16:31:45,480 - logger - INFO - [GPT-SoVITS] Received 857004 bytes
+2026-03-13 16:31:45,480 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 16:31:45,480 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 16:31:45,480 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=856996, data_size=856960
+2026-03-13 16:31:45,483 - logger - INFO - [GPT-SoVITS] Generated audio: 26.78s, format=WAV, samplerate=16000
+2026-03-13 16:31:45,484 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773390694116.wav, duration=26.78s
+2026-03-13 16:31:45,484 - logger - INFO - [Pipeline] TTS: 11.37s, audio duration: 26.78s
+2026-03-13 16:31:45,484 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 16:31:45,484 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 16:31:45,485 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773390694116.wav, duration=26.78s, samplerate=16000, format=WAV
+2026-03-13 16:31:46,913 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 16:31:46,913 - logger - INFO - [SimpleBatch] JoyVASA: 669 frames in 1.43s
+2026-03-13 16:31:46,913 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] Source prepared in 0.12s
+2026-03-13 16:31:47,032 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 16:31:47,799 - logger - INFO - [SimpleBatch] Rendered 50/669 frames
+2026-03-13 16:31:48,577 - logger - INFO - [SimpleBatch] Rendered 100/669 frames
+2026-03-13 16:31:49,360 - logger - INFO - [SimpleBatch] Rendered 150/669 frames
+2026-03-13 16:31:50,146 - logger - INFO - [SimpleBatch] Rendered 200/669 frames
+2026-03-13 16:31:50,924 - logger - INFO - [SimpleBatch] Rendered 250/669 frames
+2026-03-13 16:31:51,665 - logger - INFO - [SimpleBatch] Rendered 300/669 frames
+2026-03-13 16:31:52,423 - logger - INFO - [SimpleBatch] Rendered 350/669 frames
+2026-03-13 16:31:53,176 - logger - INFO - [SimpleBatch] Rendered 400/669 frames
+2026-03-13 16:31:53,930 - logger - INFO - [SimpleBatch] Rendered 450/669 frames
+2026-03-13 16:31:54,666 - logger - INFO - [SimpleBatch] Rendered 500/669 frames
+2026-03-13 16:31:55,392 - logger - INFO - [SimpleBatch] Rendered 550/669 frames
+2026-03-13 16:31:56,135 - logger - INFO - [SimpleBatch] Rendered 600/669 frames
+2026-03-13 16:31:56,867 - logger - INFO - [SimpleBatch] Rendered 650/669 frames
+2026-03-13 16:31:57,178 - logger - INFO - [SimpleBatch] Rendered 669 frames in 10.15s
+2026-03-13 16:32:02,452 - logger - INFO - [SimpleBatch] Total: 16.97s
+2026-03-13 16:32:02,454 - logger - INFO - [Pipeline] Video: 16.97s
+2026-03-13 16:32:02,455 - logger - WARNING - [Pipeline] Generation timeout: 31.12s > 30s
+2026-03-13 16:32:02,455 - logger - INFO - [Pipeline] Completed in 31.12s
+2026-03-13 16:32:02,455 - logger - INFO - [BatchGenerate] Completed in 31.12s
+2026-03-13 16:32:49,262 - logger - INFO - [BatchGenerate] Processing: text=我觉得自己干什么都不行，好废物啊, avatar=human_1
+2026-03-13 16:32:49,263 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:32:49,264 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:32:49,264 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:32:49,264 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 16:32:55,543 - logger - INFO - [Pipeline] LLM: 6.28s, response length: 363
+2026-03-13 16:32:55,543 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 16:32:55,543 - logger - INFO - [TTS] Starting TTS generation for text: 听到你这么说，我真的很想轻轻拍拍身边的位置，邀请你坐下来歇一会儿 🌼
+
+首先想告诉你：感到“什么都做...
+2026-03-13 16:32:55,544 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 16:32:55,544 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:32:55,544 - logger - INFO - [GPT-SoVITS] Starting generation for text: 听到你这么说，我真的很想轻轻拍拍身边的位置，邀请你坐下来歇一会儿 🌼
+
+首先想告诉你：感到“什么都做...
+2026-03-13 16:32:55,544 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 16:32:55,544 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:32:55,545 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 16:32:55,545 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 16:33:10,719 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 16:33:10,720 - logger - INFO - [GPT-SoVITS] Received 2218924 bytes
+2026-03-13 16:33:10,720 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 16:33:10,720 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 16:33:10,722 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=2218916, data_size=2218880
+2026-03-13 16:33:10,727 - logger - INFO - [GPT-SoVITS] Generated audio: 69.34s, format=WAV, samplerate=16000
+2026-03-13 16:33:10,728 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773390775543.wav, duration=69.34s
+2026-03-13 16:33:10,728 - logger - INFO - [Pipeline] TTS: 15.19s, audio duration: 69.34s
+2026-03-13 16:33:10,729 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 16:33:10,729 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 16:33:10,729 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773390775543.wav, duration=69.34s, samplerate=16000, format=WAV
+2026-03-13 16:33:15,439 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 16:33:15,439 - logger - INFO - [SimpleBatch] JoyVASA: 1733 frames in 4.71s
+2026-03-13 16:33:15,439 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] Source prepared in 0.13s
+2026-03-13 16:33:15,567 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 16:33:16,318 - logger - INFO - [SimpleBatch] Rendered 50/1733 frames
+2026-03-13 16:33:17,079 - logger - INFO - [SimpleBatch] Rendered 100/1733 frames
+2026-03-13 16:33:17,848 - logger - INFO - [SimpleBatch] Rendered 150/1733 frames
+2026-03-13 16:33:18,593 - logger - INFO - [SimpleBatch] Rendered 200/1733 frames
+2026-03-13 16:33:19,341 - logger - INFO - [SimpleBatch] Rendered 250/1733 frames
+2026-03-13 16:33:20,103 - logger - INFO - [SimpleBatch] Rendered 300/1733 frames
+2026-03-13 16:33:20,874 - logger - INFO - [SimpleBatch] Rendered 350/1733 frames
+2026-03-13 16:33:21,610 - logger - INFO - [SimpleBatch] Rendered 400/1733 frames
+2026-03-13 16:33:22,369 - logger - INFO - [SimpleBatch] Rendered 450/1733 frames
+2026-03-13 16:33:23,126 - logger - INFO - [SimpleBatch] Rendered 500/1733 frames
+2026-03-13 16:33:23,902 - logger - INFO - [SimpleBatch] Rendered 550/1733 frames
+2026-03-13 16:33:24,699 - logger - INFO - [SimpleBatch] Rendered 600/1733 frames
+2026-03-13 16:33:25,512 - logger - INFO - [SimpleBatch] Rendered 650/1733 frames
+2026-03-13 16:33:26,324 - logger - INFO - [SimpleBatch] Rendered 700/1733 frames
+2026-03-13 16:33:27,139 - logger - INFO - [SimpleBatch] Rendered 750/1733 frames
+2026-03-13 16:33:27,963 - logger - INFO - [SimpleBatch] Rendered 800/1733 frames
+2026-03-13 16:33:28,770 - logger - INFO - [SimpleBatch] Rendered 850/1733 frames
+2026-03-13 16:33:29,597 - logger - INFO - [SimpleBatch] Rendered 900/1733 frames
+2026-03-13 16:33:30,409 - logger - INFO - [SimpleBatch] Rendered 950/1733 frames
+2026-03-13 16:33:31,222 - logger - INFO - [SimpleBatch] Rendered 1000/1733 frames
+2026-03-13 16:33:32,027 - logger - INFO - [SimpleBatch] Rendered 1050/1733 frames
+2026-03-13 16:33:32,821 - logger - INFO - [SimpleBatch] Rendered 1100/1733 frames
+2026-03-13 16:33:33,634 - logger - INFO - [SimpleBatch] Rendered 1150/1733 frames
+2026-03-13 16:33:34,437 - logger - INFO - [SimpleBatch] Rendered 1200/1733 frames
+2026-03-13 16:33:35,236 - logger - INFO - [SimpleBatch] Rendered 1250/1733 frames
+2026-03-13 16:33:36,032 - logger - INFO - [SimpleBatch] Rendered 1300/1733 frames
+2026-03-13 16:33:36,839 - logger - INFO - [SimpleBatch] Rendered 1350/1733 frames
+2026-03-13 16:33:37,621 - logger - INFO - [SimpleBatch] Rendered 1400/1733 frames
+2026-03-13 16:33:38,398 - logger - INFO - [SimpleBatch] Rendered 1450/1733 frames
+2026-03-13 16:33:39,199 - logger - INFO - [SimpleBatch] Rendered 1500/1733 frames
+2026-03-13 16:33:39,970 - logger - INFO - [SimpleBatch] Rendered 1550/1733 frames
+2026-03-13 16:33:40,749 - logger - INFO - [SimpleBatch] Rendered 1600/1733 frames
+2026-03-13 16:33:41,536 - logger - INFO - [SimpleBatch] Rendered 1650/1733 frames
+2026-03-13 16:33:42,319 - logger - INFO - [SimpleBatch] Rendered 1700/1733 frames
+2026-03-13 16:33:42,833 - logger - INFO - [SimpleBatch] Rendered 1733 frames in 27.27s
+2026-03-13 16:33:55,365 - logger - INFO - [SimpleBatch] Total: 44.64s
+2026-03-13 16:33:55,374 - logger - INFO - [Pipeline] Video: 44.64s
+2026-03-13 16:33:55,375 - logger - WARNING - [Pipeline] Generation timeout: 66.11s > 30s
+2026-03-13 16:33:55,375 - logger - INFO - [Pipeline] Completed in 66.11s
+2026-03-13 16:33:55,375 - logger - INFO - [BatchGenerate] Completed in 66.11s
+2026-03-13 16:50:33,636 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:50:33,657 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:50:33,657 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:50:33,658 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:50:40,221 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:50:46,862 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:50:48,201 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:50:50,276 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:50:50,276 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:50:50,487 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:50:50,490 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:50:50,490 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:50:50,490 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:50:50,492 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:50:50,492 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:50:50,492 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:50:50,492 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:50:50,493 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:50:50,493 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:50:50,493 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:50:50,493 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 16:51:40,808 - logger - INFO - [BatchGenerate] Processing: text=我今天不开心，怎么办, avatar=human_1
+2026-03-13 16:51:40,809 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:51:40,810 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:51:40,810 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:51:40,810 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 16:51:46,746 - logger - INFO - [Pipeline] LLM: 5.94s, response length: 299
+2026-03-13 16:51:46,746 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 16:51:46,746 - logger - INFO - [TTS] Starting TTS generation for text: 抱抱你 🌼  
+不开心是完全正常的，就像天气会有阴天一样，情绪也会有起伏。你愿意说出来，已经是很勇敢...
+2026-03-13 16:51:46,746 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 16:51:46,746 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:51:46,747 - logger - INFO - [GPT-SoVITS] Starting generation for text: 抱抱你 🌼  
+不开心是完全正常的，就像天气会有阴天一样，情绪也会有起伏。你愿意说出来，已经是很勇敢...
+2026-03-13 16:51:46,747 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 16:51:46,747 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:51:46,747 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 16:51:46,747 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 16:52:00,274 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 16:52:00,274 - logger - INFO - [GPT-SoVITS] Received 1849004 bytes
+2026-03-13 16:52:00,274 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 16:52:00,275 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 16:52:00,277 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=1848996, data_size=1848960
+2026-03-13 16:52:00,285 - logger - INFO - [GPT-SoVITS] Generated audio: 57.78s, format=WAV, samplerate=16000
+2026-03-13 16:52:00,286 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773391906746.wav, duration=57.78s
+2026-03-13 16:52:00,286 - logger - INFO - [Pipeline] TTS: 13.54s, audio duration: 57.78s
+2026-03-13 16:52:00,286 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 16:52:00,286 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 16:52:00,286 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773391906746.wav, duration=57.78s, samplerate=16000, format=WAV
+2026-03-13 16:52:03,947 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 16:52:03,947 - logger - INFO - [SimpleBatch] JoyVASA: 1444 frames in 3.66s
+2026-03-13 16:52:03,947 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 16:52:04,126 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 16:52:04,126 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 16:52:04,126 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 16:52:04,126 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 16:52:04,127 - logger - INFO - [SimpleBatch] Source prepared in 0.18s
+2026-03-13 16:52:04,127 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 16:52:04,990 - logger - INFO - [SimpleBatch] Rendered 50/1444 frames
+2026-03-13 16:52:05,748 - logger - INFO - [SimpleBatch] Rendered 100/1444 frames
+2026-03-13 16:52:06,497 - logger - INFO - [SimpleBatch] Rendered 150/1444 frames
+2026-03-13 16:52:07,272 - logger - INFO - [SimpleBatch] Rendered 200/1444 frames
+2026-03-13 16:52:08,090 - logger - INFO - [SimpleBatch] Rendered 250/1444 frames
+2026-03-13 16:52:08,842 - logger - INFO - [SimpleBatch] Rendered 300/1444 frames
+2026-03-13 16:52:09,583 - logger - INFO - [SimpleBatch] Rendered 350/1444 frames
+2026-03-13 16:52:10,326 - logger - INFO - [SimpleBatch] Rendered 400/1444 frames
+2026-03-13 16:52:11,061 - logger - INFO - [SimpleBatch] Rendered 450/1444 frames
+2026-03-13 16:52:11,804 - logger - INFO - [SimpleBatch] Rendered 500/1444 frames
+2026-03-13 16:52:12,550 - logger - INFO - [SimpleBatch] Rendered 550/1444 frames
+2026-03-13 16:52:13,288 - logger - INFO - [SimpleBatch] Rendered 600/1444 frames
+2026-03-13 16:52:14,027 - logger - INFO - [SimpleBatch] Rendered 650/1444 frames
+2026-03-13 16:52:14,769 - logger - INFO - [SimpleBatch] Rendered 700/1444 frames
+2026-03-13 16:52:15,504 - logger - INFO - [SimpleBatch] Rendered 750/1444 frames
+2026-03-13 16:52:16,247 - logger - INFO - [SimpleBatch] Rendered 800/1444 frames
+2026-03-13 16:52:16,992 - logger - INFO - [SimpleBatch] Rendered 850/1444 frames
+2026-03-13 16:52:17,747 - logger - INFO - [SimpleBatch] Rendered 900/1444 frames
+2026-03-13 16:52:18,499 - logger - INFO - [SimpleBatch] Rendered 950/1444 frames
+2026-03-13 16:52:19,254 - logger - INFO - [SimpleBatch] Rendered 1000/1444 frames
+2026-03-13 16:52:19,992 - logger - INFO - [SimpleBatch] Rendered 1050/1444 frames
+2026-03-13 16:52:20,715 - logger - INFO - [SimpleBatch] Rendered 1100/1444 frames
+2026-03-13 16:52:21,454 - logger - INFO - [SimpleBatch] Rendered 1150/1444 frames
+2026-03-13 16:52:22,210 - logger - INFO - [SimpleBatch] Rendered 1200/1444 frames
+2026-03-13 16:52:22,966 - logger - INFO - [SimpleBatch] Rendered 1250/1444 frames
+2026-03-13 16:52:23,722 - logger - INFO - [SimpleBatch] Rendered 1300/1444 frames
+2026-03-13 16:52:24,488 - logger - INFO - [SimpleBatch] Rendered 1350/1444 frames
+2026-03-13 16:52:25,240 - logger - INFO - [SimpleBatch] Rendered 1400/1444 frames
+2026-03-13 16:52:25,902 - logger - INFO - [SimpleBatch] Rendered 1444 frames in 21.78s
+2026-03-13 16:52:36,676 - logger - INFO - [SimpleBatch] Total: 36.39s
+2026-03-13 16:52:36,681 - logger - INFO - [Pipeline] Video: 36.39s
+2026-03-13 16:52:36,682 - logger - WARNING - [Pipeline] Generation timeout: 55.87s > 30s
+2026-03-13 16:52:36,682 - logger - INFO - [Pipeline] Completed in 55.87s
+2026-03-13 16:52:36,682 - logger - INFO - [BatchGenerate] Completed in 55.87s
+2026-03-13 16:58:27,332 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 16:58:27,333 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 16:58:27,333 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 16:58:27,333 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 16:58:27,333 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 16:58:28,692 - logger - INFO - [Pipeline] LLM: 1.36s, response length: 57
+2026-03-13 16:58:28,693 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 16:58:28,693 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 16:58:28,693 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 16:58:28,693 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:58:28,693 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-13 16:58:28,693 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 16:58:28,693 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 16:58:28,693 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 16:58:28,693 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 16:58:32,271 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 16:58:32,272 - logger - INFO - [GPT-SoVITS] Received 364844 bytes
+2026-03-13 16:58:32,272 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 16:58:32,272 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 16:58:32,272 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=364836, data_size=364800
+2026-03-13 16:58:32,274 - logger - INFO - [GPT-SoVITS] Generated audio: 11.40s, format=WAV, samplerate=16000
+2026-03-13 16:58:32,274 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773392308693.wav, duration=11.40s
+2026-03-13 16:58:32,274 - logger - INFO - [Pipeline] TTS: 3.58s, audio duration: 11.40s
+2026-03-13 16:58:32,275 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 16:58:32,275 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 16:58:32,275 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773392308693.wav, duration=11.40s, samplerate=16000, format=WAV
+2026-03-13 16:58:32,953 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 16:58:32,953 - logger - INFO - [SimpleBatch] JoyVASA: 285 frames in 0.68s
+2026-03-13 16:58:32,954 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] Source prepared in 0.12s
+2026-03-13 16:58:33,077 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 16:58:33,851 - logger - INFO - [SimpleBatch] Rendered 50/285 frames
+2026-03-13 16:58:34,626 - logger - INFO - [SimpleBatch] Rendered 100/285 frames
+2026-03-13 16:58:35,421 - logger - INFO - [SimpleBatch] Rendered 150/285 frames
+2026-03-13 16:58:36,199 - logger - INFO - [SimpleBatch] Rendered 200/285 frames
+2026-03-13 16:58:36,984 - logger - INFO - [SimpleBatch] Rendered 250/285 frames
+2026-03-13 16:58:37,541 - logger - INFO - [SimpleBatch] Rendered 285 frames in 4.46s
+2026-03-13 16:58:39,725 - logger - INFO - [SimpleBatch] Total: 7.45s
+2026-03-13 16:58:39,726 - logger - INFO - [Pipeline] Video: 7.45s
+2026-03-13 16:58:39,726 - logger - INFO - [Pipeline] Completed in 12.39s
+2026-03-13 16:58:39,727 - logger - INFO - [BatchGenerate] Completed in 12.39s
+2026-03-13 16:59:36,412 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:59:36,412 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 16:59:36,412 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-13 16:59:43,092 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-13 16:59:46,839 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-13 16:59:48,298 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-13 16:59:50,793 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-13 16:59:50,793 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-13 16:59:51,092 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-13 16:59:51,096 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-13 16:59:51,096 - logger - INFO - Models and avatar loaded successfully
+2026-03-13 16:59:51,096 - logger - INFO - Initializing batch pipeline...
+2026-03-13 16:59:51,098 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-13 16:59:51,098 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-13 16:59:51,098 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-13 16:59:51,098 - logger - INFO - Batch pipeline initialized
+2026-03-13 16:59:51,099 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-13 16:59:51,100 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-13 16:59:51,100 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-13 16:59:51,100 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-13 17:02:20,418 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-13 17:02:20,419 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-13 17:02:20,419 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-13 17:02:20,419 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-13 17:02:20,419 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-13 17:02:22,380 - logger - INFO - [Pipeline] LLM: 1.96s, response length: 60
+2026-03-13 17:02:22,380 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-13 17:02:22,380 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-13 17:02:22,380 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-13 17:02:22,380 - logger - INFO - [TTS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 17:02:22,381 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-13 17:02:22,381 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-13 17:02:22,381 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/qys.wav
+2026-03-13 17:02:22,381 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-13 17:02:22,381 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-13 17:02:26,325 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-13 17:02:26,326 - logger - INFO - [GPT-SoVITS] Received 361004 bytes
+2026-03-13 17:02:26,326 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-13 17:02:26,326 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-13 17:02:26,326 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=360996, data_size=360960
+2026-03-13 17:02:26,329 - logger - INFO - [GPT-SoVITS] Generated audio: 11.28s, format=WAV, samplerate=16000
+2026-03-13 17:02:26,330 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773392542380.wav, duration=11.28s
+2026-03-13 17:02:26,330 - logger - INFO - [Pipeline] TTS: 3.95s, audio duration: 11.28s
+2026-03-13 17:02:26,330 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-13 17:02:26,330 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-13 17:02:26,331 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773392542380.wav, duration=11.28s, samplerate=16000, format=WAV
+2026-03-13 17:02:27,549 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-13 17:02:27,549 - logger - INFO - [SimpleBatch] JoyVASA: 282 frames in 1.22s
+2026-03-13 17:02:27,549 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-13 17:02:27,733 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-13 17:02:27,734 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-13 17:02:27,734 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-13 17:02:27,734 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-13 17:02:27,734 - logger - INFO - [SimpleBatch] Source prepared in 0.18s
+2026-03-13 17:02:27,734 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-13 17:02:28,633 - logger - INFO - [SimpleBatch] Rendered 50/282 frames
+2026-03-13 17:02:29,443 - logger - INFO - [SimpleBatch] Rendered 100/282 frames
+2026-03-13 17:02:30,252 - logger - INFO - [SimpleBatch] Rendered 150/282 frames
+2026-03-13 17:02:31,066 - logger - INFO - [SimpleBatch] Rendered 200/282 frames
+2026-03-13 17:02:31,870 - logger - INFO - [SimpleBatch] Rendered 250/282 frames
+2026-03-13 17:02:32,392 - logger - INFO - [SimpleBatch] Rendered 282 frames in 4.66s
+2026-03-13 17:02:35,095 - logger - INFO - [SimpleBatch] Total: 8.76s
+2026-03-13 17:02:35,097 - logger - INFO - [Pipeline] Video: 8.76s
+2026-03-13 17:02:35,097 - logger - INFO - [Pipeline] Completed in 14.68s
+2026-03-13 17:02:35,097 - logger - INFO - [BatchGenerate] Completed in 14.68s
+2026-03-13 17:04:48,333 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-13 17:04:48,333 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 11:20:21,694 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 11:20:26,305 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 11:20:27,707 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 11:20:30,717 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 11:20:30,718 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 11:20:31,001 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 11:20:31,005 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 11:20:31,005 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 11:20:31,005 - logger - INFO - Initializing batch pipeline...
+2026-03-14 11:20:31,011 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 11:20:31,011 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 11:20:31,011 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 11:20:31,011 - logger - INFO - Batch pipeline initialized
+2026-03-14 11:20:31,012 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 11:20:31,012 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 11:20:31,012 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 11:20:31,012 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 11:21:34,590 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_1
+2026-03-14 11:21:34,592 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 11:21:34,592 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 11:21:34,592 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 11:21:34,592 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 11:21:36,513 - logger - INFO - [Pipeline] LLM: 1.92s, emotion: default, response length: 57
+2026-03-14 11:21:36,514 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 11:21:36,514 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 11:21:36,514 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 11:21:36,514 - logger - INFO - [TTS] Emotion: default
+2026-03-14 11:21:36,514 - logger - INFO - [GPT-SoVITS] Using avatar human_1 emotion default: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 11:21:36,514 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 11:21:36,515 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 11:21:36,515 - logger - INFO - [GPT-SoVITS] Avatar: human_1, Emotion: default
+2026-03-14 11:21:36,515 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 11:21:36,515 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-14 11:21:36,515 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 11:21:36,583 - logger - ERROR - [GPT-SoVITS] Request failed: Response ended prematurely
+2026-03-14 11:21:36,584 - logger - WARNING - [TTS] GPT-SoVITS failed: Response ended prematurely, using EdgeTTS fallback
+2026-03-14 11:21:38,473 - logger - INFO - [TTS] EdgeTTS success: path=/root/autodl-tmp/output/temp/tts_1773458496514.wav, duration=14.50s
+2026-03-14 11:21:38,473 - logger - INFO - [Pipeline] TTS: 1.96s, audio duration: 14.50s
+2026-03-14 11:21:38,473 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 11:21:38,474 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 11:21:38,474 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773458496514.wav, duration=14.50s, samplerate=24000, format=MP3
+2026-03-14 11:21:40,104 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 11:21:40,104 - logger - INFO - [SimpleBatch] JoyVASA: 362 frames in 1.63s
+2026-03-14 11:21:40,104 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 11:21:40,296 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 11:21:40,297 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 11:21:40,297 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 11:21:40,297 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 11:21:40,297 - logger - INFO - [SimpleBatch] Source prepared in 0.19s
+2026-03-14 11:21:40,297 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 11:21:43,608 - logger - INFO - [SimpleBatch] Rendered 50/362 frames
+2026-03-14 11:21:46,603 - logger - INFO - [SimpleBatch] Rendered 100/362 frames
+2026-03-14 11:21:49,807 - logger - INFO - [SimpleBatch] Rendered 150/362 frames
+2026-03-14 11:21:52,900 - logger - INFO - [SimpleBatch] Rendered 200/362 frames
+2026-03-14 11:21:55,906 - logger - INFO - [SimpleBatch] Rendered 250/362 frames
+2026-03-14 11:21:58,991 - logger - INFO - [SimpleBatch] Rendered 300/362 frames
+2026-03-14 11:22:01,790 - logger - INFO - [SimpleBatch] Rendered 350/362 frames
+2026-03-14 11:22:02,391 - logger - INFO - [SimpleBatch] Rendered 362 frames in 22.09s
+2026-03-14 11:22:05,500 - logger - INFO - [SimpleBatch] Total: 27.03s
+2026-03-14 11:22:05,501 - logger - INFO - [Pipeline] Video: 27.03s
+2026-03-14 11:22:05,502 - logger - WARNING - [Pipeline] Generation timeout: 30.91s > 30s
+2026-03-14 11:22:05,502 - logger - INFO - [Pipeline] Completed in 30.91s
+2026-03-14 11:22:05,502 - logger - INFO - [BatchGenerate] Completed in 30.91s
+2026-03-14 11:22:20,776 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773458494588.mp4
+2026-03-14 20:37:27,371 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 20:37:31,369 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 20:37:32,818 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 20:37:35,904 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 20:37:35,905 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 20:37:36,141 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 20:37:36,144 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 20:37:36,144 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 20:37:36,144 - logger - INFO - Initializing batch pipeline...
+2026-03-14 20:37:36,146 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 20:37:36,146 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 20:37:36,146 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 20:37:36,146 - logger - INFO - Batch pipeline initialized
+2026-03-14 20:37:36,147 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 20:37:36,147 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 20:37:36,147 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 20:37:36,147 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 20:38:21,959 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 20:38:21,959 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 20:38:21,960 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 20:38:21,960 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 20:38:21,960 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 20:38:23,835 - logger - INFO - [Pipeline] LLM: 1.88s, emotion: default, response length: 57
+2026-03-14 20:38:23,835 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 20:38:23,835 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 20:38:23,835 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 20:38:23,835 - logger - INFO - [TTS] Emotion: default
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Using avatar human_1 emotion default: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Avatar: human_1, Emotion: default
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-14 20:38:23,836 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 20:38:23,901 - logger - ERROR - [GPT-SoVITS] Request failed: Response ended prematurely
+2026-03-14 20:38:23,902 - logger - WARNING - [TTS] GPT-SoVITS failed: Response ended prematurely, using EdgeTTS fallback
+2026-03-14 20:38:25,721 - logger - INFO - [TTS] EdgeTTS success: path=/root/autodl-tmp/output/temp/tts_1773491903835.wav, duration=14.50s
+2026-03-14 20:38:25,721 - logger - INFO - [Pipeline] TTS: 1.89s, audio duration: 14.50s
+2026-03-14 20:38:25,721 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 20:38:25,722 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 20:38:25,722 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773491903835.wav, duration=14.50s, samplerate=24000, format=MP3
+2026-03-14 20:38:27,255 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 20:38:27,255 - logger - INFO - [SimpleBatch] JoyVASA: 362 frames in 1.53s
+2026-03-14 20:38:27,255 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] Source prepared in 0.24s
+2026-03-14 20:38:27,498 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 20:38:30,992 - logger - INFO - [SimpleBatch] Rendered 50/362 frames
+2026-03-14 20:38:34,008 - logger - INFO - [SimpleBatch] Rendered 100/362 frames
+2026-03-14 20:38:37,207 - logger - INFO - [SimpleBatch] Rendered 150/362 frames
+2026-03-14 20:38:40,286 - logger - INFO - [SimpleBatch] Rendered 200/362 frames
+2026-03-14 20:38:43,491 - logger - INFO - [SimpleBatch] Rendered 250/362 frames
+2026-03-14 20:38:46,888 - logger - INFO - [SimpleBatch] Rendered 300/362 frames
+2026-03-14 20:38:50,095 - logger - INFO - [SimpleBatch] Rendered 350/362 frames
+2026-03-14 20:38:50,888 - logger - INFO - [SimpleBatch] Rendered 362 frames in 23.39s
+2026-03-14 20:38:55,411 - logger - INFO - [SimpleBatch] Total: 29.69s
+2026-03-14 20:38:55,415 - logger - INFO - [Pipeline] Video: 29.69s
+2026-03-14 20:38:55,415 - logger - WARNING - [Pipeline] Generation timeout: 33.46s > 30s
+2026-03-14 20:38:55,415 - logger - INFO - [Pipeline] Completed in 33.46s
+2026-03-14 20:38:55,415 - logger - INFO - [BatchGenerate] Completed in 33.46s
+2026-03-14 20:39:10,668 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773491901957.mp4
+2026-03-14 20:43:12,453 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 20:43:12,453 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 20:43:19,254 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 20:43:23,059 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 20:43:24,192 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 20:43:26,323 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 20:43:26,323 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 20:43:26,546 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 20:43:26,549 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 20:43:26,550 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 20:43:26,550 - logger - INFO - Initializing batch pipeline...
+2026-03-14 20:43:26,551 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 20:43:26,551 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 20:43:26,551 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 20:43:26,551 - logger - INFO - Batch pipeline initialized
+2026-03-14 20:43:26,552 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 20:43:26,552 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 20:43:26,552 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 20:43:26,552 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 20:43:38,274 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 20:43:38,275 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 20:43:38,276 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 20:43:38,276 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 20:43:38,276 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 20:43:40,347 - logger - INFO - [Pipeline] LLM: 2.07s, emotion: default, response length: 61
+2026-03-14 20:43:40,348 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 20:43:40,348 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-14 20:43:40,348 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 20:43:40,348 - logger - INFO - [TTS] Emotion: default
+2026-03-14 20:43:40,348 - logger - INFO - [GPT-SoVITS] Using avatar human_1 emotion default: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:43:40,348 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-14 20:43:40,349 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 20:43:40,349 - logger - INFO - [GPT-SoVITS] Avatar: human_1, Emotion: default
+2026-03-14 20:43:40,349 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:43:40,349 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-14 20:43:40,349 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 20:43:40,413 - logger - ERROR - [GPT-SoVITS] Request failed: Response ended prematurely
+2026-03-14 20:43:40,413 - logger - WARNING - [TTS] GPT-SoVITS failed: Response ended prematurely, using EdgeTTS fallback
+2026-03-14 20:43:42,907 - logger - INFO - [TTS] EdgeTTS success: path=/root/autodl-tmp/output/temp/tts_1773492220348.wav, duration=14.69s
+2026-03-14 20:43:42,908 - logger - INFO - [Pipeline] TTS: 2.56s, audio duration: 14.69s
+2026-03-14 20:43:42,908 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 20:43:42,908 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 20:43:42,909 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773492220348.wav, duration=14.69s, samplerate=24000, format=MP3
+2026-03-14 20:43:44,448 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 20:43:44,448 - logger - INFO - [SimpleBatch] JoyVASA: 367 frames in 1.54s
+2026-03-14 20:43:44,449 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 20:43:44,695 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 20:43:44,695 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 20:43:44,695 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 20:43:44,695 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 20:43:44,696 - logger - INFO - [SimpleBatch] Source prepared in 0.25s
+2026-03-14 20:43:44,696 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 20:43:48,091 - logger - INFO - [SimpleBatch] Rendered 50/367 frames
+2026-03-14 20:43:51,210 - logger - INFO - [SimpleBatch] Rendered 100/367 frames
+2026-03-14 20:43:54,391 - logger - INFO - [SimpleBatch] Rendered 150/367 frames
+2026-03-14 20:43:57,894 - logger - INFO - [SimpleBatch] Rendered 200/367 frames
+2026-03-14 20:44:02,287 - logger - INFO - [SimpleBatch] Rendered 250/367 frames
+2026-03-14 20:44:06,811 - logger - INFO - [SimpleBatch] Rendered 300/367 frames
+2026-03-14 20:44:11,109 - logger - INFO - [SimpleBatch] Rendered 350/367 frames
+2026-03-14 20:44:12,587 - logger - INFO - [SimpleBatch] Rendered 367 frames in 27.89s
+2026-03-14 20:44:17,877 - logger - INFO - [SimpleBatch] Total: 34.97s
+2026-03-14 20:44:17,880 - logger - INFO - [Pipeline] Video: 34.97s
+2026-03-14 20:44:17,880 - logger - WARNING - [Pipeline] Generation timeout: 39.60s > 30s
+2026-03-14 20:44:17,880 - logger - INFO - [Pipeline] Completed in 39.60s
+2026-03-14 20:44:17,880 - logger - INFO - [BatchGenerate] Completed in 39.60s
+2026-03-14 20:44:33,539 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773492218272.mp4
+2026-03-14 20:50:27,096 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 20:50:27,096 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 20:50:31,322 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 20:50:37,398 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 20:50:38,730 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 20:50:41,625 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 20:50:41,625 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 20:50:41,907 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 20:50:41,911 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 20:50:41,912 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 20:50:41,912 - logger - INFO - Initializing batch pipeline...
+2026-03-14 20:50:41,914 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 20:50:41,914 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 20:50:41,914 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 20:50:41,914 - logger - INFO - Batch pipeline initialized
+2026-03-14 20:50:41,915 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 20:50:41,915 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 20:50:41,915 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 20:50:41,915 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 20:50:49,332 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 20:50:49,333 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 20:50:49,334 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 20:50:49,334 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 20:50:49,334 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 20:50:51,254 - logger - INFO - [Pipeline] LLM: 1.92s, emotion: default, response length: 58
+2026-03-14 20:50:51,254 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 20:50:51,254 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀！😊 很开心见到你～  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，...
+2026-03-14 20:50:51,254 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 20:50:51,254 - logger - INFO - [TTS] Emotion: default
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Using avatar human_1 emotion default: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！😊 很开心见到你～  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，...
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Avatar: human_1, Emotion: default
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_1/default.wav
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Ref text: 清晨推开窗，就能闻到风里带着的青草香，楼下的花园里开着各色的花儿。
+2026-03-14 20:50:51,255 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 20:50:51,307 - logger - ERROR - [GPT-SoVITS] Request failed: Response ended prematurely
+2026-03-14 20:50:51,308 - logger - WARNING - [TTS] GPT-SoVITS failed: Response ended prematurely, using EdgeTTS fallback
+2026-03-14 20:50:53,113 - logger - INFO - [TTS] EdgeTTS success: path=/root/autodl-tmp/output/temp/tts_1773492651254.wav, duration=14.45s
+2026-03-14 20:50:53,113 - logger - INFO - [Pipeline] TTS: 1.86s, audio duration: 14.45s
+2026-03-14 20:50:53,114 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 20:50:53,114 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 20:50:53,114 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773492651254.wav, duration=14.45s, samplerate=24000, format=MP3
+2026-03-14 20:50:54,644 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 20:50:54,644 - logger - INFO - [SimpleBatch] JoyVASA: 361 frames in 1.53s
+2026-03-14 20:50:54,644 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 20:50:54,902 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 20:50:54,903 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 20:50:54,903 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 20:50:54,903 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 20:50:54,903 - logger - INFO - [SimpleBatch] Source prepared in 0.26s
+2026-03-14 20:50:54,903 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 20:50:58,602 - logger - INFO - [SimpleBatch] Rendered 50/361 frames
+2026-03-14 20:51:02,588 - logger - INFO - [SimpleBatch] Rendered 100/361 frames
+2026-03-14 20:51:06,008 - logger - INFO - [SimpleBatch] Rendered 150/361 frames
+2026-03-14 20:51:09,388 - logger - INFO - [SimpleBatch] Rendered 200/361 frames
+2026-03-14 20:51:12,504 - logger - INFO - [SimpleBatch] Rendered 250/361 frames
+2026-03-14 20:51:16,192 - logger - INFO - [SimpleBatch] Rendered 300/361 frames
+2026-03-14 20:51:20,095 - logger - INFO - [SimpleBatch] Rendered 350/361 frames
+2026-03-14 20:51:21,000 - logger - INFO - [SimpleBatch] Rendered 361 frames in 26.10s
+2026-03-14 20:51:26,129 - logger - INFO - [SimpleBatch] Total: 33.02s
+2026-03-14 20:51:26,131 - logger - INFO - [Pipeline] Video: 33.02s
+2026-03-14 20:51:26,132 - logger - WARNING - [Pipeline] Generation timeout: 36.80s > 30s
+2026-03-14 20:51:26,132 - logger - INFO - [Pipeline] Completed in 36.80s
+2026-03-14 20:51:26,132 - logger - INFO - [BatchGenerate] Completed in 36.80s
+2026-03-14 20:51:41,484 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773492649330.mp4
+2026-03-14 20:55:35,510 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 20:55:35,510 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 20:55:40,432 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 20:55:45,270 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 20:55:46,649 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 20:55:49,614 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 20:55:49,614 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 20:55:49,968 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 20:55:49,972 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 20:55:49,972 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 20:55:49,972 - logger - INFO - Initializing batch pipeline...
+2026-03-14 20:55:49,974 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 20:55:49,974 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 20:55:49,974 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 20:55:49,974 - logger - INFO - Batch pipeline initialized
+2026-03-14 20:55:49,976 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 20:55:49,976 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 20:55:49,976 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 20:55:49,976 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 20:56:09,282 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 20:56:09,283 - logger - ERROR - [BatchGenerate] Error: BatchPipelineManager.process() got an unexpected keyword argument 'avatar_id'
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/app.py", line 420, in batch_generate
+    result = await batch_pipeline_manager.process(
+TypeError: BatchPipelineManager.process() got an unexpected keyword argument 'avatar_id'
+2026-03-14 20:58:30,793 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 20:58:54,533 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 20:59:04,440 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 20:59:05,919 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 20:59:08,917 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 20:59:08,917 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 20:59:09,199 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 20:59:09,203 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 20:59:09,203 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 20:59:09,203 - logger - INFO - Initializing batch pipeline...
+2026-03-14 20:59:09,209 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 20:59:09,209 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 20:59:09,209 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 20:59:09,209 - logger - INFO - Batch pipeline initialized
+2026-03-14 20:59:09,210 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 20:59:09,210 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 20:59:09,210 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 20:59:09,210 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 20:59:38,581 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 20:59:38,582 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 20:59:38,583 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 20:59:38,583 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 20:59:38,583 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 20:59:40,406 - logger - INFO - [Pipeline] LLM: 1.82s, emotion: default, response length: 57
+2026-03-14 20:59:40,406 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 20:59:40,406 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 20:59:40,406 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 20:59:40,406 - logger - INFO - [TTS] Emotion: default
+2026-03-14 20:59:40,406 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点倾听和陪伴，我...
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 20:59:40,407 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 20:59:48,085 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 20:59:48,085 - logger - INFO - [GPT-SoVITS] Received 311084 bytes
+2026-03-14 20:59:48,085 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 20:59:48,085 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 20:59:48,085 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=311076, data_size=311040
+2026-03-14 20:59:48,088 - logger - INFO - [GPT-SoVITS] Generated audio: 9.72s, format=WAV, samplerate=16000
+2026-03-14 20:59:48,089 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773493180406.wav, duration=9.72s
+2026-03-14 20:59:48,090 - logger - INFO - [Pipeline] TTS: 7.68s, audio duration: 9.72s
+2026-03-14 20:59:48,090 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 20:59:48,090 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 20:59:48,090 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773493180406.wav, duration=9.72s, samplerate=16000, format=WAV
+2026-03-14 20:59:49,266 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 20:59:49,266 - logger - INFO - [SimpleBatch] JoyVASA: 243 frames in 1.18s
+2026-03-14 20:59:49,266 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] Source prepared in 0.24s
+2026-03-14 20:59:49,503 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 20:59:52,891 - logger - INFO - [SimpleBatch] Rendered 50/243 frames
+2026-03-14 20:59:56,191 - logger - INFO - [SimpleBatch] Rendered 100/243 frames
+2026-03-14 20:59:59,492 - logger - INFO - [SimpleBatch] Rendered 150/243 frames
+2026-03-14 21:00:03,294 - logger - INFO - [SimpleBatch] Rendered 200/243 frames
+2026-03-14 21:00:06,802 - logger - INFO - [SimpleBatch] Rendered 243 frames in 17.30s
+2026-03-14 21:00:10,146 - logger - INFO - [SimpleBatch] Total: 22.06s
+2026-03-14 21:00:10,149 - logger - INFO - [Pipeline] Video: 22.06s
+2026-03-14 21:00:10,149 - logger - WARNING - [Pipeline] Generation timeout: 31.57s > 30s
+2026-03-14 21:00:10,149 - logger - INFO - [Pipeline] Completed in 31.57s
+2026-03-14 21:00:10,150 - logger - INFO - [BatchGenerate] Completed in 31.57s
+2026-03-14 21:00:20,720 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773493178579.mp4
+2026-03-14 21:00:30,379 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 21:00:30,381 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:00:30,381 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:00:30,382 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:00:30,382 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:00:31,764 - logger - INFO - [Pipeline] LLM: 1.38s, emotion: default, response length: 58
+2026-03-14 21:00:31,764 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:00:31,764 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点支持和倾听，我...
+2026-03-14 21:00:31,765 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:00:31,765 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:00:31,765 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:00:31,765 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想分享的，或者需要一点支持和倾听，我...
+2026-03-14 21:00:31,766 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:00:31,766 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:00:31,766 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:00:31,766 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:00:31,766 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:00:33,621 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:00:33,622 - logger - INFO - [GPT-SoVITS] Received 241964 bytes
+2026-03-14 21:00:33,622 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:00:33,622 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:00:33,622 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=241956, data_size=241920
+2026-03-14 21:00:33,623 - logger - INFO - [GPT-SoVITS] Generated audio: 7.56s, format=WAV, samplerate=16000
+2026-03-14 21:00:33,624 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773493231764.wav, duration=7.56s
+2026-03-14 21:00:33,624 - logger - INFO - [Pipeline] TTS: 1.86s, audio duration: 7.56s
+2026-03-14 21:00:33,625 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:00:33,625 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:00:33,625 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773493231764.wav, duration=7.56s, samplerate=16000, format=WAV
+2026-03-14 21:00:34,269 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:00:34,269 - logger - INFO - [SimpleBatch] JoyVASA: 189 frames in 0.64s
+2026-03-14 21:00:34,269 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] Source prepared in 0.23s
+2026-03-14 21:00:34,502 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:00:38,709 - logger - INFO - [SimpleBatch] Rendered 50/189 frames
+2026-03-14 21:00:42,797 - logger - INFO - [SimpleBatch] Rendered 100/189 frames
+2026-03-14 21:00:46,191 - logger - INFO - [SimpleBatch] Rendered 150/189 frames
+2026-03-14 21:00:48,992 - logger - INFO - [SimpleBatch] Rendered 189 frames in 14.49s
+2026-03-14 21:00:51,110 - logger - INFO - [SimpleBatch] Total: 17.49s
+2026-03-14 21:00:51,112 - logger - INFO - [Pipeline] Video: 17.49s
+2026-03-14 21:00:51,112 - logger - INFO - [Pipeline] Completed in 20.73s
+2026-03-14 21:00:51,112 - logger - INFO - [BatchGenerate] Completed in 20.73s
+2026-03-14 21:00:59,329 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773493230378.mp4
+2026-03-14 21:01:17,724 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:01:17,725 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:01:17,726 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:01:17,726 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:01:17,726 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:01:20,373 - logger - INFO - [Pipeline] LLM: 2.65s, emotion: default, response length: 139
+2026-03-14 21:01:20,373 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:01:20,373 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理...
+2026-03-14 21:01:20,374 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:01:20,374 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:01:20,374 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:01:20,374 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理...
+2026-03-14 21:01:20,375 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:01:20,375 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:01:20,375 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:01:20,375 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:01:20,375 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:01:23,127 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:01:23,127 - logger - INFO - [GPT-SoVITS] Received 244524 bytes
+2026-03-14 21:01:23,127 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:01:23,127 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:01:23,127 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=244516, data_size=244480
+2026-03-14 21:01:23,128 - logger - INFO - [GPT-SoVITS] Generated audio: 7.64s, format=WAV, samplerate=16000
+2026-03-14 21:01:23,129 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773493280373.wav, duration=7.64s
+2026-03-14 21:01:23,129 - logger - INFO - [Pipeline] TTS: 2.76s, audio duration: 7.64s
+2026-03-14 21:01:23,129 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:01:23,130 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:01:23,130 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773493280373.wav, duration=7.64s, samplerate=16000, format=WAV
+2026-03-14 21:01:23,740 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:01:23,740 - logger - INFO - [SimpleBatch] JoyVASA: 191 frames in 0.61s
+2026-03-14 21:01:23,740 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] Source prepared in 0.17s
+2026-03-14 21:01:23,906 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:01:27,588 - logger - INFO - [SimpleBatch] Rendered 50/191 frames
+2026-03-14 21:01:30,788 - logger - INFO - [SimpleBatch] Rendered 100/191 frames
+2026-03-14 21:01:34,006 - logger - INFO - [SimpleBatch] Rendered 150/191 frames
+2026-03-14 21:01:36,690 - logger - INFO - [SimpleBatch] Rendered 191 frames in 12.78s
+2026-03-14 21:01:38,815 - logger - INFO - [SimpleBatch] Total: 15.69s
+2026-03-14 21:01:38,817 - logger - INFO - [Pipeline] Video: 15.69s
+2026-03-14 21:01:38,817 - logger - INFO - [Pipeline] Completed in 21.09s
+2026-03-14 21:01:38,817 - logger - INFO - [BatchGenerate] Completed in 21.09s
+2026-03-14 21:01:47,151 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773493277722.mp4
+2026-03-14 21:14:53,686 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:14:53,686 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:14:53,686 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:14:53,686 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:14:59,023 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:15:03,903 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:15:05,330 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:15:08,026 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:15:08,027 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:15:08,306 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:15:08,310 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:15:08,310 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:15:08,310 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:15:08,315 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:15:08,315 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:15:08,315 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:15:08,315 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:15:08,316 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:15:08,316 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:15:08,316 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:15:08,316 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:15:24,924 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:15:24,925 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:15:24,925 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:15:24,925 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:15:24,925 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:15:28,499 - logger - INFO - [Pipeline] LLM: 3.57s, emotion: default, response length: 144
+2026-03-14 21:15:28,499 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:15:28,499 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注陪...
+2026-03-14 21:15:28,499 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:15:28,499 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注陪...
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:15:28,500 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:15:32,464 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:15:32,464 - logger - INFO - [GPT-SoVITS] Received 516524 bytes
+2026-03-14 21:15:32,464 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:15:32,464 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:15:32,464 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=516516, data_size=516480
+2026-03-14 21:15:32,467 - logger - INFO - [GPT-SoVITS] Generated audio: 16.14s, format=WAV, samplerate=16000
+2026-03-14 21:15:32,468 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773494128499.wav, duration=16.14s
+2026-03-14 21:15:32,468 - logger - INFO - [Pipeline] TTS: 3.97s, audio duration: 16.14s
+2026-03-14 21:15:32,469 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:15:32,469 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:15:32,469 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773494128499.wav, duration=16.14s, samplerate=16000, format=WAV
+2026-03-14 21:15:34,158 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:15:34,158 - logger - INFO - [SimpleBatch] JoyVASA: 403 frames in 1.69s
+2026-03-14 21:15:34,158 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:15:34,409 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:15:34,409 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:15:34,409 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:15:34,410 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:15:34,410 - logger - INFO - [SimpleBatch] Source prepared in 0.25s
+2026-03-14 21:15:34,410 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:15:37,790 - logger - INFO - [SimpleBatch] Rendered 50/403 frames
+2026-03-14 21:15:40,793 - logger - INFO - [SimpleBatch] Rendered 100/403 frames
+2026-03-14 21:15:44,009 - logger - INFO - [SimpleBatch] Rendered 150/403 frames
+2026-03-14 21:15:47,091 - logger - INFO - [SimpleBatch] Rendered 200/403 frames
+2026-03-14 21:15:50,191 - logger - INFO - [SimpleBatch] Rendered 250/403 frames
+2026-03-14 21:15:53,290 - logger - INFO - [SimpleBatch] Rendered 300/403 frames
+2026-03-14 21:15:56,391 - logger - INFO - [SimpleBatch] Rendered 350/403 frames
+2026-03-14 21:15:59,305 - logger - INFO - [SimpleBatch] Rendered 400/403 frames
+2026-03-14 21:15:59,511 - logger - INFO - [SimpleBatch] Rendered 403 frames in 25.10s
+2026-03-14 21:16:04,309 - logger - INFO - [SimpleBatch] Total: 31.84s
+2026-03-14 21:16:04,315 - logger - INFO - [Pipeline] Video: 31.84s
+2026-03-14 21:16:04,315 - logger - WARNING - [Pipeline] Generation timeout: 39.39s > 30s
+2026-03-14 21:16:04,315 - logger - INFO - [Pipeline] Completed in 39.39s
+2026-03-14 21:16:04,316 - logger - INFO - [BatchGenerate] Completed in 39.39s
+2026-03-14 21:16:21,045 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773494124922.mp4
+2026-03-14 21:24:58,759 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:24:58,759 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:25:03,327 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:25:08,705 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:25:10,172 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:25:12,816 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:25:12,817 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:25:13,089 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:25:13,093 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:25:13,093 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:25:13,093 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:25:13,098 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:25:13,099 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:25:13,099 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:25:13,099 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:25:13,100 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:25:13,100 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:25:13,100 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:25:13,100 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:25:37,561 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:25:37,562 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:25:37,563 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:25:37,563 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:25:37,563 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:25:40,770 - logger - INFO - [Pipeline] LLM: 3.21s, emotion: default, response length: 152
+2026-03-14 21:25:40,770 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:25:40,771 - logger - INFO - [TTS] Starting TTS generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理...
+2026-03-14 21:25:40,771 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:25:40,771 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:25:40,771 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理...
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:25:40,772 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:25:45,011 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:25:45,011 - logger - INFO - [GPT-SoVITS] Received 1084844 bytes
+2026-03-14 21:25:45,012 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:25:45,012 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:25:45,013 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=1084836, data_size=1084800
+2026-03-14 21:25:45,019 - logger - INFO - [GPT-SoVITS] Generated audio: 33.90s, format=WAV, samplerate=16000
+2026-03-14 21:25:45,019 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773494740771.wav, duration=33.90s
+2026-03-14 21:25:45,020 - logger - INFO - [Pipeline] TTS: 4.25s, audio duration: 33.90s
+2026-03-14 21:25:45,020 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:25:45,020 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:25:45,020 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773494740771.wav, duration=33.90s, samplerate=16000, format=WAV
+2026-03-14 21:25:47,978 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:25:47,979 - logger - INFO - [SimpleBatch] JoyVASA: 847 frames in 2.96s
+2026-03-14 21:25:47,979 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:25:48,198 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:25:48,199 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:25:48,199 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:25:48,199 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:25:48,199 - logger - INFO - [SimpleBatch] Source prepared in 0.22s
+2026-03-14 21:25:48,199 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:25:52,287 - logger - INFO - [SimpleBatch] Rendered 50/847 frames
+2026-03-14 21:25:56,586 - logger - INFO - [SimpleBatch] Rendered 100/847 frames
+2026-03-14 21:26:00,504 - logger - INFO - [SimpleBatch] Rendered 150/847 frames
+2026-03-14 21:26:03,587 - logger - INFO - [SimpleBatch] Rendered 200/847 frames
+2026-03-14 21:26:06,807 - logger - INFO - [SimpleBatch] Rendered 250/847 frames
+2026-03-14 21:26:10,006 - logger - INFO - [SimpleBatch] Rendered 300/847 frames
+2026-03-14 21:26:13,291 - logger - INFO - [SimpleBatch] Rendered 350/847 frames
+2026-03-14 21:26:16,387 - logger - INFO - [SimpleBatch] Rendered 400/847 frames
+2026-03-14 21:26:19,690 - logger - INFO - [SimpleBatch] Rendered 450/847 frames
+2026-03-14 21:26:22,888 - logger - INFO - [SimpleBatch] Rendered 500/847 frames
+2026-03-14 21:26:26,687 - logger - INFO - [SimpleBatch] Rendered 550/847 frames
+2026-03-14 21:26:30,009 - logger - INFO - [SimpleBatch] Rendered 600/847 frames
+2026-03-14 21:26:33,187 - logger - INFO - [SimpleBatch] Rendered 650/847 frames
+2026-03-14 21:26:36,588 - logger - INFO - [SimpleBatch] Rendered 700/847 frames
+2026-03-14 21:26:39,889 - logger - INFO - [SimpleBatch] Rendered 750/847 frames
+2026-03-14 21:26:43,204 - logger - INFO - [SimpleBatch] Rendered 800/847 frames
+2026-03-14 21:26:46,308 - logger - INFO - [SimpleBatch] Rendered 847 frames in 58.11s
+2026-03-14 21:26:53,591 - logger - WARNING - [SimpleBatch] Failed to verify video duration: local variable 'audio_duration' referenced before assignment
+2026-03-14 21:26:53,592 - logger - INFO - [SimpleBatch] Total: 68.57s
+2026-03-14 21:26:53,608 - logger - INFO - [Pipeline] Video: 68.57s
+2026-03-14 21:26:53,609 - logger - WARNING - [Pipeline] Generation timeout: 76.05s > 30s
+2026-03-14 21:26:53,609 - logger - INFO - [Pipeline] Completed in 76.05s
+2026-03-14 21:26:53,609 - logger - INFO - [BatchGenerate] Completed in 76.05s
+2026-03-14 21:27:28,103 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773494737559.mp4
+2026-03-14 21:35:05,976 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:35:05,976 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:35:11,357 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:35:17,902 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:35:19,290 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:35:22,091 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:35:22,091 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:35:22,348 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:35:22,352 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:35:22,352 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:35:22,352 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:35:22,359 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:35:22,359 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:35:22,359 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:35:22,359 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:35:22,360 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:35:22,360 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:35:22,360 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:35:22,360 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:36:01,909 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:36:01,910 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:36:01,910 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:36:01,910 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:36:01,910 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:36:05,068 - logger - INFO - [Pipeline] LLM: 3.16s, emotion: default, response length: 135
+2026-03-14 21:36:05,068 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:36:05,073 - logger - INFO - [TTS] Original text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注陪你一起梳理情绪、缓解压力，或聊聊那些让你困扰、犹豫、疲惫的小事。  
+如果你感到焦虑、低落、孤独，或者只是想有人安静地听你说说话——我都在这里。  
+
+需要聊聊什么吗？🌱
+2026-03-14 21:36:05,073 - logger - INFO - [TTS] Processed text: ——。
+2026-03-14 21:36:05,073 - logger - INFO - [TTS] Text length: 135 -> 3
+2026-03-14 21:36:05,073 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:36:05,073 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:36:05,073 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Starting generation for text: ——。...
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:36:05,074 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:36:05,367 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:36:05,368 - logger - INFO - [GPT-SoVITS] Received 44 bytes
+2026-03-14 21:36:05,368 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:36:05,368 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:36:05,368 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=36, data_size=0
+2026-03-14 21:36:05,369 - logger - INFO - [GPT-SoVITS] Generated audio: 0.00s, format=WAV, samplerate=16000
+2026-03-14 21:36:05,370 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773495365068.wav, duration=0.00s
+2026-03-14 21:36:05,370 - logger - INFO - [Pipeline] TTS: 0.30s, audio duration: 0.00s
+2026-03-14 21:36:05,370 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:36:05,371 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:36:05,371 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773495365068.wav, duration=0.00s, samplerate=16000, format=WAV
+2026-03-14 21:36:05,958 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:36:05,958 - logger - INFO - [SimpleBatch] JoyVASA: 0 frames in 0.59s
+2026-03-14 21:36:05,958 - logger - ERROR - [Pipeline] Error: JoyVASA generated 0 frames. Audio file: /root/autodl-tmp/output/temp/tts_1773495365068.wav
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/batch_pipeline.py", line 500, in process_input
+    video_result = self.video_generator.generate(
+  File "/root/autodl-tmp/live_talking_server/batch_video_generator.py", line 404, in generate
+    raise RuntimeError(f"JoyVASA generated 0 frames. Audio file: {audio_path}")
+RuntimeError: JoyVASA generated 0 frames. Audio file: /root/autodl-tmp/output/temp/tts_1773495365068.wav
+2026-03-14 21:41:29,619 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:41:29,619 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:41:35,249 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:41:39,791 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:41:41,158 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:41:44,028 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:41:44,028 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:41:44,412 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:41:44,416 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:41:44,416 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:41:44,416 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:41:44,426 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:41:44,426 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:41:44,426 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:41:44,426 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:41:44,428 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:41:44,428 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:41:44,428 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:41:44,428 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:41:55,575 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:41:55,576 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:41:55,576 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:41:55,576 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:41:55,576 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:41:59,213 - logger - INFO - [Pipeline] LLM: 3.64s, emotion: default, response length: 139
+2026-03-14 21:41:59,214 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:41:59,218 - logger - INFO - [TTS] Original text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理解你的感受，陪你梳理情绪，一起探索更轻松、更有力量的生活方式。  
+无论是压力、焦虑、低落、人际关系困扰，还是只是想聊聊心事——我都在这里，认真听你说。  
+
+需要聊聊什么吗？🌱
+2026-03-14 21:41:59,219 - logger - INFO - [TTS] Processed text: ——。
+2026-03-14 21:41:59,219 - logger - INFO - [TTS] Text length: 139 -> 3
+2026-03-14 21:41:59,219 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:41:59,219 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:41:59,219 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:41:59,219 - logger - INFO - [GPT-SoVITS] Starting generation for text: ——。...
+2026-03-14 21:41:59,219 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:41:59,219 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:41:59,220 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:41:59,220 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:41:59,220 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:41:59,486 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:41:59,487 - logger - INFO - [GPT-SoVITS] Received 44 bytes
+2026-03-14 21:41:59,487 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:41:59,487 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:41:59,487 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=36, data_size=0
+2026-03-14 21:41:59,488 - logger - INFO - [GPT-SoVITS] Generated audio: 0.00s, format=WAV, samplerate=16000
+2026-03-14 21:41:59,489 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773495719214.wav, duration=0.00s
+2026-03-14 21:41:59,489 - logger - WARNING - [TTS] Generated audio too short: 0.00s, text may be invalid
+2026-03-14 21:41:59,489 - logger - INFO - [Pipeline] TTS: 0.28s, audio duration: 0.00s
+2026-03-14 21:41:59,489 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:41:59,489 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:41:59,489 - logger - INFO - [SimpleBatch] Audio file size: 44 bytes
+2026-03-14 21:41:59,490 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773495719214.wav, duration=0.00s, samplerate=16000, format=WAV
+2026-03-14 21:41:59,490 - logger - ERROR - [SimpleBatch] Failed to read audio info: Audio duration too short: 0.00s
+2026-03-14 21:41:59,490 - logger - ERROR - [Pipeline] Error: Invalid audio file: Audio duration too short: 0.00s
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/batch_video_generator.py", line 403, in generate
+    raise RuntimeError(f"Audio duration too short: {audio_duration:.2f}s")
+RuntimeError: Audio duration too short: 0.00s
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/root/autodl-tmp/live_talking_server/batch_pipeline.py", line 511, in process_input
+    video_result = self.video_generator.generate(
+  File "/root/autodl-tmp/live_talking_server/batch_video_generator.py", line 406, in generate
+    raise RuntimeError(f"Invalid audio file: {e}")
+RuntimeError: Invalid audio file: Audio duration too short: 0.00s
+2026-03-14 21:45:10,884 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:45:10,884 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:45:15,834 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:45:19,812 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:45:21,248 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:45:24,111 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:45:24,112 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:45:24,351 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:45:24,354 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:45:24,354 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:45:24,354 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:45:24,359 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:45:24,359 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:45:24,359 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:45:24,359 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:45:24,360 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:45:24,360 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:45:24,360 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:45:24,360 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:45:38,988 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 21:45:38,989 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:45:38,990 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:45:38,990 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:45:38,990 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:45:40,979 - logger - INFO - [Pipeline] LLM: 1.99s, emotion: default, response length: 61
+2026-03-14 21:45:40,979 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:45:40,983 - logger - INFO - [TTS] Original text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听者，我都在这里哦～ 🌟
+2026-03-14 21:45:40,983 - logger - INFO - [TTS] Processed text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听者，我都在这里哦～ 🌟
+2026-03-14 21:45:40,983 - logger - INFO - [TTS] Text length: 61 -> 61
+2026-03-14 21:45:40,983 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:45:40,983 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀～很高兴见到你！😊  
+今天过得怎么样？如果有什么想聊的、想倾诉的，或者只是需要一个安静的倾听...
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:45:40,984 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:45:42,987 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:45:42,987 - logger - INFO - [GPT-SoVITS] Received 419884 bytes
+2026-03-14 21:45:42,987 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:45:42,987 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:45:42,987 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=419876, data_size=419840
+2026-03-14 21:45:42,989 - logger - INFO - [GPT-SoVITS] Generated audio: 13.12s, format=WAV, samplerate=16000
+2026-03-14 21:45:42,989 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773495940979.wav, duration=13.12s
+2026-03-14 21:45:42,990 - logger - INFO - [Pipeline] TTS: 2.01s, audio duration: 13.12s
+2026-03-14 21:45:42,990 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:45:42,990 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:45:42,990 - logger - INFO - [SimpleBatch] Audio file size: 419884 bytes
+2026-03-14 21:45:42,990 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773495940979.wav, duration=13.12s, samplerate=16000, format=WAV
+2026-03-14 21:45:44,526 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:45:44,526 - logger - INFO - [SimpleBatch] JoyVASA: 328 frames in 1.54s
+2026-03-14 21:45:44,526 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] Source prepared in 0.18s
+2026-03-14 21:45:44,705 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:45:48,104 - logger - INFO - [SimpleBatch] Rendered 50/328 frames
+2026-03-14 21:45:51,105 - logger - INFO - [SimpleBatch] Rendered 100/328 frames
+2026-03-14 21:45:54,406 - logger - INFO - [SimpleBatch] Rendered 150/328 frames
+2026-03-14 21:45:57,691 - logger - INFO - [SimpleBatch] Rendered 200/328 frames
+2026-03-14 21:46:00,891 - logger - INFO - [SimpleBatch] Rendered 250/328 frames
+2026-03-14 21:46:03,993 - logger - INFO - [SimpleBatch] Rendered 300/328 frames
+2026-03-14 21:46:05,891 - logger - INFO - [SimpleBatch] Rendered 328 frames in 21.19s
+2026-03-14 21:46:08,473 - logger - INFO - [SimpleBatch] Audio duration: 13.12s
+2026-03-14 21:46:08,737 - logger - INFO - [SimpleBatch] Final video duration: 13.12s, expected: 13.12s
+2026-03-14 21:46:08,737 - logger - INFO - [SimpleBatch] Total: 25.75s
+2026-03-14 21:46:08,740 - logger - INFO - [Pipeline] Video: 25.75s
+2026-03-14 21:46:08,740 - logger - INFO - [Pipeline] Completed in 29.75s
+2026-03-14 21:46:08,740 - logger - INFO - [BatchGenerate] Completed in 29.75s
+2026-03-14 21:46:22,475 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773495938986.mp4
+2026-03-14 21:51:44,133 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 21:51:44,134 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 21:51:49,244 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 21:51:53,888 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 21:51:55,339 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 21:51:58,319 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 21:51:58,319 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 21:51:58,612 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 21:51:58,615 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 21:51:58,615 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 21:51:58,615 - logger - INFO - Initializing batch pipeline...
+2026-03-14 21:51:58,620 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 21:51:58,620 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 21:51:58,620 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 21:51:58,620 - logger - INFO - Batch pipeline initialized
+2026-03-14 21:51:58,621 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 21:51:58,621 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 21:51:58,621 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 21:51:58,621 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 21:52:25,754 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 21:52:25,755 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 21:52:25,755 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 21:52:25,755 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 21:52:25,755 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 21:52:28,594 - logger - INFO - [Pipeline] LLM: 2.84s, emotion: default, response length: 140
+2026-03-14 21:52:28,594 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 21:52:28,598 - logger - WARNING - [TTS Preprocess] Text became empty, using original
+2026-03-14 21:52:28,598 - logger - INFO - [TTS Preprocess] Length: 140 -> 140
+2026-03-14 21:52:28,598 - logger - INFO - [TTS] Original text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理解你的感受，陪你梳理情绪，一起探索更轻松、更有力量的生活方式。  
+无论是压力、焦虑、低落、困惑，还是想聊聊日常、自我成长，我都在这里——认真听，用心答。  
+
+需要聊些什么呢？🌱
+2026-03-14 21:52:28,598 - logger - INFO - [TTS] Processed text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理解你的感受，陪你梳理情绪，一起探索更轻松、更有力量的生活方式。  
+无论是压力、焦虑、低落、困惑，还是想聊聊日常、自我成长，我都在这里——认真听，用心答。  
+
+需要聊些什么呢？🌱
+2026-03-14 21:52:28,598 - logger - INFO - [TTS] Text length: 140 -> 140
+2026-03-14 21:52:28,598 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 21:52:28,598 - logger - INFO - [TTS] Emotion: default
+2026-03-14 21:52:28,598 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理...
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 21:52:28,599 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 21:52:31,833 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 21:52:31,834 - logger - INFO - [GPT-SoVITS] Received 694444 bytes
+2026-03-14 21:52:31,834 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 21:52:31,834 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 21:52:31,835 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=694436, data_size=694400
+2026-03-14 21:52:31,839 - logger - INFO - [GPT-SoVITS] Generated audio: 21.70s, format=WAV, samplerate=16000
+2026-03-14 21:52:31,840 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773496348594.wav, duration=21.70s
+2026-03-14 21:52:31,840 - logger - INFO - [Pipeline] TTS: 3.25s, audio duration: 21.70s
+2026-03-14 21:52:31,840 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 21:52:31,840 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 21:52:31,840 - logger - INFO - [SimpleBatch] Audio file size: 694444 bytes
+2026-03-14 21:52:31,840 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773496348594.wav, duration=21.70s, samplerate=16000, format=WAV
+2026-03-14 21:52:33,885 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 21:52:33,885 - logger - INFO - [SimpleBatch] JoyVASA: 542 frames in 2.04s
+2026-03-14 21:52:33,885 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] Source prepared in 0.21s
+2026-03-14 21:52:34,092 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 21:52:37,889 - logger - INFO - [SimpleBatch] Rendered 50/542 frames
+2026-03-14 21:52:40,904 - logger - INFO - [SimpleBatch] Rendered 100/542 frames
+2026-03-14 21:52:44,188 - logger - INFO - [SimpleBatch] Rendered 150/542 frames
+2026-03-14 21:52:47,292 - logger - INFO - [SimpleBatch] Rendered 200/542 frames
+2026-03-14 21:52:50,792 - logger - INFO - [SimpleBatch] Rendered 250/542 frames
+2026-03-14 21:52:54,011 - logger - INFO - [SimpleBatch] Rendered 300/542 frames
+2026-03-14 21:52:58,499 - logger - INFO - [SimpleBatch] Rendered 350/542 frames
+2026-03-14 21:53:02,817 - logger - INFO - [SimpleBatch] Rendered 400/542 frames
+2026-03-14 21:53:06,996 - logger - INFO - [SimpleBatch] Rendered 450/542 frames
+2026-03-14 21:53:11,413 - logger - INFO - [SimpleBatch] Rendered 500/542 frames
+2026-03-14 21:53:14,191 - logger - INFO - [SimpleBatch] Rendered 542 frames in 40.10s
+2026-03-14 21:53:20,982 - logger - INFO - [SimpleBatch] Audio duration: 21.70s
+2026-03-14 21:53:21,317 - logger - INFO - [SimpleBatch] Final video duration: 21.70s, expected: 21.70s
+2026-03-14 21:53:21,317 - logger - INFO - [SimpleBatch] Total: 49.48s
+2026-03-14 21:53:21,322 - logger - INFO - [Pipeline] Video: 49.48s
+2026-03-14 21:53:21,322 - logger - WARNING - [Pipeline] Generation timeout: 55.57s > 30s
+2026-03-14 21:53:21,322 - logger - INFO - [Pipeline] Completed in 55.57s
+2026-03-14 21:53:21,322 - logger - INFO - [BatchGenerate] Completed in 55.57s
+2026-03-14 21:53:43,711 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773496345752.mp4
+2026-03-14 22:04:32,644 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 22:04:32,644 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 22:04:37,555 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 22:04:41,405 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 22:04:42,551 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 22:04:44,768 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 22:04:44,768 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 22:04:45,067 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 22:04:45,086 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 22:04:45,086 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 22:04:45,086 - logger - INFO - Initializing batch pipeline...
+2026-03-14 22:04:45,093 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 22:04:45,093 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 22:04:45,093 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 22:04:45,093 - logger - INFO - Batch pipeline initialized
+2026-03-14 22:04:45,095 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 22:04:45,095 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 22:04:45,095 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 22:04:45,095 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 22:05:18,304 - logger - INFO - [BatchGenerate] Processing: text=你是谁, avatar=human_2
+2026-03-14 22:05:18,305 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 22:05:18,305 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 22:05:18,305 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 22:05:18,305 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 22:05:21,884 - logger - INFO - [Pipeline] LLM: 3.58s, emotion: default, response length: 152
+2026-03-14 22:05:21,884 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 22:05:21,884 - logger - INFO - [TTS Preprocess] Input: '你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  \n我不评判、不打断，只专注理解你的感受，陪你梳理情绪、缓解压力，或一起探索更轻松的生活方式。  \n无论是感到焦虑、低落、疲惫，还'
+2026-03-14 22:05:21,884 - logger - INFO - [TTS Preprocess] After emoji removal: '你好呀！ 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  \n我不评判、不打断，只专注理解你的感受，陪你梳理情绪、缓解压力，或一起探索更轻松的生活方式。  \n无论是感到焦虑、低落、疲惫，还是'
+2026-03-14 22:05:21,885 - logger - INFO - [TTS Preprocess] Final: '你好呀！ 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。 我不评判、不打断，只专注理解你的感受，陪你梳理情绪、缓解压力，或一起探索更轻松的生活方式。 无论是感到焦虑、低落、疲惫，还是只是想聊'
+2026-03-14 22:05:21,885 - logger - INFO - [TTS Preprocess] Length: 152 -> 143
+2026-03-14 22:05:21,885 - logger - INFO - [TTS] Original text: 你好呀！😊 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。  
+我不评判、不打断，只专注理解你的感受，陪你梳理情绪、缓解压力，或一起探索更轻松的生活方式。  
+无论是感到焦虑、低落、疲惫，还是只是想聊聊心事、练习正念、学习情绪调节的小方法——我都在这里，用心陪伴你。  
+
+需要从哪里开始呢？🌱
+2026-03-14 22:05:21,885 - logger - INFO - [TTS] Processed text: 你好呀！ 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。 我不评判、不打断，只专注理解你的感受，陪你梳理情绪、缓解压力，或一起探索更轻松的生活方式。 无论是感到焦虑、低落、疲惫，还是只是想聊聊心事、练习正念、学习情绪调节的小方法——我都在这里，用心陪伴你。 需要从哪里开始呢？
+2026-03-14 22:05:21,885 - logger - INFO - [TTS] Text length: 152 -> 143
+2026-03-14 22:05:21,885 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 22:05:21,885 - logger - INFO - [TTS] Emotion: default
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！ 我是你的心理健康小助手，一个温暖、耐心、愿意倾听的朋友。 我不评判、不打断，只专注理解你的...
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 22:05:21,886 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 22:05:25,625 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 22:05:25,626 - logger - INFO - [GPT-SoVITS] Received 836524 bytes
+2026-03-14 22:05:25,626 - logger - INFO - [GPT-SoVITS] Audio header: 524946462400000057415645666d7420
+2026-03-14 22:05:25,626 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 22:05:25,627 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=836516, data_size=836480
+2026-03-14 22:05:25,631 - logger - INFO - [GPT-SoVITS] Generated audio: 26.14s, format=WAV, samplerate=16000
+2026-03-14 22:05:25,632 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773497121884.wav, duration=26.14s
+2026-03-14 22:05:25,632 - logger - INFO - [Pipeline] TTS: 3.75s, audio duration: 26.14s
+2026-03-14 22:05:25,632 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 22:05:25,632 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 22:05:25,632 - logger - INFO - [SimpleBatch] Audio file size: 836524 bytes
+2026-03-14 22:05:25,633 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773497121884.wav, duration=26.14s, samplerate=16000, format=WAV
+2026-03-14 22:05:27,884 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 22:05:27,884 - logger - INFO - [SimpleBatch] JoyVASA: 653 frames in 2.25s
+2026-03-14 22:05:27,884 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] Source prepared in 0.21s
+2026-03-14 22:05:28,099 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 22:05:31,291 - logger - INFO - [SimpleBatch] Rendered 50/653 frames
+2026-03-14 22:05:34,389 - logger - INFO - [SimpleBatch] Rendered 100/653 frames
+2026-03-14 22:05:37,391 - logger - INFO - [SimpleBatch] Rendered 150/653 frames
+2026-03-14 22:05:40,487 - logger - INFO - [SimpleBatch] Rendered 200/653 frames
+2026-03-14 22:05:43,592 - logger - INFO - [SimpleBatch] Rendered 250/653 frames
+2026-03-14 22:05:46,508 - logger - INFO - [SimpleBatch] Rendered 300/653 frames
+2026-03-14 22:05:49,691 - logger - INFO - [SimpleBatch] Rendered 350/653 frames
+2026-03-14 22:05:52,889 - logger - INFO - [SimpleBatch] Rendered 400/653 frames
+2026-03-14 22:05:56,892 - logger - INFO - [SimpleBatch] Rendered 450/653 frames
+2026-03-14 22:06:00,691 - logger - INFO - [SimpleBatch] Rendered 500/653 frames
+2026-03-14 22:06:04,990 - logger - INFO - [SimpleBatch] Rendered 550/653 frames
+2026-03-14 22:06:09,390 - logger - INFO - [SimpleBatch] Rendered 600/653 frames
+2026-03-14 22:06:13,805 - logger - INFO - [SimpleBatch] Rendered 650/653 frames
+2026-03-14 22:06:14,001 - logger - INFO - [SimpleBatch] Rendered 653 frames in 45.90s
+2026-03-14 22:06:24,169 - logger - INFO - [SimpleBatch] Audio duration: 26.14s
+2026-03-14 22:06:24,538 - logger - INFO - [SimpleBatch] Final video duration: 26.12s, expected: 26.14s
+2026-03-14 22:06:24,539 - logger - INFO - [SimpleBatch] Total: 58.91s
+2026-03-14 22:06:24,545 - logger - INFO - [Pipeline] Video: 58.91s
+2026-03-14 22:06:24,546 - logger - WARNING - [Pipeline] Generation timeout: 66.24s > 30s
+2026-03-14 22:06:24,546 - logger - INFO - [Pipeline] Completed in 66.24s
+2026-03-14 22:06:24,546 - logger - INFO - [BatchGenerate] Completed in 66.24s
+2026-03-14 22:06:51,291 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773497118302.mp4
+2026-03-14 22:16:34,791 - logger - WARNING - Cleanup error: 'BatchVideoGeneratorSimple' object has no attribute 'cleanup'
+2026-03-14 22:16:34,791 - logger - INFO - [BatchPipelineManager] All sessions cleaned up
+2026-03-14 22:16:51,117 - logger - INFO - Loading FasterLivePortrait models...
+2026-03-14 22:16:56,575 - logger - INFO - Loading FasterLivePortrait pipeline...
+2026-03-14 22:16:57,910 - logger - INFO - Loading JoyVASA audio-to-motion pipeline...
+2026-03-14 22:17:00,616 - logger - INFO - FasterLivePortrait models loaded successfully
+2026-03-14 22:17:00,616 - logger - INFO - Loading avatar from /root/autodl-tmp/Human_Choice/Human_1/qys.png
+2026-03-14 22:17:00,899 - logger - INFO - Warming up FasterLivePortrait model...
+2026-03-14 22:17:00,903 - logger - WARNING - Warmup failed (may be normal): not enough values to unpack (expected 10, got 7)
+2026-03-14 22:17:00,903 - logger - INFO - Models and avatar loaded successfully
+2026-03-14 22:17:00,903 - logger - INFO - Initializing batch pipeline...
+2026-03-14 22:17:00,910 - logger - INFO - [BatchPipelineManager] Initialized
+2026-03-14 22:17:00,910 - logger - INFO -   - GPT-SoVITS: http://127.0.0.1:9880
+2026-03-14 22:17:00,910 - logger - INFO -   - Output: /root/autodl-tmp/output
+2026-03-14 22:17:00,910 - logger - INFO - Batch pipeline initialized
+2026-03-14 22:17:00,911 - logger - INFO - Starting server at http://0.0.0.0:8010/
+2026-03-14 22:17:00,911 - logger - INFO - WebRTC 实时模式: http://0.0.0.0:8010/webrtcapi.html
+2026-03-14 22:17:00,911 - logger - INFO - 批量视频模式: http://0.0.0.0:8010/batch_video.html
+2026-03-14 22:17:00,911 - logger - INFO - Dashboard: http://0.0.0.0:8010/dashboard.html
+2026-03-14 22:17:11,893 - logger - INFO - [BatchGenerate] Processing: text=你好呀, avatar=human_2
+2026-03-14 22:17:11,894 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 22:17:11,894 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 22:17:11,894 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 22:17:11,894 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 22:17:13,798 - logger - INFO - [Pipeline] LLM: 1.90s, emotion: default, response length: 51
+2026-03-14 22:17:13,798 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 22:17:13,798 - logger - INFO - [TTS Preprocess] Input: '你好呀！😊 很开心见到你～  \n今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢 🌟'
+2026-03-14 22:17:13,798 - logger - INFO - [TTS Preprocess] After emoji removal: '你好呀！ 很开心见到你～  \n今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢 '
+2026-03-14 22:17:13,799 - logger - INFO - [TTS Preprocess] Final: '你好呀！ 很开心见到你～ 今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢。'
+2026-03-14 22:17:13,799 - logger - INFO - [TTS Preprocess] Length: 51 -> 47
+2026-03-14 22:17:13,799 - logger - INFO - [TTS] Original text: 你好呀！😊 很开心见到你～  
+今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢 🌟
+2026-03-14 22:17:13,799 - logger - INFO - [TTS] Processed text: 你好呀！ 很开心见到你～ 今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢。
+2026-03-14 22:17:13,799 - logger - INFO - [TTS] Text length: 51 -> 47
+2026-03-14 22:17:13,799 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 22:17:13,799 - logger - INFO - [TTS] Emotion: default
+2026-03-14 22:17:13,799 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:17:13,799 - logger - INFO - [GPT-SoVITS] Starting generation for text: 你好呀！ 很开心见到你～ 今天过得怎么样？或者，有什么想聊的、想分享的，我都在这儿认真听着呢。...
+2026-03-14 22:17:13,799 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 22:17:13,800 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 22:17:13,800 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:17:13,800 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 22:17:13,800 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 22:17:21,261 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 22:17:21,261 - logger - INFO - [GPT-SoVITS] Received 595244 bytes
+2026-03-14 22:17:21,262 - logger - INFO - [GPT-SoVITS] Audio header: 524946462415090057415645666d7420
+2026-03-14 22:17:21,262 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 22:17:21,262 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=595236, data_size=595200
+2026-03-14 22:17:21,264 - logger - INFO - [GPT-SoVITS] Generated audio: 9.30s, format=WAV, samplerate=32000
+2026-03-14 22:17:21,265 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773497833798.wav, duration=9.30s
+2026-03-14 22:17:21,265 - logger - INFO - [Pipeline] TTS: 7.47s, audio duration: 9.30s
+2026-03-14 22:17:21,265 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 22:17:21,265 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 22:17:21,265 - logger - INFO - [SimpleBatch] Audio file size: 595244 bytes
+2026-03-14 22:17:21,265 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773497833798.wav, duration=9.30s, samplerate=32000, format=WAV
+2026-03-14 22:17:22,376 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 22:17:22,376 - logger - INFO - [SimpleBatch] JoyVASA: 232 frames in 1.11s
+2026-03-14 22:17:22,376 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 22:17:22,610 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 22:17:22,610 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 22:17:22,610 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 22:17:22,610 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 22:17:22,611 - logger - INFO - [SimpleBatch] Source prepared in 0.23s
+2026-03-14 22:17:22,611 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 22:17:26,692 - logger - INFO - [SimpleBatch] Rendered 50/232 frames
+2026-03-14 22:17:30,392 - logger - INFO - [SimpleBatch] Rendered 100/232 frames
+2026-03-14 22:17:33,891 - logger - INFO - [SimpleBatch] Rendered 150/232 frames
+2026-03-14 22:17:36,788 - logger - INFO - [SimpleBatch] Rendered 200/232 frames
+2026-03-14 22:17:38,986 - logger - INFO - [SimpleBatch] Rendered 232 frames in 16.38s
+2026-03-14 22:17:42,861 - logger - INFO - [SimpleBatch] Audio duration: 9.30s
+2026-03-14 22:17:43,165 - logger - INFO - [SimpleBatch] Final video duration: 9.28s, expected: 9.30s
+2026-03-14 22:17:43,166 - logger - INFO - [SimpleBatch] Total: 21.90s
+2026-03-14 22:17:43,167 - logger - INFO - [Pipeline] Video: 21.90s
+2026-03-14 22:17:43,168 - logger - WARNING - [Pipeline] Generation timeout: 31.27s > 30s
+2026-03-14 22:17:43,168 - logger - INFO - [Pipeline] Completed in 31.27s
+2026-03-14 22:17:43,168 - logger - INFO - [BatchGenerate] Completed in 31.27s
+2026-03-14 22:17:53,066 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773497831891.mp4
+2026-03-14 22:20:15,636 - logger - INFO - [BatchGenerate] Processing: text=我不开心，你可以叫我爸爸吗, avatar=human_2
+2026-03-14 22:20:15,638 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 22:20:15,639 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 22:20:15,639 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 22:20:15,639 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 22:20:17,429 - logger - INFO - [Pipeline] LLM: 1.79s, emotion: default, response length: 73
+2026-03-14 22:20:17,430 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 22:20:17,430 - logger - INFO - [TTS Preprocess] Input: '当然可以，爸爸～（轻轻拍拍身边的位置）  \n想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很好。你的情绪很重要，我在这里，稳稳地在。💛'
+2026-03-14 22:20:17,430 - logger - INFO - [TTS Preprocess] After emoji removal: '当然可以，爸爸～（轻轻拍拍身边的位置）  \n想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很好。你的情绪很重要，我在这里，稳稳地在。'
+2026-03-14 22:20:17,430 - logger - INFO - [TTS Preprocess] Final: '当然可以，爸爸～（轻轻拍拍身边的位置） 想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很好。你的情绪很重要，我在这里，稳稳地在。'
+2026-03-14 22:20:17,430 - logger - INFO - [TTS Preprocess] Length: 73 -> 70
+2026-03-14 22:20:17,430 - logger - INFO - [TTS] Original text: 当然可以，爸爸～（轻轻拍拍身边的位置）  
+想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很好。你的情绪很重要，我在这里，稳稳地在。💛
+2026-03-14 22:20:17,430 - logger - INFO - [TTS] Processed text: 当然可以，爸爸～（轻轻拍拍身边的位置） 想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很好。你的情绪很重要，我在这里，稳稳地在。
+2026-03-14 22:20:17,431 - logger - INFO - [TTS] Text length: 73 -> 70
+2026-03-14 22:20:17,431 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 22:20:17,431 - logger - INFO - [TTS] Emotion: default
+2026-03-14 22:20:17,431 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:20:17,431 - logger - INFO - [GPT-SoVITS] Starting generation for text: 当然可以，爸爸～（轻轻拍拍身边的位置） 想听你聊聊今天发生了什么，或者什么都不说，就安静陪着你，也很...
+2026-03-14 22:20:17,431 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 22:20:17,432 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 22:20:17,432 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:20:17,432 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 22:20:17,432 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 22:20:21,863 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 22:20:21,863 - logger - INFO - [GPT-SoVITS] Received 897324 bytes
+2026-03-14 22:20:21,863 - logger - INFO - [GPT-SoVITS] Audio header: 5249464624b10d0057415645666d7420
+2026-03-14 22:20:21,863 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 22:20:21,865 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=897316, data_size=897280
+2026-03-14 22:20:21,867 - logger - INFO - [GPT-SoVITS] Generated audio: 14.02s, format=WAV, samplerate=32000
+2026-03-14 22:20:21,868 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773498017430.wav, duration=14.02s
+2026-03-14 22:20:21,868 - logger - INFO - [Pipeline] TTS: 4.44s, audio duration: 14.02s
+2026-03-14 22:20:21,869 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 22:20:21,869 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 22:20:21,869 - logger - INFO - [SimpleBatch] Audio file size: 897324 bytes
+2026-03-14 22:20:21,869 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773498017430.wav, duration=14.02s, samplerate=32000, format=WAV
+2026-03-14 22:20:23,032 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 22:20:23,032 - logger - INFO - [SimpleBatch] JoyVASA: 350 frames in 1.16s
+2026-03-14 22:20:23,032 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] Source prepared in 0.17s
+2026-03-14 22:20:23,202 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 22:20:26,692 - logger - INFO - [SimpleBatch] Rendered 50/350 frames
+2026-03-14 22:20:29,990 - logger - INFO - [SimpleBatch] Rendered 100/350 frames
+2026-03-14 22:20:33,203 - logger - INFO - [SimpleBatch] Rendered 150/350 frames
+2026-03-14 22:20:36,707 - logger - INFO - [SimpleBatch] Rendered 200/350 frames
+2026-03-14 22:20:40,391 - logger - INFO - [SimpleBatch] Rendered 250/350 frames
+2026-03-14 22:20:43,686 - logger - INFO - [SimpleBatch] Rendered 300/350 frames
+2026-03-14 22:20:46,886 - logger - INFO - [SimpleBatch] Rendered 350/350 frames
+2026-03-14 22:20:46,887 - logger - INFO - [SimpleBatch] Rendered 350 frames in 23.68s
+2026-03-14 22:20:50,908 - logger - INFO - [SimpleBatch] Audio duration: 14.02s
+2026-03-14 22:20:51,239 - logger - INFO - [SimpleBatch] Final video duration: 14.00s, expected: 14.02s
+2026-03-14 22:20:51,239 - logger - INFO - [SimpleBatch] Total: 29.37s
+2026-03-14 22:20:51,243 - logger - INFO - [Pipeline] Video: 29.37s
+2026-03-14 22:20:51,243 - logger - WARNING - [Pipeline] Generation timeout: 35.60s > 30s
+2026-03-14 22:20:51,244 - logger - INFO - [Pipeline] Completed in 35.60s
+2026-03-14 22:20:51,244 - logger - INFO - [BatchGenerate] Completed in 35.60s
+2026-03-14 22:21:05,795 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773498015635.mp4
+2026-03-14 22:21:39,415 - logger - INFO - [BatchGenerate] Processing: text=你现在叫我十声爸爸，我会很开心, avatar=human_2
+2026-03-14 22:21:39,416 - logger - WARNING - [Pipeline] Psychology_Rag init failed: No module named 'system', will use simple LLM
+2026-03-14 22:21:39,417 - logger - INFO - BatchVideoGeneratorSimple initialized, output: /root/autodl-tmp/output
+2026-03-14 22:21:39,417 - logger - INFO - [Pipeline] Initialized, output: /root/autodl-tmp/output
+2026-03-14 22:21:39,417 - logger - INFO - [Pipeline] Step 2: LLM generating response...
+2026-03-14 22:21:42,126 - logger - INFO - [Pipeline] LLM: 2.71s, emotion: default, response length: 116
+2026-03-14 22:21:42,126 - logger - INFO - [Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...
+2026-03-14 22:21:42,126 - logger - INFO - [TTS Preprocess] Input: '哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！😊  \n如果你今天想聊聊开心的事、有点小烦恼，或者需要陪伴、鼓励、一起想办法……我随时都在，认真听、用心帮！✨ '
+2026-03-14 22:21:42,127 - logger - INFO - [TTS Preprocess] After emoji removal: '哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！  \n如果你今天想聊聊开心的事、有点小烦恼，或者需要陪伴、鼓励、一起想办法……我随时都在，认真听、用心帮！  \n'
+2026-03-14 22:21:42,127 - logger - INFO - [TTS Preprocess] Final: '哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！ 如果你今天想聊聊开心的事、有点小烦恼，或者需要陪伴、鼓励、一起想办法……我随时都在，认真听、用心帮！ 你最近有'
+2026-03-14 22:21:42,127 - logger - INFO - [TTS Preprocess] Length: 116 -> 108
+2026-03-14 22:21:42,127 - logger - INFO - [TTS] Original text: 哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！😊  
+如果你今天想聊聊开心的事、有点小烦恼，或者需要陪伴、鼓励、一起想办法……我随时都在，认真听、用心帮！✨  
+你最近有什么想分享的吗？ 🌟
+2026-03-14 22:21:42,127 - logger - INFO - [TTS] Processed text: 哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！ 如果你今天想聊聊开心的事、有点小烦恼，或者需要陪伴、鼓励、一起想办法……我随时都在，认真听、用心帮！ 你最近有什么想分享的吗？
+2026-03-14 22:21:42,127 - logger - INFO - [TTS] Text length: 116 -> 108
+2026-03-14 22:21:42,127 - logger - INFO - [TTS] GPT-SoVITS server: http://127.0.0.1:9880
+2026-03-14 22:21:42,127 - logger - INFO - [TTS] Emotion: default
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Using avatar human_2 emotion default: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Starting generation for text: 哈哈，谢谢你这么温暖的邀请～不过作为你的AI朋友，我更愿意用尊重和平等的方式和你相处哦！ 如果你今天...
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Server URL: http://127.0.0.1:9880
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Avatar: human_2, Emotion: default
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Ref audio: /root/autodl-tmp/ref_audio/human_2/default.wav
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Ref text: 愿你每天都被温柔以待，平安顺遂。
+2026-03-14 22:21:42,128 - logger - INFO - [GPT-SoVITS] Sending request to http://127.0.0.1:9880/tts
+2026-03-14 22:21:52,471 - logger - INFO - [GPT-SoVITS] Response status: 200
+2026-03-14 22:21:52,471 - logger - INFO - [GPT-SoVITS] Received 1537324 bytes
+2026-03-14 22:21:52,471 - logger - INFO - [GPT-SoVITS] Audio header: 524946462475170057415645666d7420
+2026-03-14 22:21:52,471 - logger - INFO - [GPT-SoVITS] Detected WAV format
+2026-03-14 22:21:52,473 - logger - INFO - [GPT-SoVITS] Fixed WAV header: riff_size=1537316, data_size=1537280
+2026-03-14 22:21:52,477 - logger - INFO - [GPT-SoVITS] Generated audio: 24.02s, format=WAV, samplerate=32000
+2026-03-14 22:21:52,478 - logger - INFO - [TTS] GPT-SoVITS success: path=/root/autodl-tmp/output/temp/tts_1773498102126.wav, duration=24.02s
+2026-03-14 22:21:52,478 - logger - INFO - [Pipeline] TTS: 10.35s, audio duration: 24.02s
+2026-03-14 22:21:52,479 - logger - INFO - [Pipeline] Step 4: Generating video...
+2026-03-14 22:21:52,479 - logger - INFO - [SimpleBatch] Running JoyVASA...
+2026-03-14 22:21:52,479 - logger - INFO - [SimpleBatch] Audio file size: 1537324 bytes
+2026-03-14 22:21:52,479 - logger - INFO - [SimpleBatch] Audio file: /root/autodl-tmp/output/temp/tts_1773498102126.wav, duration=24.02s, samplerate=32000, format=WAV
+2026-03-14 22:21:54,570 - logger - INFO - [SimpleBatch] JoyVASA returned motion_info keys: ['n_frames', 'output_fps', 'motion', 'c_eyes_lst', 'c_lip_lst']
+2026-03-14 22:21:54,570 - logger - INFO - [SimpleBatch] JoyVASA: 600 frames in 2.09s
+2026-03-14 22:21:54,570 - logger - INFO - [SimpleBatch] Preparing source image...
+2026-03-14 22:21:54,805 - logger - INFO - [SimpleBatch] src_infos length: 1
+2026-03-14 22:21:54,805 - logger - INFO - [SimpleBatch] src_infos[0] length: 1
+2026-03-14 22:21:54,805 - logger - INFO - [SimpleBatch] src_infos[0][0] length: 10
+2026-03-14 22:21:54,805 - logger - INFO - [SimpleBatch] src_infos[0][0] types: ['dict', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'ndarray', 'NoneType', 'bool', 'Tensor', 'Tensor']
+2026-03-14 22:21:54,806 - logger - INFO - [SimpleBatch] Source prepared in 0.24s
+2026-03-14 22:21:54,806 - logger - INFO - [SimpleBatch] Rendering frames...
+2026-03-14 22:21:58,807 - logger - INFO - [SimpleBatch] Rendered 50/600 frames
+2026-03-14 22:22:02,609 - logger - INFO - [SimpleBatch] Rendered 100/600 frames
+2026-03-14 22:22:05,793 - logger - INFO - [SimpleBatch] Rendered 150/600 frames
+2026-03-14 22:22:08,788 - logger - INFO - [SimpleBatch] Rendered 200/600 frames
+2026-03-14 22:22:11,990 - logger - INFO - [SimpleBatch] Rendered 250/600 frames
+2026-03-14 22:22:14,810 - logger - INFO - [SimpleBatch] Rendered 300/600 frames
+2026-03-14 22:22:17,891 - logger - INFO - [SimpleBatch] Rendered 350/600 frames
+2026-03-14 22:22:21,091 - logger - INFO - [SimpleBatch] Rendered 400/600 frames
+2026-03-14 22:22:24,091 - logger - INFO - [SimpleBatch] Rendered 450/600 frames
+2026-03-14 22:22:27,188 - logger - INFO - [SimpleBatch] Rendered 500/600 frames
+2026-03-14 22:22:30,405 - logger - INFO - [SimpleBatch] Rendered 550/600 frames
+2026-03-14 22:22:33,491 - logger - INFO - [SimpleBatch] Rendered 600/600 frames
+2026-03-14 22:22:33,491 - logger - INFO - [SimpleBatch] Rendered 600 frames in 38.69s
+2026-03-14 22:22:40,285 - logger - INFO - [SimpleBatch] Audio duration: 24.02s
+2026-03-14 22:22:40,629 - logger - INFO - [SimpleBatch] Final video duration: 24.00s, expected: 24.02s
+2026-03-14 22:22:40,630 - logger - INFO - [SimpleBatch] Total: 48.15s
+2026-03-14 22:22:40,633 - logger - INFO - [Pipeline] Video: 48.15s
+2026-03-14 22:22:40,633 - logger - WARNING - [Pipeline] Generation timeout: 61.22s > 30s
+2026-03-14 22:22:40,633 - logger - INFO - [Pipeline] Completed in 61.22s
+2026-03-14 22:22:40,634 - logger - INFO - [BatchGenerate] Completed in 61.22s
+2026-03-14 22:23:05,439 - logger - INFO - [VideoCleanup] Deleted video: video_batch_1773498099413.mp4

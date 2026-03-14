@@ -236,30 +236,87 @@ class FishTTS(BaseTTS):
 
 ###########################################################################################
 class SovitsTTS(BaseTTS):
-    def txt_to_audio(self,msg:tuple[str, dict]): 
+    def txt_to_audio(self,msg:tuple[str, dict]):
         text,textevent = msg
+        # 从 textevent 中获取情感参数，默认为 "default"
+        emotion = textevent.get('emotion', 'default')
+
+        # 获取当前数字人的参考音频配置
+        avatar_id = getattr(self.parent, 'avatar_id', 'human_1')
+
+        # 调试日志：显示当前使用的 avatar_id
+        logger.info(f"[TTS] Using avatar_id: {avatar_id}, emotion: {emotion}")
+
+        ref_audio, ref_text = self._get_ref_audio(avatar_id, emotion)
+
+        # 调试日志：显示最终使用的参考音频路径
+        logger.info(f"[TTS] Ref audio path: {ref_audio}")
+
         self.stream_tts(
             self.gpt_sovits(
                 text=text,
-                reffile=self.opt.REF_FILE,
-                reftext=self.opt.REF_TEXT,
-                language="zh", #en args.language,
-                server_url=self.opt.TTS_SERVER, #"http://127.0.0.1:5000", #args.server_url,
+                reffile=ref_audio,
+                reftext=ref_text,
+                language="zh",
+                server_url=self.opt.TTS_SERVER,
+                emotion=emotion,
             ),
             msg
         )
 
-    def gpt_sovits(self, text, reffile, reftext,language, server_url) -> Iterator[bytes]:
+    def _get_ref_audio(self, avatar_id: str, emotion: str = "default") -> tuple:
+        """
+        根据数字人ID和情感获取参考音频
+
+        Args:
+            avatar_id: 数字人ID (human_1, human_2)
+            emotion: 情感类型
+
+        Returns:
+            (ref_audio_path, ref_text)
+        """
+        try:
+            # 尝试从 digital_human 配置获取
+            import sys
+            sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+            from digital_human.config import get_default_config
+
+            config = get_default_config()
+            avatar_info = config.avatar.get_avatar(avatar_id)
+
+            if avatar_info and avatar_info.tts_config:
+                return avatar_info.get_tts_ref(emotion)
+
+            # 回退到全局配置
+            return config.gpt_sovits.ref_audio, config.gpt_sovits.ref_text
+
+        except Exception as e:
+            logger.warning(f"Failed to get avatar config: {e}, using default")
+            # 最终回退到 opt 中的配置
+            return self.opt.REF_FILE, self.opt.REF_TEXT
+
+    def gpt_sovits(self, text, reffile, reftext, language, server_url, emotion="default") -> Iterator[bytes]:
         start = time.perf_counter()
-        req={
-            'text':text,
-            'text_lang':language,
-            'ref_audio_path':reffile,
-            'prompt_text':reftext,
-            'prompt_lang':language,
-            'media_type':'wav',
-            'streaming_mode':False
+
+        # 基础请求参数
+        req = {
+            'text': text,
+            'text_lang': language,
+            'ref_audio_path': reffile,
+            'prompt_text': reftext,
+            'prompt_lang': language,
+            'media_type': 'ogg',
+            'streaming_mode': True,
+            # 情感丰富度参数
+            'temperature': 1.1,    # 略高于1，增加情感波动
+            'top_k': 10,
+            'top_p': 0.95,
+            'speed_factor': 1.0,
         }
+
+        # 记录情感类型
+        if emotion != "default":
+            logger.info(f"GPT-SoVITS emotion: {emotion}")
         # req["text"] = text
         # req["text_language"] = language
         # req["character"] = character

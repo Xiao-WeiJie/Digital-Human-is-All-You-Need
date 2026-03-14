@@ -10,6 +10,7 @@ import sys
 import time
 import asyncio
 import logging
+import re
 from pathlib import Path
 from typing import Optional, Tuple, Dict, Any
 from dataclasses import dataclass
@@ -96,19 +97,51 @@ class SenseVoiceASR:
 class GPTSoVITSTTS:
     """GPT-SoVITS TTS 语音合成"""
 
-    def __init__(self, config=None):
+    def __init__(self, config=None, avatar_id: str = "human_1"):
         self.config = config or get_default_config().gpt_sovits
         self.server_url = self.config.server_url
         self.ref_audio = self.config.ref_audio
         self.ref_text = self.config.ref_text
+        self.avatar_id = avatar_id
+        self._avatar_config = None
 
-    def generate(self, text: str, output_path: str) -> Tuple[str, float]:
+    def _get_ref_audio(self, emotion: str = "default") -> Tuple[str, str]:
+        """
+        根据数字人和情感获取参考音频
+
+        Returns:
+            (ref_audio_path, ref_text)
+        """
+        try:
+            # 尝试从 avatar 配置获取
+            if self._avatar_config is None:
+                self._avatar_config = get_default_config().avatar
+
+            avatar_info = self._avatar_config.get_avatar(self.avatar_id)
+            if avatar_info and avatar_info.tts_config:
+                ref_audio, ref_text = avatar_info.get_tts_ref(emotion)
+                if ref_audio and ref_text:
+                    logger.info(f"[GPT-SoVITS] Using avatar {self.avatar_id} emotion {emotion}: {ref_audio}")
+                    return ref_audio, ref_text
+        except Exception as e:
+            logger.warning(f"[GPT-SoVITS] Failed to get avatar config: {e}")
+
+        # 回退到全局配置
+        return self.ref_audio, self.ref_text
+
+    def set_avatar(self, avatar_id: str):
+        """切换数字人"""
+        self.avatar_id = avatar_id
+        self._avatar_config = None  # 重置缓存，下次重新加载
+
+    def generate(self, text: str, output_path: str, emotion: str = "default") -> Tuple[str, float]:
         """
         生成语音
 
         Args:
             text: 输入文本
             output_path: 输出文件路径
+            emotion: 情感标签 (default/happy/sad/calm/question)
 
         Returns:
             Tuple[str, float]: (音频路径, 音频时长)
@@ -119,26 +152,37 @@ class GPTSoVITSTTS:
         import wave
         import struct
 
+        # 根据情感获取参考音频
+        ref_audio, ref_text = self._get_ref_audio(emotion)
+
         logger.info(f"[GPT-SoVITS] Starting generation for text: {text[:50]}...")
         logger.info(f"[GPT-SoVITS] Server URL: {self.server_url}")
-        logger.info(f"[GPT-SoVITS] Ref audio: {self.ref_audio}")
-        logger.info(f"[GPT-SoVITS] Ref text: {self.ref_text}")
+        logger.info(f"[GPT-SoVITS] Avatar: {self.avatar_id}, Emotion: {emotion}")
+        logger.info(f"[GPT-SoVITS] Ref audio: {ref_audio}")
+        logger.info(f"[GPT-SoVITS] Ref text: {ref_text}")
 
         # 检查配置
         if not self.server_url:
             raise RuntimeError("GPT-SoVITS server URL is not configured!")
-        if not self.ref_audio:
+        if not ref_audio:
             raise RuntimeError("GPT-SoVITS ref_audio is not configured!")
 
         # 使用非流式模式直接生成 WAV 格式
         req = {
             'text': text,
             'text_lang': 'zh',
-            'ref_audio_path': self.ref_audio,
-            'prompt_text': self.ref_text,
+            'ref_audio_path': ref_audio,
+            'prompt_text': ref_text,
             'prompt_lang': 'zh',
             'media_type': 'wav',  # 直接生成 WAV 格式
-            'streaming_mode': False  # 非流式模式，返回完整 WAV 文件
+            'streaming_mode': False,  # 非流式模式，返回完整 WAV 文件
+            'text_split_method': 'cut0',  # 不分割文本，避免分段导致的音频间隙
+            'parallel_infer': False,  # 禁用并行推理，确保音频连续性
+            'split_bucket': False,  # 禁用分桶处理
+            # 情感丰富度参数
+            'temperature': 1.1,
+            'top_k': 10,
+            'top_p': 0.95,
         }
 
         logger.info(f"[GPT-SoVITS] Sending request to {self.server_url}/tts")
@@ -257,6 +301,77 @@ class EdgeTTSFallback:
         return output_path, info.duration
 
 
+def preprocess_text_for_tts(text: str) -> str:
+    """
+    预处理文本以优化 TTS 合成
+
+    只做最小化处理：
+    - 移除表情符号（可能导致 TTS 分段异常）
+    - 规范化空白字符
+    """
+    if not text:
+        return text
+
+    original_text = text
+    logger.info(f"[TTS Preprocess] Input: {repr(text[:100])}")
+
+    # 使用简单直接的方式移除 emoji：逐字符过滤
+    # emoji 通常在 Unicode 的 Supplementary Planes (U+10000 及以上)
+    result_chars = []
+    for char in text:
+        code = ord(char)
+        # 跳过 emoji 范围
+        if 0x1F600 <= code <= 0x1F64F:  # Emoticons
+            continue
+        if 0x1F300 <= code <= 0x1F5FF:  # Misc Symbols and Pictographs
+            continue
+        if 0x1F680 <= code <= 0x1F6FF:  # Transport and Map
+            continue
+        if 0x1F1E0 <= code <= 0x1F1FF:  # Flags
+            continue
+        if 0x1F900 <= code <= 0x1F9FF:  # Supplemental Symbols and Pictographs
+            continue
+        if 0x1FA00 <= code <= 0x1FA6F:  # Chess Symbols
+            continue
+        if 0x1FA70 <= code <= 0x1FAFF:  # Symbols and Pictographs Extended-A
+            continue
+        if 0x2600 <= code <= 0x26FF:    # Misc symbols
+            continue
+        if 0x2700 <= code <= 0x27BF:    # Dingbats
+            continue
+        if code == 0xFE0F:              # Variation Selector-16
+            continue
+        if code == 0x200D:              # Zero Width Joiner
+            continue
+        result_chars.append(char)
+
+    text = ''.join(result_chars)
+    logger.info(f"[TTS Preprocess] After emoji removal: {repr(text[:100])}")
+
+    # 规范化空白字符：多个换行/空格变成一个空格
+    text = re.sub(r'\s+', ' ', text)
+
+    # 移除首尾空格
+    text = text.strip()
+
+    # 移除开头的标点符号（如破折号、句号、波浪号等）
+    text = re.sub(r'^[—…。！？，、；：\s\-～~]+', '', text)
+
+    # 确保结尾有标点
+    if text and text[-1] not in '。！？，、；：.!?～~':
+        text += '。'
+
+    # 如果处理后为空，返回原始文本
+    if not text or len(text.strip()) == 0:
+        logger.warning(f"[TTS Preprocess] Text became empty after processing, using original")
+        text = original_text
+
+    logger.info(f"[TTS Preprocess] Final: {repr(text[:100])}")
+    logger.info(f"[TTS Preprocess] Length: {len(original_text)} -> {len(text)}")
+
+    return text
+
+
 class DigitalHumanBatchPipeline:
     """
     数字人批量处理流水线
@@ -308,7 +423,8 @@ class DigitalHumanBatchPipeline:
             logger.warning(f"[Pipeline] Psychology_Rag init failed: {e}, will use simple LLM")
 
         # 初始化 TTS（默认使用 GPT-SoVITS）
-        self.tts = GPTSoVITSTTS(self.config.gpt_sovits)
+        default_avatar_id = self.config.avatar.default_avatar
+        self.tts = GPTSoVITSTTS(self.config.gpt_sovits, avatar_id=default_avatar_id)
         self.tts_fallback = EdgeTTSFallback()
 
         # 初始化视频生成器
@@ -332,7 +448,8 @@ class DigitalHumanBatchPipeline:
         user_text: str = None,
         user_audio_path: str = None,
         source_image: str = None,
-        session_id: str = None
+        session_id: str = None,
+        avatar_id: str = None
     ) -> PipelineResult:
         """
         处理输入，生成视频
@@ -342,6 +459,7 @@ class DigitalHumanBatchPipeline:
             user_audio_path: 用户输入音频路径（需要 ASR）
             source_image: 源图像路径（可选，使用默认）
             session_id: 会话 ID
+            avatar_id: 数字人 ID（可选，用于切换参考音频）
 
         Returns:
             PipelineResult: 处理结果
@@ -350,9 +468,13 @@ class DigitalHumanBatchPipeline:
         source_image = source_image or self.default_source_image
         metrics = {}
 
+        # 如果指定了 avatar_id，更新 TTS 的 avatar
+        if avatar_id:
+            self.tts.set_avatar(avatar_id)
+
         try:
             # ========== Step 1: ASR 识别（如果是语音输入） ==========
-            if user_audio_path and not user_text and use_asr:
+            if user_audio_path and not user_text and self.use_asr:
                 t1 = time.time()
                 logger.info("[Pipeline] Step 1: ASR recognition...")
                 user_text = await self._asr_recognize(user_audio_path)
@@ -374,19 +496,23 @@ class DigitalHumanBatchPipeline:
             t2 = time.time()
             logger.info("[Pipeline] Step 2: LLM generating response...")
 
+            emotion = "default"  # 默认情感
+
             if self.psy_mind:
-                response_text = await self.psy_mind.process_message(user_text, session_id or "default")
+                result = await self.psy_mind.process_message(user_text, session_id or "default")
+                response_text = result.get("response", "")
+                emotion = result.get("emotion", "default")
             else:
                 response_text = await self._simple_llm_response(user_text)
 
             self.last_response_text = response_text
             metrics['llm_time'] = time.time() - t2
-            logger.info(f"[Pipeline] LLM: {metrics['llm_time']:.2f}s, response length: {len(response_text)}")
+            logger.info(f"[Pipeline] LLM: {metrics['llm_time']:.2f}s, emotion: {emotion}, response length: {len(response_text)}")
 
             # ========== Step 3: TTS 生成音频（默认使用 GPT-SoVITS） ==========
             t3 = time.time()
             logger.info("[Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...")
-            audio_path, audio_duration = await self._tts_generate(response_text)
+            audio_path, audio_duration = await self._tts_generate(response_text, emotion)
             metrics['tts_time'] = time.time() - t3
             logger.info(f"[Pipeline] TTS: {metrics['tts_time']:.2f}s, audio duration: {audio_duration:.2f}s")
 
@@ -479,9 +605,13 @@ class DigitalHumanBatchPipeline:
             logger.error(f"LLM error: {e}")
             return f"抱歉，我现在无法回复。您说的是：{user_text}"
 
-    async def _tts_generate(self, text: str) -> Tuple[str, float]:
+    async def _tts_generate(self, text: str, emotion: str = "default") -> Tuple[str, float]:
         """
         TTS 生成音频（默认使用 GPT-SoVITS）
+
+        Args:
+            text: 要合成的文本
+            emotion: 情感标签 (default/happy/sad/calm/question)
 
         Returns:
             Tuple[str, float]: (音频文件路径, 音频时长)
@@ -489,25 +619,40 @@ class DigitalHumanBatchPipeline:
         # 生成临时音频文件路径
         audio_path = str(self.temp_dir / f"tts_{int(time.time() * 1000)}.wav")
 
-        logger.info(f"[TTS] Starting TTS generation for text: {text[:50]}...")
+        # 预处理文本（移除表情符号、规范化换行等）
+        processed_text = preprocess_text_for_tts(text)
+        logger.info(f"[TTS] Original text: {text}")
+        logger.info(f"[TTS] Processed text: {processed_text}")
+        logger.info(f"[TTS] Text length: {len(text)} -> {len(processed_text)}")
+
+        # 验证处理后的文本不为空
+        if not processed_text or len(processed_text.strip()) == 0:
+            logger.error(f"[TTS] Text became empty after preprocessing!")
+            # 使用原始文本作为备选
+            processed_text = text
+            logger.info(f"[TTS] Falling back to original text: {processed_text}")
+
         logger.info(f"[TTS] GPT-SoVITS server: {self.tts.server_url}")
-        logger.info(f"[TTS] Ref audio: {self.tts.ref_audio}")
+        logger.info(f"[TTS] Emotion: {emotion}")
 
         # 优先使用 GPT-SoVITS
         try:
             loop = asyncio.get_event_loop()
             result = await loop.run_in_executor(
                 None,
-                self.tts.generate,
-                text,
-                audio_path
+                lambda: self.tts.generate(processed_text, audio_path, emotion=emotion)
             )
             logger.info(f"[TTS] GPT-SoVITS success: path={result[0]}, duration={result[1]:.2f}s")
+
+            # 验证生成的音频文件有效
+            if result[1] < 0.1:
+                logger.warning(f"[TTS] Generated audio too short: {result[1]:.2f}s, text may be invalid")
+
             return result
         except Exception as e:
             logger.warning(f"[TTS] GPT-SoVITS failed: {e}, using EdgeTTS fallback")
             try:
-                result = await self.tts_fallback.generate(text, audio_path)
+                result = await self.tts_fallback.generate(processed_text, audio_path)
                 logger.info(f"[TTS] EdgeTTS success: path={result[0]}, duration={result[1]:.2f}s")
                 return result
             except Exception as e2:
@@ -590,7 +735,8 @@ class BatchPipelineManager:
                 config=self.config,
                 pipeline=self.pipeline,
                 joyvasa_pipeline=self.joyvasa_pipeline,
-                default_source_image=self.default_source_image
+                default_source_image=self.default_source_image,
+                use_asr=self.config.use_asr
             )
 
         return self._pipelines[session_id]
@@ -606,7 +752,8 @@ class BatchPipelineManager:
         session_id: str,
         user_text: str = None,
         user_audio_path: str = None,
-        source_image: str = None
+        source_image: str = None,
+        avatar_id: str = None
     ) -> 'PipelineResult':
         """处理输入，生成视频"""
         pipeline = self.get_or_create_pipeline(session_id)
@@ -614,7 +761,8 @@ class BatchPipelineManager:
             user_text=user_text,
             user_audio_path=user_audio_path,
             source_image=source_image,
-            session_id=session_id
+            session_id=session_id,
+            avatar_id=avatar_id
         )
 
     def cleanup_all(self):

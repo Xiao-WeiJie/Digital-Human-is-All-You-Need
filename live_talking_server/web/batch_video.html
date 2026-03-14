@@ -11,115 +11,102 @@
             padding: 0;
         }
 
+        :root {
+            --panel-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.08);
+            --text-muted: rgba(255, 255, 255, 0.65);
+            --text-light: rgba(255, 255, 255, 0.9);
+            --primary: #00d2ff;
+            --primary-2: #3a7bd5;
+            --success: #2ecc71;
+            --warning: #f1c40f;
+            --danger: #e74c3c;
+        }
+
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
             background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
             min-height: 100vh;
             color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+            padding: 12px;
+            overflow: hidden;
         }
 
         .container {
-            max-width: 1000px;
-            width: 100%;
+            max-width: 1580px;
+            height: calc(100vh - 24px);
+            margin: 0 auto;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 20px;
-            padding: 40px;
+            border-radius: 24px;
+            padding: 20px 24px 22px;
             box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
             backdrop-filter: blur(10px);
+            overflow: hidden;
         }
 
         h1 {
             text-align: center;
-            margin-bottom: 30px;
-            font-size: 28px;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            margin-bottom: 16px;
+            font-size: 24px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        /* 视频区域 */
-        .video-section {
-            margin-bottom: 30px;
+        .main-layout {
+            display: grid;
+            grid-template-columns: minmax(620px, 1.55fr) minmax(340px, 0.9fr);
+            gap: 18px;
+            align-items: stretch;
+            height: calc(100% - 40px);
+            min-height: 0;
         }
 
-        .video-container {
-            position: relative;
-            width: 100%;
-            max-width: 450px;
-            margin: 0 auto;
-            border-radius: 15px;
-            overflow: hidden;
-            background: #000;
-            aspect-ratio: 1;
+        .left-panel,
+        .right-panel {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 18px;
+            min-height: 0;
         }
 
-        /* 使用 Canvas 渲染视频，避免浏览器暂停不可见视频 */
-        #render-canvas {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        /* 视频元素隐藏，仅作为数据源 */
-        #idle-video,
-        #idle-video-2,
-        #response-video {
-            display: none;
-        }
-
-        .video-overlay {
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
+        .left-panel {
             display: flex;
             flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            color: #666;
-            font-size: 18px;
-            z-index: 0;
-            background: #111;
+            gap: 14px;
         }
 
-        .video-overlay .icon {
-            font-size: 64px;
-            margin-bottom: 15px;
+        .right-panel {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
         }
 
-        /* 数字人选择 */
-        .avatar-section {
-            margin-bottom: 25px;
-        }
-
-        .avatar-section h3 {
-            margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
+        .section-title {
+            margin-bottom: 6px;
+            color: var(--text-muted);
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: 1px;
         }
 
         .avatar-list {
             display: flex;
-            gap: 15px;
+            gap: 12px;
             flex-wrap: wrap;
             justify-content: center;
+            margin-top: 4px;
         }
 
         .avatar-item {
-            width: 100px;
+            width: 96px;
             cursor: pointer;
-            border-radius: 12px;
+            border-radius: 14px;
             padding: 10px;
             background: rgba(255, 255, 255, 0.05);
             border: 2px solid transparent;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             text-align: center;
         }
 
@@ -129,228 +116,243 @@
         }
 
         .avatar-item.active {
-            border-color: #00d2ff;
-            background: rgba(0, 210, 255, 0.1);
+            border-color: var(--primary);
+            background: rgba(0, 210, 255, 0.12);
+            box-shadow: 0 0 0 1px rgba(0, 210, 255, 0.15) inset;
         }
 
-        .avatar-item .avatar-preview {
-            width: 60px;
-            height: 60px;
+        .avatar-preview {
+            width: 56px;
+            height: 56px;
             border-radius: 50%;
             margin: 0 auto 8px;
             object-fit: cover;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        .avatar-item .avatar-name {
-            font-size: 12px;
-            color: rgba(255, 255, 255, 0.8);
+        .avatar-name {
+            font-size: 13px;
+            color: rgba(255, 255, 255, 0.85);
         }
 
-        /* 状态栏 */
+        .video-shell {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 0;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            max-height: calc(100vh - 220px);
+            min-height: 0;
+            border-radius: 18px;
+            overflow: hidden;
+            background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.28);
+        }
+
+        #render-canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+            background: #000;
+        }
+
+        #idle-video,
+        #idle-video-2,
+        #response-video {
+            display: none;
+        }
+
+        .video-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            color: #777;
+            font-size: 18px;
+            background: #111;
+        }
+
+        .video-overlay .icon {
+            font-size: 64px;
+            margin-bottom: 15px;
+        }
+
         .status-bar {
-            margin: 20px 0;
-            padding: 15px 20px;
-            border-radius: 10px;
-            text-align: center;
-            font-size: 16px;
+            margin-bottom: 0;
+            padding: 12px 14px;
+            border-radius: 12px;
+            font-size: 15px;
             transition: all 0.3s ease;
         }
 
-        .status-bar.ready {
-            background: rgba(52, 152, 219, 0.2);
-            color: #3498db;
-        }
-
-        .status-bar.processing {
-            background: rgba(241, 196, 15, 0.2);
-            color: #f1c40f;
-        }
-
-        .status-bar.success {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-        }
-
-        .status-bar.error {
-            background: rgba(231, 76, 60, 0.2);
-            color: #e74c3c;
-        }
+        .status-bar.ready { background: rgba(52, 152, 219, 0.16); color: #7cc3ff; }
+        .status-bar.processing { background: rgba(241, 196, 15, 0.18); color: var(--warning); }
+        .status-bar.success { background: rgba(46, 204, 113, 0.18); color: var(--success); }
+        .status-bar.error { background: rgba(231, 76, 60, 0.18); color: #ff9a8f; }
 
         .progress-bar {
             width: 100%;
             height: 6px;
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 999px;
             margin-top: 10px;
             overflow: hidden;
             display: none;
         }
 
-        .progress-bar.active {
-            display: block;
-        }
+        .progress-bar.active { display: block; }
 
-        .progress-bar .progress {
+        .progress {
             height: 100%;
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
-            border-radius: 3px;
-            width: 0%;
+            width: 0;
+            border-radius: 999px;
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
             transition: width 0.3s ease;
-        }
-
-        /* 输入区域 */
-        .input-section {
-            margin-bottom: 30px;
         }
 
         .input-tabs {
             display: flex;
-            margin-bottom: 15px;
+            margin-bottom: 14px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 12px;
             padding: 5px;
         }
 
         .input-tab {
             flex: 1;
-            padding: 10px;
+            padding: 11px;
             text-align: center;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            border-radius: 10px;
+            transition: all 0.25s ease;
             font-size: 14px;
         }
 
-        .input-tab:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
         .input-tab.active {
-            background: rgba(0, 210, 255, 0.2);
-            color: #00d2ff;
+            background: rgba(0, 210, 255, 0.18);
+            color: var(--primary);
         }
 
-        .input-tab-content {
-            display: none;
-        }
+        .input-tab-content { display: none; }
+        .input-tab-content.active { display: block; }
 
-        .input-tab-content.active {
-            display: block;
-        }
-
-        .input-section textarea {
+        textarea {
             width: 100%;
-            height: 100px;
-            padding: 15px;
-            border: 2px solid rgba(255, 255, 255, 0.1);
-            border-radius: 10px;
-            background: rgba(255, 255, 255, 0.05);
+            min-height: 88px;
+            padding: 16px;
+            border: 2px solid rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.04);
             color: #fff;
             font-size: 16px;
-            resize: none;
-            transition: border-color 0.3s ease;
+            resize: vertical;
+            transition: border-color 0.25s ease;
         }
 
-        .input-section textarea:focus {
+        textarea:focus {
             outline: none;
-            border-color: #3a7bd5;
+            border-color: var(--primary-2);
         }
 
-        .input-section textarea::placeholder {
+        textarea::placeholder {
             color: rgba(255, 255, 255, 0.3);
         }
 
-        /* 音频录制区域 */
         .audio-record-section {
             text-align: center;
-            padding: 20px;
+            padding: 16px 12px 8px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
         .record-btn {
             width: 80px;
             height: 80px;
             border-radius: 50%;
-            border: 3px solid rgba(255, 255, 255, 0.3);
+            border: 3px solid rgba(255, 255, 255, 0.25);
             background: rgba(255, 255, 255, 0.05);
             cursor: pointer;
             transition: all 0.3s ease;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin: 0 auto 15px;
-        }
-
-        .record-btn:hover {
-            background: rgba(255, 255, 255, 0.1);
-            border-color: #00d2ff;
+            margin: 0 auto 14px;
         }
 
         .record-btn.recording {
-            border-color: #e74c3c;
+            border-color: var(--danger);
             background: rgba(231, 76, 60, 0.2);
             animation: pulse 1s infinite;
         }
 
-        .record-btn .record-icon {
+        .record-icon {
             width: 30px;
             height: 30px;
             border-radius: 50%;
-            background: #e74c3c;
+            background: var(--danger);
         }
 
         .record-btn.recording .record-icon {
+            width: 24px;
+            height: 24px;
             border-radius: 5px;
-            width: 25px;
-            height: 25px;
         }
 
         .record-hint {
-            color: rgba(255, 255, 255, 0.5);
+            color: rgba(255, 255, 255, 0.58);
             font-size: 14px;
         }
 
         .audio-preview {
-            margin-top: 15px;
+            margin-top: 16px;
             display: none;
         }
 
         .audio-preview audio {
             width: 100%;
-            max-width: 300px;
+            max-width: 320px;
         }
 
-        /* 按钮组 */
         .button-group {
             display: flex;
-            gap: 15px;
-            margin-top: 15px;
+            gap: 12px;
+            margin-top: 2px;
         }
 
         button {
             flex: 1;
-            padding: 15px 30px;
+            padding: 12px 18px;
             border: none;
-            border-radius: 10px;
+            border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
         }
 
         button:disabled {
-            opacity: 0.5;
+            opacity: 0.55;
             cursor: not-allowed;
         }
 
         .btn-primary {
-            background: linear-gradient(90deg, #00d2ff, #3a7bd5);
+            background: linear-gradient(90deg, var(--primary), var(--primary-2));
             color: #fff;
         }
 
         .btn-primary:hover:not(:disabled) {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(58, 123, 213, 0.3);
+            transform: translateY(-1px);
+            box-shadow: 0 10px 20px rgba(58, 123, 213, 0.28);
         }
 
         .btn-secondary {
@@ -359,118 +361,240 @@
         }
 
         .btn-secondary:hover:not(:disabled) {
-            background: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.16);
         }
 
-        /* 回复区域 */
-        .response-section {
-            margin-top: 30px;
-            padding-top: 30px;
-            border-top: 1px solid rgba(255, 255, 255, 0.1);
-            display: none;
+        .chat-section {
+            margin-top: 4px;
+            border-top: 1px solid rgba(255, 255, 255, 0.08);
+            padding-top: 12px;
+            display: flex;
+            flex-direction: column;
+            min-height: 0;
+            flex: 1;
         }
 
-        .response-section.visible {
+        .chat-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+            gap: 12px;
+        }
+
+        .chat-title-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .chat-title {
+            font-size: 14px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            color: var(--text-muted);
+        }
+
+        .chat-subtitle {
+            color: rgba(255, 255, 255, 0.42);
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .chat-count {
+            color: rgba(255, 255, 255, 0.45);
+            font-size: 13px;
+            white-space: nowrap;
+            padding-top: 2px;
+        }
+
+        .chat-history {
+            min-height: 140px;
+            max-height: none;
+            flex: 1;
+            overflow-y: auto;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            padding-right: 4px;
+            scroll-behavior: smooth;
+        }
+
+        .empty-chat {
+            color: rgba(255, 255, 255, 0.45);
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px dashed rgba(255, 255, 255, 0.08);
+            border-radius: 14px;
+            padding: 18px;
+            line-height: 1.6;
+        }
+
+        .message-row {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .message-row.user {
+            flex-direction: row-reverse;
+        }
+
+        .message-avatar {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 13px;
+            font-weight: 700;
+            color: #fff;
+            background: rgba(255,255,255,0.12);
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.12);
+            box-shadow: 0 6px 14px rgba(0,0,0,0.18);
+        }
+
+        .message-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .message-main {
+            max-width: min(88%, 680px);
+        }
+
+        .message-row.user .message-main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+        }
+
+        .message-row.assistant .message-main {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+
+        .message-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.48);
+            margin-bottom: 6px;
+            padding: 0 2px;
+        }
+
+        .message-bubble {
+            width: fit-content;
+            max-width: 100%;
+            padding: 14px 16px;
+            border-radius: 18px;
+            line-height: 1.72;
+            font-size: 15px;
+            color: var(--text-light);
+            white-space: pre-wrap;
+            word-break: break-word;
+            box-shadow: 0 8px 18px rgba(0, 0, 0, 0.15);
+        }
+
+        .message-row.user .message-bubble {
+            background: linear-gradient(90deg, rgba(0, 210, 255, 0.22), rgba(58, 123, 213, 0.24));
+            border-top-right-radius: 6px;
+        }
+
+        .message-row.assistant .message-bubble {
+            background: rgba(255, 255, 255, 0.08);
+            border-top-left-radius: 6px;
+        }
+
+        .typing-bubble {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            min-width: 72px;
+        }
+
+        .typing-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.72);
+            animation: blink 1.2s infinite ease-in-out;
+        }
+
+        .typing-dot:nth-child(2) { animation-delay: 0.15s; }
+        .typing-dot:nth-child(3) { animation-delay: 0.3s; }
+
+        .message-text {
             display: block;
         }
 
-        .response-section h3 {
-            margin-bottom: 15px;
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 14px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
-
-        .response-text {
-            padding: 20px;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
-            font-size: 16px;
-            line-height: 1.6;
-            min-height: 80px;
-            color: rgba(255, 255, 255, 0.9);
-        }
-
-        .user-text {
-            margin-bottom: 10px;
-            padding: 10px 15px;
-            background: rgba(0, 210, 255, 0.1);
-            border-radius: 8px;
-            font-size: 14px;
-            color: rgba(255, 255, 255, 0.6);
-        }
-
-        .user-text strong {
-            color: #00d2ff;
-        }
-
-        /* 性能指标 */
         .metrics {
-            display: flex;
-            gap: 15px;
-            margin-top: 20px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(4, minmax(0, 1fr));
+            gap: 10px;
+            margin-top: 12px;
         }
 
         .metric {
-            flex: 1;
-            min-width: 80px;
-            padding: 12px;
+            padding: 10px 8px;
             background: rgba(255, 255, 255, 0.05);
-            border-radius: 10px;
+            border-radius: 12px;
             text-align: center;
         }
 
         .metric .value {
-            font-size: 20px;
-            font-weight: bold;
-            color: #00d2ff;
+            font-size: 18px;
+            font-weight: 700;
+            color: var(--primary);
         }
 
         .metric .label {
             font-size: 11px;
             color: rgba(255, 255, 255, 0.5);
-            margin-top: 5px;
-            text-transform: uppercase;
+            margin-top: 6px;
         }
 
-        /* 动画 */
         @keyframes pulse {
             0%, 100% { opacity: 1; }
             50% { opacity: 0.6; }
         }
 
-        .processing .status-text {
-            animation: pulse 1.5s infinite;
+        @keyframes blink {
+            0%, 80%, 100% { transform: scale(0.7); opacity: 0.45; }
+            40% { transform: scale(1); opacity: 1; }
         }
 
-        /* 响应式 */
-        @media (max-width: 600px) {
+        @media (max-width: 1200px) {
+            body { overflow: auto; }
             .container {
-                padding: 20px;
+                height: auto;
+                min-height: calc(100vh - 24px);
+                overflow: visible;
             }
+            .main-layout {
+                grid-template-columns: 1fr;
+                height: auto;
+            }
+            .video-container {
+                max-height: 72vh;
+                min-height: 52vh;
+            }
+        }
 
-            h1 {
-                font-size: 22px;
-            }
-
-            .button-group {
-                flex-direction: column;
-            }
-
-            .metrics {
-                flex-direction: column;
-            }
-
-            .avatar-item {
-                width: 80px;
-            }
-
-            .avatar-item .avatar-preview {
-                width: 50px;
-                height: 50px;
-            }
+        @media (max-width: 640px) {
+            body { padding: 12px; overflow: auto; }
+            .container { padding: 16px; height: auto; }
+            h1 { font-size: 22px; }
+            .button-group { flex-direction: column; }
+            .metrics { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+            .avatar-item { width: 88px; }
+            .message-bubble { max-width: 100%; }
+            .video-container { max-height: 62vh; min-height: 46vh; }
         }
     </style>
 </head>
@@ -478,106 +602,98 @@
     <div class="container">
         <h1>数字人对话系统</h1>
 
-        <!-- 数字人选择 -->
-        <div class="avatar-section">
-            <h3>选择数字人</h3>
-            <div class="avatar-list" id="avatar-list">
-                <!-- 动态加载 -->
-            </div>
-        </div>
-
-        <!-- 视频播放区 -->
-        <div class="video-section">
-            <div class="video-container">
-                <div class="video-overlay" id="video-overlay">
-                    <div class="icon">🎬</div>
-                    <div>加载中...</div>
-                </div>
-                <!-- Canvas 用于渲染视频，实现无缝切换 -->
-                <canvas id="render-canvas"></canvas>
-                <!-- 视频元素隐藏，仅作为数据源 -->
-                <!-- 双缓冲待机视频，实现无缝循环 -->
-                <video id="idle-video" muted playsinline preload="auto"></video>
-                <video id="idle-video-2" muted playsinline preload="auto"></video>
-                <video id="response-video" playsinline></video>
-            </div>
-        </div>
-
-        <!-- 状态栏 -->
-        <div class="status-bar ready" id="status-bar">
-            <div class="status-text">准备就绪</div>
-            <div class="progress-bar" id="progress-bar">
-                <div class="progress" id="progress"></div>
-            </div>
-        </div>
-
-        <!-- 输入区 -->
-        <div class="input-section">
-            <div class="input-tabs">
-                <div class="input-tab active" data-tab="text">文字输入</div>
-                <div class="input-tab" data-tab="voice">语音输入</div>
-            </div>
-
-            <!-- 文字输入 -->
-            <div class="input-tab-content active" id="text-input">
-                <textarea id="user-text" placeholder="请输入您想问的问题..."></textarea>
-            </div>
-
-            <!-- 语音输入 -->
-            <div class="input-tab-content" id="voice-input">
-                <div class="audio-record-section">
-                    <div class="record-btn" id="record-btn">
-                        <div class="record-icon"></div>
-                    </div>
-                    <div class="record-hint">点击开始录音</div>
-                    <div class="audio-preview" id="audio-preview">
-                        <audio id="recorded-audio" controls></audio>
+        <div class="main-layout">
+            <section class="left-panel">
+                <div class="video-shell">
+                    <div class="video-container" id="video-container">
+                        <div class="video-overlay" id="video-overlay">
+                            <div class="icon">🎬</div>
+                            <div>加载中...</div>
+                        </div>
+                        <canvas id="render-canvas"></canvas>
+                        <video id="idle-video" muted playsinline preload="auto"></video>
+                        <video id="idle-video-2" muted playsinline preload="auto"></video>
+                        <video id="response-video" playsinline></video>
                     </div>
                 </div>
-            </div>
 
-            <div class="button-group">
-                <button class="btn-primary" id="generate-btn" onclick="generateVideo()">
-                    生成回复
-                </button>
-                <button class="btn-secondary" onclick="clearAll()">
-                    清空
-                </button>
-            </div>
-        </div>
+                <div>
+                    <div class="section-title">选择数字人</div>
+                    <div class="avatar-list" id="avatar-list"></div>
+                </div>
+            </section>
 
-        <!-- 回复区 -->
-        <div class="response-section" id="response-section">
-            <div class="user-text">
-                <strong>用户:</strong> <span id="user-input-display"></span>
-            </div>
-            <h3>数字人回复</h3>
-            <div class="response-text" id="response-text"></div>
+            <section class="right-panel">
+                <div class="status-bar ready" id="status-bar">
+                    <div class="status-text">准备就绪</div>
+                    <div class="progress-bar" id="progress-bar">
+                        <div class="progress" id="progress"></div>
+                    </div>
+                </div>
 
-            <!-- 性能指标 -->
-            <div class="metrics" id="metrics">
-                <div class="metric">
-                    <div class="value" id="metric-total">--</div>
-                    <div class="label">总耗时</div>
+                <div class="section-title">交互输入</div>
+                <div class="input-tabs">
+                    <div class="input-tab active" data-tab="text">文字输入</div>
+                    <div class="input-tab" data-tab="voice">语音输入</div>
                 </div>
-                <div class="metric">
-                    <div class="value" id="metric-llm">--</div>
-                    <div class="label">LLM</div>
+
+                <div class="input-tab-content active" id="text-input">
+                    <textarea id="user-text" placeholder="请输入您想问的问题..."></textarea>
                 </div>
-                <div class="metric">
-                    <div class="value" id="metric-tts">--</div>
-                    <div class="label">TTS</div>
+
+                <div class="input-tab-content" id="voice-input">
+                    <div class="audio-record-section">
+                        <div class="record-btn" id="record-btn">
+                            <div class="record-icon"></div>
+                        </div>
+                        <div class="record-hint" id="record-hint">点击开始录音</div>
+                        <div class="audio-preview" id="audio-preview">
+                            <audio id="recorded-audio" controls></audio>
+                        </div>
+                    </div>
                 </div>
-                <div class="metric">
-                    <div class="value" id="metric-video">--</div>
-                    <div class="label">视频</div>
+
+                <div class="button-group">
+                    <button class="btn-primary" id="generate-btn" onclick="generateVideo()">发送并生成</button>
+                    <button class="btn-secondary" onclick="clearAll()">清空</button>
                 </div>
-            </div>
+
+                <div class="chat-section">
+                    <div class="chat-header">
+                        <div class="chat-title-wrap">
+                            <div class="chat-title">当前会话</div>
+                            <div class="chat-subtitle">右侧按聊天流展示整轮对话，发送后会自动滚动到最新消息。</div>
+                        </div>
+                        <div class="chat-count" id="chat-count">0 条消息</div>
+                    </div>
+                    <div class="chat-history" id="chat-history">
+                        <div class="empty-chat" id="empty-chat">这里会按对话顺序显示你的输入和数字人的回复，效果更接近聊天窗口。</div>
+                    </div>
+
+                    <div class="metrics" id="metrics">
+                        <div class="metric">
+                            <div class="value" id="metric-total">--</div>
+                            <div class="label">总耗时</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value" id="metric-llm">--</div>
+                            <div class="label">LLM</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value" id="metric-tts">--</div>
+                            <div class="label">TTS</div>
+                        </div>
+                        <div class="metric">
+                            <div class="value" id="metric-video">--</div>
+                            <div class="label">视频</div>
+                        </div>
+                    </div>
+                </div>
+            </section>
         </div>
     </div>
 
     <script>
-        // ==================== 全局状态 ====================
         const state = {
             currentAvatar: 'human_1',
             avatars: {},
@@ -586,21 +702,21 @@
             mediaRecorder: null,
             recordedChunks: [],
             recordedBlob: null,
-            // Canvas 渲染状态
-            showingResponse: false,  // 当前是否显示回复视频
-            crossfadeAlpha: 1.0,     // 1.0 = 完全显示待机，0.0 = 完全显示回复
-            crossfadeTarget: 1.0,    // 目标 alpha
+            showingResponse: false,
+            crossfadeAlpha: 1.0,
+            crossfadeTarget: 1.0,
             animationFrameId: null,
-            // 双缓冲待机视频状态
-            activeIdleVideo: 1,      // 当前活跃的待机视频 (1 或 2)
-            idleVideoUrl: '',        // 当前待机视频 URL
-            idleCrossfadeAlpha: 1.0, // 待机视频之间的切换 alpha (1.0 = 视频1, 0.0 = 视频2)
-            isIdleCrossfading: false, // 是否正在切换待机视频
-            lastIdleFrame: null,     // 上一帧待机画面 (用于无缝切换)
-            lastResponseFrame: null  // 上一帧回复画面 (用于无缝切换)
+            activeIdleVideo: 1,
+            idleVideoUrl: '',
+            idleCrossfadeAlpha: 1.0,
+            isIdleCrossfading: false,
+            lastIdleFrame: null,
+            lastResponseFrame: null,
+            chatHistory: [],
+            lastSubmittedText: '',
+            currentVideoFilename: null  // 当前播放的视频文件名，用于播放完成后删除
         };
 
-        // DOM 元素
         const elements = {
             avatarList: document.getElementById('avatar-list'),
             renderCanvas: document.getElementById('render-canvas'),
@@ -608,25 +724,26 @@
             idleVideo2: document.getElementById('idle-video-2'),
             responseVideo: document.getElementById('response-video'),
             videoOverlay: document.getElementById('video-overlay'),
+            videoContainer: document.getElementById('video-container'),
             statusBar: document.getElementById('status-bar'),
             progressBar: document.getElementById('progress-bar'),
             progress: document.getElementById('progress'),
             generateBtn: document.getElementById('generate-btn'),
             userText: document.getElementById('user-text'),
-            responseSection: document.getElementById('response-section'),
-            responseText: document.getElementById('response-text'),
-            userInputDisplay: document.getElementById('user-input-display'),
             recordBtn: document.getElementById('record-btn'),
+            recordHint: document.getElementById('record-hint'),
             audioPreview: document.getElementById('audio-preview'),
-            recordedAudio: document.getElementById('recorded-audio')
+            recordedAudio: document.getElementById('recorded-audio'),
+            chatHistory: document.getElementById('chat-history'),
+            chatCount: document.getElementById('chat-count'),
+            emptyChat: document.getElementById('empty-chat')
         };
 
-        // Canvas 上下文
         let ctx = null;
         let canvasWidth = 450;
-        let canvasHeight = 450;
+        let canvasHeight = 800;
+        let progressInterval = null;
 
-        // 指标元素
         const metrics = {
             total: document.getElementById('metric-total'),
             llm: document.getElementById('metric-llm'),
@@ -634,188 +751,281 @@
             video: document.getElementById('metric-video')
         };
 
-        // ==================== Canvas 渲染引擎 ====================
         function initCanvasRenderer() {
             ctx = elements.renderCanvas.getContext('2d');
+            resizeCanvasToContainer();
+            state.offscreenCanvas = document.createElement('canvas');
+            state.offscreenCtx = state.offscreenCanvas.getContext('2d');
+            syncOffscreenCanvas();
+            startRenderLoop();
+            window.addEventListener('resize', resizeCanvasToContainer);
+        }
 
-            // 设置 Canvas 尺寸
-            const container = elements.renderCanvas.parentElement;
-            canvasWidth = container.clientWidth || 450;
-            canvasHeight = container.clientHeight || 450;
+        function resizeCanvasToContainer() {
+            const rect = elements.videoContainer.getBoundingClientRect();
+            const nextWidth = Math.max(1, Math.floor(rect.width || 450));
+            const nextHeight = Math.max(1, Math.floor(rect.height || 800));
+
+            if (nextWidth === canvasWidth && nextHeight === canvasHeight) return;
+
+            canvasWidth = nextWidth;
+            canvasHeight = nextHeight;
             elements.renderCanvas.width = canvasWidth;
             elements.renderCanvas.height = canvasHeight;
+            syncOffscreenCanvas();
+        }
 
-            // 创建离屏 Canvas 用于保存最后一帧
-            state.offscreenCanvas = document.createElement('canvas');
+        function syncOffscreenCanvas() {
+            if (!state.offscreenCanvas) return;
             state.offscreenCanvas.width = canvasWidth;
             state.offscreenCanvas.height = canvasHeight;
-            state.offscreenCtx = state.offscreenCanvas.getContext('2d');
+        }
 
-            console.log(`[Canvas] Initialized: ${canvasWidth}x${canvasHeight}`);
+        function updateVideoAspectRatio(video) {
+            if (video.videoWidth && video.videoHeight) {
+                elements.videoContainer.style.aspectRatio = `${video.videoWidth} / ${video.videoHeight}`;
+                requestAnimationFrame(resizeCanvasToContainer);
+            }
+        }
 
-            // 启动渲染循环
-            startRenderLoop();
+        function drawVideoContain(video, alpha) {
+            if (!video || video.readyState < 2 || alpha <= 0) return false;
+            const vW = video.videoWidth;
+            const vH = video.videoHeight;
+            if (!vW || !vH) return false;
+
+            const scale = Math.min(canvasWidth / vW, canvasHeight / vH);
+            const drawWidth = vW * scale;
+            const drawHeight = vH * scale;
+            const dx = (canvasWidth - drawWidth) / 2;
+            const dy = (canvasHeight - drawHeight) / 2;
+
+            try {
+                ctx.globalAlpha = alpha;
+                ctx.drawImage(video, dx, dy, drawWidth, drawHeight);
+                return true;
+            } catch (e) {
+                return false;
+            }
         }
 
         function startRenderLoop() {
-            function render() {
+            const render = () => {
                 renderFrame();
                 state.animationFrameId = requestAnimationFrame(render);
-            }
+            };
             render();
-        }
-
-        // 捕获视频当前帧到离屏 Canvas
-        function captureFrame(video) {
-            if (video.readyState >= 2 && video.videoWidth > 0) {
-                try {
-                    state.offscreenCtx.drawImage(video, 0, 0, canvasWidth, canvasHeight);
-                    return true;
-                } catch (e) {
-                    return false;
-                }
-            }
-            return false;
         }
 
         function renderFrame() {
             if (!ctx) return;
 
-            // 清空画布
-            ctx.fillStyle = '#000';
-            ctx.fillRect(0, 0, canvasWidth, canvasHeight);
-
-            // 平滑过渡 crossfadeAlpha (待机/回复 之间的切换)
-            const fadeSpeed = 0.05; // 调整这个值可以改变淡入淡出速度
+            // 淡入淡出速度
+            const fadeSpeed = 0.08;
             if (state.crossfadeAlpha < state.crossfadeTarget) {
                 state.crossfadeAlpha = Math.min(state.crossfadeAlpha + fadeSpeed, state.crossfadeTarget);
             } else if (state.crossfadeAlpha > state.crossfadeTarget) {
                 state.crossfadeAlpha = Math.max(state.crossfadeAlpha - fadeSpeed, state.crossfadeTarget);
             }
 
-            // 待机视频之间的交叉淡入淡出
-            const idleFadeSpeed = 0.06;
+            const idleFadeSpeed = 0.1;
             if (state.idleCrossfadeAlpha < 1.0 && state.isIdleCrossfading) {
                 state.idleCrossfadeAlpha = Math.min(state.idleCrossfadeAlpha + idleFadeSpeed, 1.0);
-                if (state.idleCrossfadeAlpha >= 1.0) {
-                    state.isIdleCrossfading = false;
-                }
+                if (state.idleCrossfadeAlpha >= 1.0) state.isIdleCrossfading = false;
             }
 
-            // 获取当前活跃的待机视频
+            // 确保离屏 canvas 存在且尺寸正确
+            if (!state.offscreenCanvas) {
+                state.offscreenCanvas = document.createElement('canvas');
+                state.offscreenCtx = state.offscreenCanvas.getContext('2d');
+            }
+            if (state.offscreenCanvas.width !== canvasWidth || state.offscreenCanvas.height !== canvasHeight) {
+                state.offscreenCanvas.width = canvasWidth;
+                state.offscreenCanvas.height = canvasHeight;
+            }
+
+            const offCtx = state.offscreenCtx;
+
+            // ========== 清空并填充黑色背景 ==========
+            offCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            offCtx.fillStyle = '#000';
+            offCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
             const activeIdle = state.activeIdleVideo === 1 ? elements.idleVideo : elements.idleVideo2;
             const inactiveIdle = state.activeIdleVideo === 1 ? elements.idleVideo2 : elements.idleVideo;
 
-            // 绘制待机视频（底层）
-            let idleDrawn = false;
+            // ========== 绘制 IDLE 层 ==========
+            const idleAlpha = state.crossfadeAlpha;
+            if (idleAlpha > 0.001) {
+                if (state.isIdleCrossfading) {
+                    // Crossfade 模式：旧视频淡出，新视频淡入
+                    // 帧缓冲作为新视频还没准备好时的兜底
 
-            // 先绘制非活跃的待机视频（淡出）
-            if (state.isIdleCrossfading && inactiveIdle.readyState >= 2 && !inactiveIdle.paused) {
-                try {
-                    ctx.globalAlpha = state.crossfadeAlpha * (1 - state.idleCrossfadeAlpha);
-                    ctx.drawImage(inactiveIdle, 0, 0, canvasWidth, canvasHeight);
-                    idleDrawn = true;
-                } catch (e) {}
-            }
-
-            // 再绘制活跃的待机视频（淡入）
-            if (activeIdle.readyState >= 2 && !activeIdle.paused) {
-                try {
-                    ctx.globalAlpha = state.crossfadeAlpha * state.idleCrossfadeAlpha;
-                    ctx.drawImage(activeIdle, 0, 0, canvasWidth, canvasHeight);
-                    idleDrawn = true;
-
-                    // 保存最后一帧
-                    if (state.crossfadeAlpha > 0.5) {
-                        state.lastIdleFrame = activeIdle;
+                    // 1. 绘制旧视频/帧缓冲淡出
+                    const outAlpha = idleAlpha * (1 - state.idleCrossfadeAlpha);
+                    if (outAlpha > 0.01) {
+                        // 优先绘制旧视频
+                        if (inactiveIdle.readyState >= 2 && inactiveIdle.videoWidth > 0) {
+                            drawVideoToContext(offCtx, inactiveIdle, outAlpha);
+                        } else if (state.idleFrameBuffer) {
+                            // ���视频不可用时用帧缓冲
+                            offCtx.globalAlpha = outAlpha;
+                            offCtx.drawImage(state.idleFrameBuffer, 0, 0, canvasWidth, canvasHeight);
+                            offCtx.globalAlpha = 1;
+                        }
                     }
-                } catch (e) {}
+
+                    // 2. 绘制新视频淡入
+                    const inAlpha = idleAlpha * state.idleCrossfadeAlpha;
+                    if (inAlpha > 0.01) {
+                        if (activeIdle.readyState >= 2 && activeIdle.videoWidth > 0) {
+                            drawVideoToContext(offCtx, activeIdle, inAlpha);
+                            // 更新帧缓冲为新视频
+                            saveFrameBuffer('idle', activeIdle);
+                        } else if (state.idleFrameBuffer) {
+                            // 新视频不可用时用帧缓冲
+                            offCtx.globalAlpha = inAlpha;
+                            offCtx.drawImage(state.idleFrameBuffer, 0, 0, canvasWidth, canvasHeight);
+                            offCtx.globalAlpha = 1;
+                        }
+                    }
+                } else {
+                    // 正常模式：帧缓冲打底 + 视频覆盖
+                    if (state.idleFrameBuffer) {
+                        offCtx.globalAlpha = idleAlpha;
+                        offCtx.drawImage(state.idleFrameBuffer, 0, 0, canvasWidth, canvasHeight);
+                        offCtx.globalAlpha = 1;
+                    }
+                    if (activeIdle.readyState >= 2 && activeIdle.videoWidth > 0) {
+                        drawVideoToContext(offCtx, activeIdle, idleAlpha);
+                        saveFrameBuffer('idle', activeIdle);
+                    }
+                }
             }
 
-            // 如果待机视频还没准备好，使用保存的帧
-            if (!idleDrawn && state.lastIdleFrame && state.lastIdleFrame.readyState >= 2) {
-                try {
-                    ctx.globalAlpha = state.crossfadeAlpha;
-                    ctx.drawImage(state.lastIdleFrame, 0, 0, canvasWidth, canvasHeight);
-                } catch (e) {}
+            // ========== 绘制 RESPONSE 层 ==========
+            const responseAlpha = 1 - state.crossfadeAlpha;
+            if (responseAlpha > 0.001) {
+                // 帧缓冲打底
+                if (state.responseFrameBuffer) {
+                    offCtx.globalAlpha = responseAlpha;
+                    offCtx.drawImage(state.responseFrameBuffer, 0, 0, canvasWidth, canvasHeight);
+                    offCtx.globalAlpha = 1;
+                }
+                // 视频覆盖
+                if (elements.responseVideo.readyState >= 2 && elements.responseVideo.videoWidth > 0) {
+                    drawVideoToContext(offCtx, elements.responseVideo, responseAlpha);
+                    saveFrameBuffer('response', elements.responseVideo);
+                }
             }
 
-            // 绘制回复视频（顶层）
-            let responseDrawn = false;
-            if (elements.responseVideo.readyState >= 2 && !elements.responseVideo.paused) {
-                try {
-                    ctx.globalAlpha = 1 - state.crossfadeAlpha;
-                    ctx.drawImage(elements.responseVideo, 0, 0, canvasWidth, canvasHeight);
-                    responseDrawn = true;
-                    state.lastResponseFrame = elements.responseVideo;
-                } catch (e) {}
-            }
-
-            // 如果回复视频还没准备好但我们需要显示它，使用保存的帧
-            if (!responseDrawn && state.lastResponseFrame && state.lastResponseFrame.readyState >= 2 && state.crossfadeAlpha < 0.5) {
-                try {
-                    ctx.globalAlpha = 1 - state.crossfadeAlpha;
-                    ctx.drawImage(state.lastResponseFrame, 0, 0, canvasWidth, canvasHeight);
-                } catch (e) {}
-            }
-
-            ctx.globalAlpha = 1.0;
+            // ========== 绘制到主 canvas ==========
+            ctx.clearRect(0, 0, canvasWidth, canvasHeight);
+            ctx.drawImage(state.offscreenCanvas, 0, 0);
         }
 
-        // 切换到回复视频
+        // 绘制视频到指定 context
+        function drawVideoToContext(targetCtx, video, alpha) {
+            if (!video || video.readyState < 2 || alpha <= 0.01) return false;
+            const vW = video.videoWidth;
+            const vH = video.videoHeight;
+            if (!vW || !vH) return false;
+
+            const scale = Math.min(canvasWidth / vW, canvasHeight / vH);
+            const drawWidth = vW * scale;
+            const drawHeight = vH * scale;
+            const dx = (canvasWidth - drawWidth) / 2;
+            const dy = (canvasHeight - drawHeight) / 2;
+
+            try {
+                targetCtx.globalAlpha = alpha;
+                targetCtx.drawImage(video, dx, dy, drawWidth, drawHeight);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // 保存帧缓冲
+        function saveFrameBuffer(type, video) {
+            const vW = video.videoWidth;
+            const vH = video.videoHeight;
+            if (!vW || !vH || canvasWidth <= 0 || canvasHeight <= 0) return;
+
+            const bufferKey = type + 'FrameBuffer';
+            if (!state[bufferKey]) {
+                state[bufferKey] = document.createElement('canvas');
+            }
+            // 确保帧缓冲尺寸与主 canvas 匹配
+            if (state[bufferKey].width !== canvasWidth || state[bufferKey].height !== canvasHeight) {
+                state[bufferKey].width = canvasWidth;
+                state[bufferKey].height = canvasHeight;
+            }
+
+            const bufferCtx = state[bufferKey].getContext('2d');
+            bufferCtx.clearRect(0, 0, canvasWidth, canvasHeight);
+            bufferCtx.fillStyle = '#000';
+            bufferCtx.fillRect(0, 0, canvasWidth, canvasHeight);
+
+            const scale = Math.min(canvasWidth / vW, canvasHeight / vH);
+            const drawWidth = vW * scale;
+            const drawHeight = vH * scale;
+            const dx = (canvasWidth - drawWidth) / 2;
+            const dy = (canvasHeight - drawHeight) / 2;
+
+            try {
+                bufferCtx.drawImage(video, dx, dy, drawWidth, drawHeight);
+            } catch (e) {}
+        }
+
         function switchToResponseVideo() {
-            state.crossfadeTarget = 0.0;  // 淡入回复视频
-            console.log('[Video] Switching to response video');
+            state.crossfadeTarget = 0.0;
         }
 
-        // 切换到待机视频
         function switchToIdleVideo() {
-            state.crossfadeTarget = 1.0;  // 淡入待机视频
-            console.log('[Video] Switching to idle video');
+            state.crossfadeTarget = 1.0;
         }
 
-        // ==================== 双缓冲待机视频无缝循环 ====================
-
-        // 在视频即将结束前触发切换（提前 0.3 秒）
-        const IDLE_CROSSFADE_TIME = 0.3; // 秒
+        const IDLE_CROSSFADE_TIME = 0.3;
 
         function initIdleVideoEvents(video, videoNum) {
+            video.addEventListener('loadedmetadata', () => updateVideoAspectRatio(video));
+
             video.addEventListener('timeupdate', () => {
                 if (state.showingResponse) return;
-
                 const remainingTime = video.duration - video.currentTime;
-                const isActive = (state.activeIdleVideo === videoNum);
-
-                // 当活跃视频接近结束时，启动另一个视频并开始交叉淡入淡出
+                const isActive = state.activeIdleVideo === videoNum;
                 if (isActive && remainingTime < IDLE_CROSSFADE_TIME && !state.isIdleCrossfading) {
                     const otherVideo = videoNum === 1 ? elements.idleVideo2 : elements.idleVideo;
                     const otherNum = videoNum === 1 ? 2 : 1;
-
                     if (otherVideo.readyState >= 2) {
-                        console.log(`[Idle] Starting crossfade from video ${videoNum} to video ${otherNum}`);
+                        // 在切换前保存当前帧到缓冲
+                        if (video.readyState >= 2 && video.videoWidth > 0) {
+                            saveFrameBuffer('idle', video);
+                        }
                         state.isIdleCrossfading = true;
                         state.activeIdleVideo = otherNum;
+                        // 从 1.0 开始，让新视频逐渐淡入覆盖旧帧
                         state.idleCrossfadeAlpha = 0.0;
                         otherVideo.currentTime = 0;
-                        otherVideo.play().catch(e => console.log('Idle video play error'));
+                        otherVideo.play().catch(() => {});
                     }
                 }
             });
 
-            // 视频播放结束后的处理
             video.addEventListener('ended', () => {
                 if (state.showingResponse) return;
-
-                const videoNum_local = video === elements.idleVideo ? 1 : 2;
-
-                // 如果这个视频不是活跃的，重新加载并准备下一轮
-                if (state.activeIdleVideo !== videoNum_local) {
+                const localNum = video === elements.idleVideo ? 1 : 2;
+                if (state.activeIdleVideo !== localNum) {
                     video.currentTime = 0;
                     video.pause();
                 } else {
-                    // 如果这个视频仍然是活跃的（不应该发生），强制切换
-                    const otherVideo = videoNum_local === 1 ? elements.idleVideo2 : elements.idleVideo;
-                    state.activeIdleVideo = videoNum_local === 1 ? 2 : 1;
+                    const otherVideo = localNum === 1 ? elements.idleVideo2 : elements.idleVideo;
+                    // 在切换前保存当前帧到缓冲
+                    if (video.readyState >= 2 && video.videoWidth > 0) {
+                        saveFrameBuffer('idle', video);
+                    }
+                    state.activeIdleVideo = localNum === 1 ? 2 : 1;
                     state.idleCrossfadeAlpha = 0.0;
                     state.isIdleCrossfading = true;
                     otherVideo.currentTime = 0;
@@ -823,7 +1033,6 @@
                 }
             });
 
-            // 确保视频持续播放
             video.addEventListener('pause', () => {
                 if (!state.showingResponse && state.activeIdleVideo === videoNum) {
                     video.play().catch(() => {});
@@ -831,60 +1040,79 @@
             });
         }
 
-        // ==================== 初始化 ====================
         async function init() {
             initCanvasRenderer();
             await loadAvatars();
             initTabs();
             initAudioRecorder();
             initVideoEvents();
+            initTextareaAutoResize();
+            renderChatHistory();
         }
 
-        // 初始化视频事件监听
         function initVideoEvents() {
-            // 初始化双缓冲待机视频事件
             initIdleVideoEvents(elements.idleVideo, 1);
             initIdleVideoEvents(elements.idleVideo2, 2);
 
-            // 回复视频播放完毕后，无缝切回待机视频
+            elements.responseVideo.addEventListener('loadedmetadata', () => updateVideoAspectRatio(elements.responseVideo));
             elements.responseVideo.addEventListener('ended', onResponseVideoEnded);
 
-            // 待机视频加载完成后自动播放
             elements.idleVideo.addEventListener('loadeddata', () => {
                 if (!state.showingResponse) {
-                    elements.idleVideo.play().catch(e => console.log('Idle video 1 play blocked'));
+                    elements.idleVideo.play().catch(() => {});
                 }
-            });
-
-            elements.idleVideo2.addEventListener('loadeddata', () => {
-                // 视频2加载完成，准备好待命
-                console.log('[Idle] Video 2 loaded and ready');
             });
         }
 
-        // 回复视频播放完毕处理
         function onResponseVideoEnded() {
-            console.log('[Video] Response video ended, switching to idle');
+            // 立即保存 response 最后一帧
+            if (elements.responseVideo.readyState >= 2 && elements.responseVideo.videoWidth > 0) {
+                saveFrameBuffer('response', elements.responseVideo);
+            }
 
-            // 确保待机视频在播放
+            // idle 帧缓冲在 playResponseVideo 时已保存，这里不需要更新
+            // 只需要恢复 idle 视频播放
+
             const activeIdle = state.activeIdleVideo === 1 ? elements.idleVideo : elements.idleVideo2;
-            if (activeIdle.paused) {
+            if (activeIdle.readyState >= 2 && activeIdle.paused) {
                 activeIdle.play().catch(() => {});
             }
 
-            // 切换到待机视频
             state.showingResponse = false;
             switchToIdleVideo();
 
-            // 延迟清空回复视频源，保持最后一帧
+            // 删除已播放完成的视频文件
+            if (state.currentVideoFilename) {
+                deletePlayedVideo(state.currentVideoFilename);
+                state.currentVideoFilename = null;
+            }
+
+            // 延迟清理 response 资源，让帧缓冲有时间淡出
             setTimeout(() => {
                 elements.responseVideo.src = '';
                 elements.responseVideo.load();
-                state.lastResponseFrame = null;
-            }, 600);
+                setTimeout(() => {
+                    state.responseFrameBuffer = null;
+                }, 1000);
+            }, 500);
         }
 
-        // 加载数字人列表
+        async function deletePlayedVideo(filename) {
+            try {
+                const response = await fetch(`/api/v1/video/${encodeURIComponent(filename)}`, {
+                    method: 'DELETE'
+                });
+                const result = await response.json();
+                if (result.code === 0) {
+                    console.log(`[VideoCleanup] Deleted: ${filename}`);
+                } else {
+                    console.warn(`[VideoCleanup] Failed to delete: ${filename}`, result.msg);
+                }
+            } catch (e) {
+                console.error(`[VideoCleanup] Error deleting ${filename}:`, e);
+            }
+        }
+
         async function loadAvatars() {
             try {
                 const response = await fetch('/list_avatars', {
@@ -892,16 +1120,12 @@
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({})
                 });
-
                 const result = await response.json();
-
                 if (result.code === 0 && result.data.avatars) {
                     state.avatars = {};
                     elements.avatarList.innerHTML = '';
-
                     result.data.avatars.forEach(avatar => {
                         state.avatars[avatar.id] = avatar;
-
                         const item = document.createElement('div');
                         item.className = 'avatar-item' + (avatar.id === result.data.default ? ' active' : '');
                         item.dataset.avatarId = avatar.id;
@@ -912,8 +1136,6 @@
                         item.onclick = () => selectAvatar(avatar.id);
                         elements.avatarList.appendChild(item);
                     });
-
-                    // 设置默认数字人
                     state.currentAvatar = result.data.default;
                     playIdleVideo(state.currentAvatar);
                 }
@@ -922,46 +1144,30 @@
             }
         }
 
-        // 选择数字人
         function selectAvatar(avatarId) {
             if (state.isProcessing) return;
-
             state.currentAvatar = avatarId;
-
-            // 更新UI
             document.querySelectorAll('.avatar-item').forEach(item => {
                 item.classList.toggle('active', item.dataset.avatarId === avatarId);
             });
-
-            // 播放待机视频
             playIdleVideo(avatarId);
         }
 
-        // 播放待机视频（双缓冲模式）
         function playIdleVideo(avatarId) {
             const avatar = state.avatars[avatarId];
             if (avatar && avatar.idle_video) {
                 elements.videoOverlay.style.display = 'none';
                 state.idleVideoUrl = avatar.idle_video;
-
-                // 重置双缓冲状态
                 state.activeIdleVideo = 1;
                 state.idleCrossfadeAlpha = 1.0;
                 state.isIdleCrossfading = false;
-
-                // 同时加载两个视频源（双缓冲）
                 elements.idleVideo.src = avatar.idle_video;
                 elements.idleVideo.load();
-
-                // 延迟加载第二个视频，避免同时请求造成带宽竞争
                 setTimeout(() => {
                     elements.idleVideo2.src = avatar.idle_video;
                     elements.idleVideo2.load();
-                    console.log('[Idle] Both videos loaded for seamless loop');
                 }, 100);
-
-                // 播放第一个视频
-                elements.idleVideo.play().catch(e => console.log('Idle video autoplay blocked'));
+                elements.idleVideo.play().catch(() => {});
             } else {
                 elements.videoOverlay.innerHTML = '<div class="icon">👤</div><div>无待机动画</div>';
                 elements.videoOverlay.style.display = 'flex';
@@ -970,22 +1176,28 @@
             }
         }
 
-        // ==================== 输入标签切换 ====================
         function initTabs() {
             document.querySelectorAll('.input-tab').forEach(tab => {
                 tab.onclick = () => {
                     document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.input-tab-content').forEach(c => c.classList.remove('active'));
-
                     tab.classList.add('active');
                     document.getElementById(tab.dataset.tab + '-input').classList.add('active');
                 };
             });
         }
 
-        // ==================== 音频录制 ====================
         function initAudioRecorder() {
             elements.recordBtn.onclick = toggleRecording;
+        }
+
+        function initTextareaAutoResize() {
+            const resize = () => {
+                elements.userText.style.height = 'auto';
+                elements.userText.style.height = Math.min(elements.userText.scrollHeight, 240) + 'px';
+            };
+            elements.userText.addEventListener('input', resize);
+            resize();
         }
 
         async function toggleRecording() {
@@ -1001,29 +1213,20 @@
                 const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
                 state.mediaRecorder = new MediaRecorder(stream);
                 state.recordedChunks = [];
-
                 state.mediaRecorder.ondataavailable = (e) => {
-                    if (e.data.size > 0) {
-                        state.recordedChunks.push(e.data);
-                    }
+                    if (e.data.size > 0) state.recordedChunks.push(e.data);
                 };
-
                 state.mediaRecorder.onstop = () => {
                     state.recordedBlob = new Blob(state.recordedChunks, { type: 'audio/wav' });
                     const url = URL.createObjectURL(state.recordedBlob);
                     elements.recordedAudio.src = url;
                     elements.audioPreview.style.display = 'block';
-
-                    // 停止所有音轨
                     stream.getTracks().forEach(track => track.stop());
                 };
-
                 state.mediaRecorder.start();
                 state.isRecording = true;
                 elements.recordBtn.classList.add('recording');
-                elements.recordBtn.querySelector('.record-hint') ||
-                    (elements.recordBtn.nextElementSibling.textContent = '点击停止录音');
-
+                elements.recordHint.textContent = '点击停止录音';
             } catch (e) {
                 console.error('Failed to start recording:', e);
                 alert('无法访问麦克风，请检查权限设置');
@@ -1035,15 +1238,105 @@
                 state.mediaRecorder.stop();
                 state.isRecording = false;
                 elements.recordBtn.classList.remove('recording');
-                elements.recordBtn.nextElementSibling.textContent = '点击重新录音';
+                elements.recordHint.textContent = '点击重新录音';
             }
         }
 
-        // ==================== 视频生成 ====================
+        function addMessage(role, text) {
+            state.chatHistory.push({
+                role,
+                text,
+                time: new Date().toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' })
+            });
+            renderChatHistory();
+        }
+
+        function setTyping(typing) {
+            state.isTyping = typing;
+            renderChatHistory();
+        }
+
+        function getAssistantAvatarHtml() {
+            const avatar = state.avatars[state.currentAvatar];
+            if (avatar && avatar.source_image) {
+                return `<img src="${avatar.source_image}" alt="数字人">`;
+            }
+            return 'AI';
+        }
+
+        function renderMessageRow(item) {
+            const row = document.createElement('div');
+            row.className = `message-row ${item.role}`;
+            const isUser = item.role === 'user';
+            const avatarHtml = isUser ? '我' : getAssistantAvatarHtml();
+            const name = isUser ? '我' : (state.avatars[state.currentAvatar]?.name || '数字人');
+            row.innerHTML = `
+                <div class="message-avatar">${avatarHtml}</div>
+                <div class="message-main">
+                    <div class="message-label">
+                        <span>${name}</span>
+                        <span>${item.time}</span>
+                    </div>
+                    <div class="message-bubble">
+                        <div class="message-text">${escapeHtml(item.text)}</div>
+                    </div>
+                </div>
+            `;
+            return row;
+        }
+
+        function renderTypingRow() {
+            const row = document.createElement('div');
+            row.className = 'message-row assistant';
+            const name = state.avatars[state.currentAvatar]?.name || '数字人';
+            row.innerHTML = `
+                <div class="message-avatar">${getAssistantAvatarHtml()}</div>
+                <div class="message-main">
+                    <div class="message-label">
+                        <span>${name}</span>
+                        <span>正在输入</span>
+                    </div>
+                    <div class="message-bubble">
+                        <div class="typing-bubble">
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                            <span class="typing-dot"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+            return row;
+        }
+
+        function renderChatHistory() {
+            const visibleCount = state.chatHistory.length + (state.isTyping ? 1 : 0);
+            const hasMessages = visibleCount > 0;
+            elements.emptyChat.style.display = hasMessages ? 'none' : 'block';
+            elements.chatCount.textContent = `${state.chatHistory.length} 条消息`;
+
+            const existing = elements.chatHistory.querySelectorAll('.message-row');
+            existing.forEach(node => node.remove());
+
+            state.chatHistory.forEach(item => {
+                elements.chatHistory.appendChild(renderMessageRow(item));
+            });
+
+            if (state.isTyping) {
+                elements.chatHistory.appendChild(renderTypingRow());
+            }
+
+            elements.chatHistory.scrollTop = elements.chatHistory.scrollHeight;
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text ?? '';
+            return div.innerHTML.replace(/\n/g, '<br>');
+        }
+
         async function generateVideo() {
             if (state.isProcessing) return;
 
-            // 获取输入
             const activeTab = document.querySelector('.input-tab.active').dataset.tab;
             let text = null;
             let audioBlob = null;
@@ -1054,164 +1347,146 @@
                     alert('请输入内容');
                     return;
                 }
+                state.lastSubmittedText = text;
+                elements.userText.value = '';
+                elements.userText.style.height = '88px';
+                addMessage('user', text);
             } else {
                 if (!state.recordedBlob) {
                     alert('请先录制语音');
                     return;
                 }
                 audioBlob = state.recordedBlob;
+                addMessage('user', '【语音输入】');
             }
 
             state.isProcessing = true;
             elements.generateBtn.disabled = true;
-
-            // 确保待机视频在播放（使用当前活跃的待机视频）
             const activeIdle = state.activeIdleVideo === 1 ? elements.idleVideo : elements.idleVideo2;
-            if (activeIdle.paused) {
-                activeIdle.play().catch(() => {});
-            }
-            // 同时确保另一个视频也准备好
+            if (activeIdle.paused) activeIdle.play().catch(() => {});
             const inactiveIdle = state.activeIdleVideo === 1 ? elements.idleVideo2 : elements.idleVideo;
-            if (inactiveIdle.readyState < 2) {
-                inactiveIdle.load();
-            }
-
-            // 隐藏之前的回复
-            elements.responseSection.classList.remove('visible');
+            if (inactiveIdle.readyState < 2) inactiveIdle.load();
 
             setStatus('processing', '正在生成... (预计 15-25 秒)');
-
-            const startTime = Date.now();
+            setTyping(true);
 
             try {
                 const formData = new FormData();
-
                 if (text) {
                     formData.append('text', text);
                 } else if (audioBlob) {
                     formData.append('audio', audioBlob, 'recording.wav');
                 }
-
                 formData.append('source_image', state.currentAvatar);
 
                 const response = await fetch('/api/v1/generate', {
                     method: 'POST',
                     body: formData
                 });
-
                 const result = await response.json();
-
-                if (result.code !== 0) {
-                    throw new Error(result.msg || '生成失败');
-                }
+                if (result.code !== 0) throw new Error(result.msg || '生成失败');
 
                 const data = result.data;
-
-                // 完成进度
                 elements.progress.style.width = '100%';
-
-                // 更新状态
                 setStatus('success', `生成完成，耗时 ${data.total_time.toFixed(1)} 秒`);
 
-                // 显示回复文本
-                elements.userInputDisplay.textContent = data.user_text || text || '语音输入';
-                elements.responseText.textContent = data.response_text;
-                elements.responseSection.classList.add('visible');
+                setTyping(false);
+                addMessage('assistant', data.response_text || '已生成回复');
 
-                // 更新指标
                 const dataMetrics = data.metrics || {};
                 metrics.total.textContent = data.total_time.toFixed(1) + 's';
                 metrics.llm.textContent = (dataMetrics.llm_time || 0).toFixed(1) + 's';
                 metrics.tts.textContent = (dataMetrics.tts_time || 0).toFixed(1) + 's';
                 metrics.video.textContent = (dataMetrics.video_time || 0).toFixed(1) + 's';
 
-                // 播放回复视频 - 无缝切换
+                // 提取视频文件名（格式: /videos/xxx.mp4）
+                const videoFilename = data.video_url.split('/').pop().split('?')[0];
+                state.currentVideoFilename = videoFilename;
                 playResponseVideo(data.video_url + '?t=' + Date.now());
-
             } catch (error) {
                 console.error('Generation error:', error);
+                setTyping(false);
+                addMessage('assistant', `生成失败：${error.message}`);
                 setStatus('error', '生成失败: ' + error.message);
             } finally {
+                setTyping(false);
                 state.isProcessing = false;
                 elements.generateBtn.disabled = false;
             }
         }
 
-        // 播放回复视频 - 无缝切换
         function playResponseVideo(videoUrl) {
-            console.log('[Video] Loading response video:', videoUrl);
+            // 在切换前确保 idle 帧缓冲已保存
+            const activeIdle = state.activeIdleVideo === 1 ? elements.idleVideo : elements.idleVideo2;
+            if (activeIdle.readyState >= 2 && activeIdle.videoWidth > 0) {
+                saveFrameBuffer('idle', activeIdle);
+            }
 
-            // 预加载回复视频
             elements.responseVideo.src = videoUrl;
             elements.responseVideo.load();
 
-            // 使用 requestVideoFrameCallback 获取精确帧时机（如果支持）
-            const onFrameReady = () => {
-                if (elements.responseVideo.readyState >= 3) { // HAVE_FUTURE_DATA
-                    console.log('[Video] Response video ready to play');
+            let hasStartedSwitch = false;
+
+            const tryStartSwitch = () => {
+                if (hasStartedSwitch) return;
+                if (elements.responseVideo.readyState >= 2 && elements.responseVideo.videoWidth > 0) {
+                    hasStartedSwitch = true;
+                    // 先保存 response 第一帧到缓冲
+                    saveFrameBuffer('response', elements.responseVideo);
+                    // 暂停 idle 视频（节省资源，保持帧缓冲稳定）
+                    elements.idleVideo.pause();
+                    elements.idleVideo2.pause();
+                    // 开始切换
                     state.showingResponse = true;
                     switchToResponseVideo();
-                    elements.responseVideo.play().catch(e => console.log('Response video play blocked'));
-                } else {
-                    // 如果没有足够的数据，继续等待
-                    setTimeout(onFrameReady, 50);
+                    // 播放视频
+                    elements.responseVideo.play().catch(() => {});
                 }
             };
 
-            // 回复视频准备好后开始播放
-            elements.responseVideo.oncanplaythrough = () => {
-                console.log('[Video] Response video can play through');
-                onFrameReady();
-            };
-
-            // 备用：使用 onloadeddata 确保视频加载
+            // 监听多个事件确保尽早开始
             elements.responseVideo.onloadeddata = () => {
-                console.log('[Video] Response video data loaded');
-                if (!state.showingResponse && elements.responseVideo.readyState >= 2) {
-                    setTimeout(onFrameReady, 100);
+                setTimeout(tryStartSwitch, 20);
+            };
+            elements.responseVideo.oncanplay = tryStartSwitch;
+            elements.responseVideo.oncanplaythrough = tryStartSwitch;
+
+            // 备用检查
+            const checkReady = () => {
+                if (!hasStartedSwitch) {
+                    tryStartSwitch();
+                    if (!hasStartedSwitch) {
+                        setTimeout(checkReady, 50);
+                    }
                 }
             };
+            setTimeout(checkReady, 100);
         }
 
-        // ==================== 工具函数 ====================
         function setStatus(type, text) {
             elements.statusBar.className = 'status-bar ' + type;
             elements.statusBar.querySelector('.status-text').textContent = text;
-
             if (type === 'processing') {
-                elements.statusBar.classList.add('processing');
                 elements.progressBar.classList.add('active');
                 startProgressAnimation();
             } else {
-                elements.statusBar.classList.remove('processing');
                 elements.progressBar.classList.remove('active');
                 stopProgressAnimation();
             }
         }
 
-        let progressInterval = null;
-
         function startProgressAnimation() {
             let currentProgress = 0;
-            const steps = [
-                { target: 15, duration: 2000 },
-                { target: 30, duration: 2000 },
-                { target: 50, duration: 3000 },
-                { target: 80, duration: 5000 },
-                { target: 95, duration: 3000 }
-            ];
-
+            const steps = [15, 30, 50, 80, 95];
             let stepIndex = 0;
-
+            clearInterval(progressInterval);
             progressInterval = setInterval(() => {
-                if (stepIndex < steps.length) {
-                    const step = steps[stepIndex];
-                    if (currentProgress < step.target) {
-                        currentProgress += 1;
-                        elements.progress.style.width = currentProgress + '%';
-                    } else {
-                        stepIndex++;
-                    }
+                if (stepIndex >= steps.length) return;
+                if (currentProgress < steps[stepIndex]) {
+                    currentProgress += 1;
+                    elements.progress.style.width = currentProgress + '%';
+                } else {
+                    stepIndex += 1;
                 }
             }, 200);
         }
@@ -1228,6 +1503,9 @@
             elements.userText.value = '';
             state.recordedBlob = null;
             state.recordedChunks = [];
+            state.chatHistory = [];
+            state.isTyping = false;
+            state.lastSubmittedText = '';
             elements.audioPreview.style.display = 'none';
             elements.responseVideo.src = '';
             elements.responseVideo.load();
@@ -1235,12 +1513,15 @@
             state.crossfadeAlpha = 1.0;
             state.crossfadeTarget = 1.0;
             state.lastResponseFrame = null;
-            elements.responseSection.classList.remove('visible');
+            metrics.total.textContent = '--';
+            metrics.llm.textContent = '--';
+            metrics.tts.textContent = '--';
+            metrics.video.textContent = '--';
+            renderChatHistory();
             playIdleVideo(state.currentAvatar);
             setStatus('ready', '准备就绪');
         }
 
-        // 回车提交
         elements.userText.addEventListener('keydown', function(e) {
             if (e.key === 'Enter' && !e.shiftKey) {
                 e.preventDefault();
@@ -1248,7 +1529,6 @@
             }
         });
 
-        // 初始化
         init();
     </script>
 </body>

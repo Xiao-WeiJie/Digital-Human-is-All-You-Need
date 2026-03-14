@@ -421,7 +421,8 @@ async def batch_generate(request):
             session_id=session_id,
             user_text=text,
             user_audio_path=audio_path,
-            source_image=source_path
+            source_image=source_path,
+            avatar_id=source_image_id  # 传递 avatar_id，确保 TTS 使用正确的参考音频
         )
 
         # 清理临时音频
@@ -493,6 +494,71 @@ async def serve_video(request):
     )
 
 
+async def delete_video(request):
+    """
+    删除已播放完成的视频文件
+
+    请求方式: DELETE
+    参数: filename (URL路径参数)
+
+    返回:
+        {"code": 0, "msg": "ok"} 或错误信息
+    """
+    filename = request.match_info.get('filename', '')
+
+    if not filename:
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": "Filename required"}),
+        )
+
+    # 安全检查：防止路径遍历
+    if '..' in filename or '/' in filename or '\\' in filename:
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": "Invalid filename"}),
+        )
+
+    global video_output_dir
+    if video_output_dir is None:
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": "Video directory not configured"}),
+        )
+
+    video_path = Path(video_output_dir) / filename
+
+    # 确保只删除 output 目录下的文件
+    try:
+        video_path.resolve().relative_to(Path(video_output_dir).resolve())
+    except ValueError:
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": "Invalid path"}),
+        )
+
+    if not video_path.exists():
+        # 文件已不存在，视为成功
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "msg": "Video already deleted"}),
+        )
+
+    try:
+        os.remove(video_path)
+        logger.info(f"[VideoCleanup] Deleted video: {filename}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "msg": "ok"}),
+        )
+    except Exception as e:
+        logger.error(f"[VideoCleanup] Failed to delete {filename}: {e}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": str(e)}),
+        )
+
+
 # ==================== 主函数 ====================
 
 def load_models_and_avatar(opt):
@@ -526,6 +592,7 @@ def create_app(opt):
     # 批量视频生成 API（方案B）
     appasync.router.add_post("/api/v1/generate", batch_generate)
     appasync.router.add_get("/videos/{filename}", serve_video)
+    appasync.router.add_delete("/api/v1/video/{filename}", delete_video)
 
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"

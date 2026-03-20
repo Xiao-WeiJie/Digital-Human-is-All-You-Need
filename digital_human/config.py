@@ -14,6 +14,9 @@ from typing import Optional, Dict, Any
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
 
+# 导入情感配置
+from .emotion_config import EmotionExpressionConfig, get_emotion_config
+
 # 默认路径配置
 DEFAULT_PATHS = {
     "human_choice": str(PROJECT_ROOT / "Human_Choice"),
@@ -36,6 +39,46 @@ def _load_avatar_config() -> Dict[str, Any]:
 
 # 加载数字人配置
 _AVATAR_CONFIG = _load_avatar_config()
+
+
+@dataclass
+class EmotionDetectionConfig:
+    """情绪识别配置"""
+    enabled: bool = True
+    detector_backend: str = "opencv"  # opencv/mediapipe/retinaface
+    enforce_detection: bool = False   # 允许无人脸时不报错
+    frame_sample_interval: int = 3    # 每 N 帧采样一次
+    smoothing_window: int = 5         # 时空平滑窗口大小
+    analysis_timeout: float = 2.0     # 单帧分析超时(秒)
+    sad_score_warning: float = 60.0   # 悲伤分数预警阈值
+    sad_score_critical: float = 80.0  # 悲伤分数严重阈值
+    context_ttl: int = 30             # 情绪上下文有效期(秒)
+
+    def __post_init__(self):
+        env_enabled = os.getenv("EMOTION_DETECTION_ENABLED")
+        if env_enabled:
+            self.enabled = env_enabled.lower() in ("true", "1", "yes")
+
+
+@dataclass
+class EmotionFusionConfig:
+    """情绪融合配置"""
+    enabled: bool = True
+    text_weight: float = 0.7          # 文本情绪权重
+    facial_weight: float = 0.3        # 面部情绪权重
+
+    def __post_init__(self):
+        env_enabled = os.getenv("EMOTION_FUSION_ENABLED")
+        if env_enabled:
+            self.enabled = env_enabled.lower() in ("true", "1", "yes")
+
+        env_text_weight = os.getenv("EMOTION_FUSION_TEXT_WEIGHT")
+        if env_text_weight:
+            try:
+                self.text_weight = float(env_text_weight)
+                self.facial_weight = 1.0 - self.text_weight
+            except ValueError:
+                pass
 
 
 @dataclass
@@ -74,7 +117,7 @@ class GPTSoVITSConfig:
 class SenseVoiceConfig:
     """SenseVoice ASR 配置"""
     model_name: str = "iic/SenseVoiceSmall"
-    model_path: str = "/root/autodl-tmp/SenseVoice/iic/SenseVoiceSmall"  # 使用 model_name 自动下载，或设置绝对路径
+    model_path: str = ""  # 使用 model_name 自动下载，或设置绝对路径
     language: str = "auto"
     use_gpu: bool = True
 
@@ -249,6 +292,15 @@ class DigitalHumanConfig:
     video: VideoConfig = field(default_factory=VideoConfig)
     audio: AudioConfig = field(default_factory=AudioConfig)
 
+    # 情感表情配置（新增）
+    emotion: EmotionExpressionConfig = field(default_factory=get_emotion_config)
+
+    # 情绪识别配置（新增）
+    emotion_detection: EmotionDetectionConfig = field(default_factory=EmotionDetectionConfig)
+
+    # 情绪融合配置（新增）
+    emotion_fusion: EmotionFusionConfig = field(default_factory=EmotionFusionConfig)
+
     # 服务配置
     host: str = "0.0.0.0"
     port: int = 8010
@@ -299,4 +351,11 @@ __all__ = [
     "DigitalHumanConfig",
     "get_default_config",
     "reload_config",
+    # 新增情感配置
+    "EmotionExpressionConfig",
+    "get_emotion_config",
+    # 情绪识别配置
+    "EmotionDetectionConfig",
+    # 情绪融合配置
+    "EmotionFusionConfig",
 ]

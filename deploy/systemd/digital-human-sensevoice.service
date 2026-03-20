@@ -1,0 +1,16 @@
+[Unit]
+Description=Digital Human - SenseVoice ASR Service
+After=network.target
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/path/to/Digital_Human_Per/SenseVoice
+ExecStart=/usr/bin/python api.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/Digital_Human_Per/logs/sensevoice.log
+StandardError=append:/path/to/Digital_Human_Per/logs/sensevoice_error.log
+
+[Install]
+WantedBy=multi-user.target

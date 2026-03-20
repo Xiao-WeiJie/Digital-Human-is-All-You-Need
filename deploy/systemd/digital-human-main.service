@@ -1,0 +1,16 @@
+[Unit]
+Description=Digital Human - Main Backend Service
+After=network.target digital-human-sensevoice.service digital-human-rag.service digital-human-render.service
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/path/to/Digital_Human_Per/digital_human_backend
+ExecStart=/usr/bin/python main.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/Digital_Human_Per/logs/main.log
+StandardError=append:/path/to/Digital_Human_Per/logs/main_error.log
+
+[Install]
+WantedBy=multi-user.target

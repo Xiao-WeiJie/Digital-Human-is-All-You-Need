@@ -1,0 +1,16 @@
+[Unit]
+Description=Digital Human - PerFRDiffRender Service
+After=network.target
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/path/to/Digital_Human_Per/PerFRDiffRender-master
+ExecStart=/usr/bin/python inference_api.py --mode server
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/Digital_Human_Per/logs/render.log
+StandardError=append:/path/to/Digital_Human_Per/logs/render_error.log
+
+[Install]
+WantedBy=multi-user.target

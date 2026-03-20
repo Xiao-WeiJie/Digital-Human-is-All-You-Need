@@ -11,7 +11,7 @@ import os
 # ============================================================================
 # API 配置 — 通义千问 (Qwen) via DashScope OpenAI 兼容接口
 # ============================================================================
-DASHSCOPE_API_KEY = os.environ.get("DASHSCOPE_API_KEY")
+DASHSCOPE_API_KEY = "sk-5fcb24ad41b54421bb5ac93feea21cf6"
 DASHSCOPE_BASE_URL = "https://dashscope.aliyuncs.com/compatible-mode/v1"
 
 # ============================================================================

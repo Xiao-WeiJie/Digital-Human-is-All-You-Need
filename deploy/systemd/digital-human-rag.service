@@ -1,0 +1,16 @@
+[Unit]
+Description=Digital Human - Psychology RAG Service
+After=network.target
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/path/to/Digital_Human_Per/Psychology_Rag
+ExecStart=/usr/bin/python api_server.py
+Restart=always
+RestartSec=10
+StandardOutput=append:/path/to/Digital_Human_Per/logs/rag.log
+StandardError=append:/path/to/Digital_Human_Per/logs/rag_error.log
+
+[Install]
+WantedBy=multi-user.target

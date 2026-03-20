@@ -431,7 +431,8 @@ class DigitalHumanBatchPipeline:
         self.video_generator = BatchVideoGeneratorSimple(
             pipeline=pipeline,
             joyvasa_pipeline=joyvasa_pipeline,
-            output_dir=str(self.output_dir)
+            output_dir=str(self.output_dir),
+            emotion_config=self.config.emotion  # 传递情感配置
         )
 
         # 默认源图像
@@ -522,12 +523,14 @@ class DigitalHumanBatchPipeline:
             video_result = self.video_generator.generate(
                 audio_path=audio_path,
                 source_image_path=source_image,
-                session_id=session_id
+                session_id=session_id,
+                emotion=emotion  # 传递情感标签
             )
             metrics['video_time'] = video_result.total_time
             metrics['joyvasa_time'] = video_result.metrics.get('joyvasa_time', 0)
             metrics['render_time'] = video_result.metrics.get('render_time', 0)
             metrics['ffmpeg_time'] = video_result.metrics.get('ffmpeg_time', 0)
+            metrics['motion_post_time'] = video_result.metrics.get('motion_post_time', 0)  # 新增
             logger.info(f"[Pipeline] Video: {metrics['video_time']:.2f}s")
 
             # ========== 清理临时音频 ==========

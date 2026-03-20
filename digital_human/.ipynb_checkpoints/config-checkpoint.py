@@ -14,6 +14,9 @@ from typing import Optional, Dict, Any
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
 
+# 导入情感配置
+from .emotion_config import EmotionExpressionConfig, get_emotion_config
+
 # 默认路径配置
 DEFAULT_PATHS = {
     "human_choice": str(PROJECT_ROOT / "Human_Choice"),
@@ -74,7 +77,7 @@ class GPTSoVITSConfig:
 class SenseVoiceConfig:
     """SenseVoice ASR 配置"""
     model_name: str = "iic/SenseVoiceSmall"
-    model_path: str = "/root/autodl-tmp/SenseVoice/iic/SenseVoiceSmall"  # 使用 model_name 自动下载，或设置绝对路径
+    model_path: str = ""  # 使用 model_name 自动下载，或设置绝对路径
     language: str = "auto"
     use_gpu: bool = True
 
@@ -93,7 +96,7 @@ class DashScopeConfig:
     api_key: str = "sk-5fcb24ad41b54421bb5ac93feea21cf6"
     base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
     model_name: str = "qwen-plus"
-    max_tokens: int = 500
+    max_tokens: int = 400
     temperature: float = 0.7
 
     def __post_init__(self):
@@ -249,6 +252,9 @@ class DigitalHumanConfig:
     video: VideoConfig = field(default_factory=VideoConfig)
     audio: AudioConfig = field(default_factory=AudioConfig)
 
+    # 情感表情配置（新增）
+    emotion: EmotionExpressionConfig = field(default_factory=get_emotion_config)
+
     # 服务配置
     host: str = "0.0.0.0"
     port: int = 8010
@@ -299,4 +305,7 @@ __all__ = [
     "DigitalHumanConfig",
     "get_default_config",
     "reload_config",
+    # 新增情感配置
+    "EmotionExpressionConfig",
+    "get_emotion_config",
 ]

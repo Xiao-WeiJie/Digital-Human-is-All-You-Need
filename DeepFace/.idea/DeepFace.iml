@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<module type="PYTHON_MODULE" version="4">
+  <component name="NewModuleRootManager">
+    <content url="file://$MODULE_DIR$">
+      <excludeFolder url="file://$MODULE_DIR$/deepface_env" />
+      <excludeFolder url="file://$MODULE_DIR$/env_310" />
+      <excludeFolder url="file://$MODULE_DIR$/env_ai_core" />
+    </content>
+    <orderEntry type="jdk" jdkName="Python 3.10 (DeepFace)" jdkType="Python SDK" />
+    <orderEntry type="sourceFolder" forTests="false" />
+  </component>
+</module>

@@ -332,6 +332,134 @@ async def on_shutdown(app):
         batch_pipeline_manager.cleanup_all()
 
 
+# ==================== 情绪识别 API ====================
+
+async def detect_emotion(request):
+    """
+    单帧情绪检测
+
+    请求方式: POST (application/json)
+    参数:
+        - image: Base64 编码的图像（支持 data:image/xxx;base64, 前缀）
+        - session_id: 会话 ID（可选，默认 "default"）
+
+    返回:
+        {
+            "code": 0,
+            "data": {
+                "dominant_emotion": "happy",
+                "emotion_scores": {"happy": 85.5, "sad": 5.2, ...},
+                "sad_score": 5.2,
+                "risk_level": "normal",
+                "confidence": 85.5,
+                "timestamp": 1234567890.123
+            }
+        }
+    """
+    try:
+        params = await request.json()
+        base64_image = params.get("image", "")
+        session_id = params.get("session_id", "default")
+
+        if not base64_image:
+            return web.Response(
+                content_type="application/json",
+                text=json.dumps({"code": -1, "msg": "image parameter is required"}),
+            )
+
+        # 获取情绪适配器
+        from digital_human import get_emotion_adapter
+        adapter = get_emotion_adapter()
+
+        if not adapter.enabled:
+            return web.Response(
+                content_type="application/json",
+                text=json.dumps({
+                    "code": 0,
+                    "data": {
+                        "dominant_emotion": "neutral",
+                        "emotion_scores": {},
+                        "sad_score": 0.0,
+                        "risk_level": "normal",
+                        "confidence": 0.0,
+                        "timestamp": time.time(),
+                        "disabled": True,
+                    }
+                }),
+            )
+
+        # 执行检测
+        result = adapter.detect_from_base64(base64_image, session_id)
+
+        if result is None:
+            return web.Response(
+                content_type="application/json",
+                text=json.dumps({"code": -1, "msg": "Emotion detection failed"}),
+            )
+
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "data": result.to_dict()}),
+        )
+
+    except Exception as e:
+        logger.exception(f"[EmotionDetect] Error: {e}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": str(e)}),
+        )
+
+
+async def get_emotion_context(request):
+    """
+    获取情绪上下文
+
+    请求方式: GET
+    参数:
+        - session_id: 会话 ID（URL 参数）
+
+    返回:
+        {
+            "code": 0,
+            "data": {
+                "has_data": true,
+                "dominant_emotions": {"happy": 5, "neutral": 3},
+                "avg_sad_score": 15.5,
+                "latest_risk_level": "normal",
+                "trend": "stable",
+                "sample_count": 8,
+                "prompt_context": "[用户情绪状态]\n当前主要情绪: happy\n"
+            }
+        }
+    """
+    try:
+        session_id = request.query.get("session_id", "default")
+
+        from digital_human import get_emotion_adapter
+        adapter = get_emotion_adapter()
+
+        summary = adapter.get_context(session_id)
+        prompt_context = adapter.get_prompt_context(session_id)
+
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({
+                "code": 0,
+                "data": {
+                    **summary,
+                    "prompt_context": prompt_context,
+                }
+            }),
+        )
+
+    except Exception as e:
+        logger.exception(f"[EmotionContext] Error: {e}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -1, "msg": str(e)}),
+        )
+
+
 # ==================== 批量视频生成 API ====================
 
 async def batch_generate(request):
@@ -593,6 +721,10 @@ def create_app(opt):
     appasync.router.add_post("/api/v1/generate", batch_generate)
     appasync.router.add_get("/videos/{filename}", serve_video)
     appasync.router.add_delete("/api/v1/video/{filename}", delete_video)
+
+    # 情绪识别 API
+    appasync.router.add_post("/api/v1/emotion/detect", detect_emotion)
+    appasync.router.add_get("/api/v1/emotion/context", get_emotion_context)
 
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"

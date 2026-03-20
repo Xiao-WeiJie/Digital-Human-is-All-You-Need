@@ -431,7 +431,8 @@ class DigitalHumanBatchPipeline:
         self.video_generator = BatchVideoGeneratorSimple(
             pipeline=pipeline,
             joyvasa_pipeline=joyvasa_pipeline,
-            output_dir=str(self.output_dir)
+            output_dir=str(self.output_dir),
+            emotion_config=self.config.emotion  # 传递情感配置
         )
 
         # 默认源图像
@@ -492,14 +493,30 @@ class DigitalHumanBatchPipeline:
 
             self.last_user_text = user_text
 
-            # ========== Step 2: LLM 生成回复 ==========
+            # ========== Step 2: LLM 生成回复（带情绪上下文） ==========
             t2 = time.time()
             logger.info("[Pipeline] Step 2: LLM generating response...")
 
             emotion = "default"  # 默认情感
+            emotion_context = ""  # 情绪上下文
+
+            # 获取融合情绪上下文
+            try:
+                from digital_human.emotion_fusion import get_emotion_fusion
+                fusion = get_emotion_fusion()
+                fused = fusion.fuse(user_text, session_id or "default")
+                emotion_context = fused.prompt_context
+                if emotion_context:
+                    logger.info(f"[Pipeline] Emotion context detected: {fused.primary_emotion}, intensity={fused.intensity:.2f}")
+            except Exception as e:
+                logger.warning(f"[Pipeline] Failed to get emotion context: {e}")
 
             if self.psy_mind:
-                result = await self.psy_mind.process_message(user_text, session_id or "default")
+                result = await self.psy_mind.process_message(
+                    user_text,
+                    session_id or "default",
+                    emotion_context  # 传递情绪上下文
+                )
                 response_text = result.get("response", "")
                 emotion = result.get("emotion", "default")
             else:
@@ -522,12 +539,14 @@ class DigitalHumanBatchPipeline:
             video_result = self.video_generator.generate(
                 audio_path=audio_path,
                 source_image_path=source_image,
-                session_id=session_id
+                session_id=session_id,
+                emotion=emotion  # 传递情感标签
             )
             metrics['video_time'] = video_result.total_time
             metrics['joyvasa_time'] = video_result.metrics.get('joyvasa_time', 0)
             metrics['render_time'] = video_result.metrics.get('render_time', 0)
             metrics['ffmpeg_time'] = video_result.metrics.get('ffmpeg_time', 0)
+            metrics['motion_post_time'] = video_result.metrics.get('motion_post_time', 0)  # 新增
             logger.info(f"[Pipeline] Video: {metrics['video_time']:.2f}s")
 
             # ========== 清理临时音频 ==========

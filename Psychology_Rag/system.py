@@ -159,9 +159,14 @@ class PsyMindSystem:
     # 核心处理流程
     # ────────────────────────────────────────────
 
-    async def process_message(self, user_input: str, session_id: str) -> dict:
+    async def process_message(self, user_input: str, session_id: str, emotion_context: str = "") -> dict:
         """
         处理一条用户消息的完整流程。
+
+        Args:
+            user_input: 用户输入
+            session_id: 会话 ID
+            emotion_context: 情绪上下文（可选，由情绪融合模块生成）
 
         Returns:
             dict: {"response": str, "emotion": str}
@@ -180,7 +185,7 @@ class PsyMindSystem:
 
         # ── Step 3: 路由 → 检索 + 生成 ──
         raw_response = await self._route_and_generate(
-            intent, user_input, history_messages, user_name
+            intent, user_input, history_messages, user_name, emotion_context
         )
 
         # ── Step 4: 解析情感标签 ──
@@ -210,12 +215,14 @@ class PsyMindSystem:
         user_input: str,
         history_messages: list,
         user_name: str,
+        emotion_context: str = "",
     ) -> str:
         """根据意图路由到对应的链路，执行检索与生成。"""
         base_params = {
             "input": user_input,
             "history": history_messages,
             "user_name": user_name,
+            "emotion_context": emotion_context,  # 新增：情绪上下文
         }
 
         if intent == "emotional":

@@ -23,6 +23,14 @@ if fasterlp_path not in sys.path:
 
 from logger import logger
 
+# 导入 Motion 后处理器
+try:
+    from FasterLivePortrait.src.utils.motion_post_processor import MotionPostProcessor, get_motion_post_processor
+    MOTION_POST_PROCESSOR_AVAILABLE = True
+except ImportError:
+    logger.warning("[BatchVideo] MotionPostProcessor not available, emotion features disabled")
+    MOTION_POST_PROCESSOR_AVAILABLE = False
+
 
 @dataclass
 class VideoGenerationResult:
@@ -337,11 +345,13 @@ class BatchVideoGeneratorSimple:
         pipeline,
         joyvasa_pipeline,
         output_dir: str = None,
-        ffmpeg_path: str = "ffmpeg"
+        ffmpeg_path: str = "ffmpeg",
+        emotion_config=None
     ):
         self.pipeline = pipeline
         self.joyvasa = joyvasa_pipeline
         self.ffmpeg = ffmpeg_path
+        self.emotion_config = emotion_config
 
         if output_dir is None:
             output_dir = os.path.join(tempfile.gettempdir(), "digital_human_videos")
@@ -350,18 +360,34 @@ class BatchVideoGeneratorSimple:
 
         self.temp_dir = Path(tempfile.mkdtemp(prefix="batch_simple_"))
 
+        # 初始化 Motion 后处理器
+        self.motion_post_processor = None
+        if MOTION_POST_PROCESSOR_AVAILABLE:
+            try:
+                self.motion_post_processor = get_motion_post_processor(emotion_config)
+                logger.info("[BatchVideo] MotionPostProcessor initialized successfully")
+            except Exception as e:
+                logger.warning(f"[BatchVideo] Failed to initialize MotionPostProcessor: {e}")
+
         logger.info(f"BatchVideoGeneratorSimple initialized, output: {self.output_dir}")
 
     def generate(
         self,
         audio_path: str,
         source_image_path: str,
-        session_id: str = None
+        session_id: str = None,
+        emotion: str = "default"
     ) -> VideoGenerationResult:
         """
         生成数字人视频
 
         直接使用 pipeline 的 run_audio_driving 方法
+
+        Args:
+            audio_path: 音频文件路径
+            source_image_path: 源图像路径
+            session_id: 会话ID
+            emotion: 情感标签 (happy/sad/calm/question/default)
         """
         start_time = time.time()
         metrics = {}
@@ -419,6 +445,18 @@ class BatchVideoGeneratorSimple:
         if n_frames == 0:
             logger.error(f"[SimpleBatch] JoyVASA generated 0 frames for audio: {audio_path}, duration: {audio_duration:.2f}s")
             raise RuntimeError(f"JoyVASA generated 0 frames. Audio file: {audio_path}, duration: {audio_duration:.2f}s")
+
+        # ========== 新增: Motion 后处理 ==========
+        t_post = time.time()
+        if self.motion_post_processor is not None and emotion != "default":
+            logger.info(f"[SimpleBatch] Applying motion post-processing with emotion: {emotion}")
+            try:
+                motion_info = self.motion_post_processor.process(motion_info, emotion=emotion)
+                logger.info(f"[SimpleBatch] Motion post-processing completed in {time.time() - t_post:.3f}s")
+            except Exception as e:
+                logger.warning(f"[SimpleBatch] Motion post-processing failed: {e}, using original motion")
+        metrics['motion_post_time'] = time.time() - t_post
+        # ========== Motion 后处理结束 ==========
 
         # Step 2: 准备源图像
         t2 = time.time()

@@ -1043,3 +1043,182 @@ class AzureTTS(BaseTTS):
             frame = (np.frombuffer(chunk, dtype=np.int16)
                        .astype(np.float32) / 32767.0)
             self.parent.put_audio_frame(frame)
+
+###########################################################################################
+class KokoroTTS(BaseTTS):
+    """
+    Kokoro-82M TTS 本地语音合成
+
+    使用 FasterLivePortrait 自带的 Kokoro 模型进行语音合成
+    支持多音色配置，    """
+
+    def __init__(self, opt, parent):
+        super().__init__(opt, parent)
+
+        # Kokoro 模型路径
+        self.kokoro_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "FasterLivePortrait", "checkpoints", "Kokoro-82M"
+        )
+
+        # 默认音色
+        self.default_voice = getattr(opt, 'KOKORO_VOICE', 'zf_001')
+
+        # 音色映射（从 avatar_id 获取对应的 kokoro voice）
+        self.voice_map = {}
+        self._load_voice_map()
+
+        # 模型延迟加载
+        self._model = None
+        self._pipeline = None
+        self._voices_loaded = False
+
+        logger.info(f"[KokoroTTS] Initialized, default voice: {self.default_voice}")
+
+    def _load_voice_map(self):
+        """从配置文件加载数字人音色映射"""
+        try:
+            config_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                "Human_Choice", "avatar_config.json"
+            )
+            if os.path.exists(config_path):
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                for avatar_id, info in config.get("avatars", {}).items():
+                    kokoro_voice = info.get("kokoro_voice")
+                    if kokoro_voice:
+                        self.voice_map[avatar_id] = kokoro_voice
+                        logger.info(f"[KokoroTTS] Mapped {avatar_id} -> {kokoro_voice}")
+        except Exception as e:
+            logger.warning(f"[KokoroTTS] Failed to load voice map: {e}")
+
+    def _init_model(self):
+        """延迟初始化 Kokoro 模型"""
+        if self._model is not None:
+            return True
+
+        try:
+            import platform
+            if platform.system() == "Windows":
+                # Windows 下需要设置 espeak 路径
+                espeak_path = r"C:\Program Files\eSpeak NG"
+                os.environ["PHONEMIZER_ESPEAK_LIBRARY"] = os.path.join(espeak_path, "libespeak-ng.dll")
+                os.environ["PHONEMIZER_ESPEAK_PATH"] = os.path.join(espeak_path, "espeak-ng.exe")
+
+            from kokoro import KPipeline, KModel
+
+            # 加载模型配置
+            config_path = os.path.join(self.kokoro_path, "config.json")
+            with open(config_path, "r", encoding="utf-8") as f:
+                model_config = json.load(f)
+
+            # 加载模型
+            model_path = os.path.join(self.kokoro_path, "kokoro-v1_0.pth")
+            self._model = KModel(config=model_config, model=model_path)
+
+            logger.info("[KokoroTTS] Model loaded successfully")
+            return True
+
+        except Exception as e:
+            logger.error(f"[KokoroTTS] Failed to load model: {e}")
+            return False
+
+    def _get_voice(self) -> str:
+        """获取当前数字人对应的音色"""
+        avatar_id = getattr(self.parent, 'avatar_id', 'human_1')
+        voice = self.voice_map.get(avatar_id, self.default_voice)
+        logger.info(f"[KokoroTTS] Using voice: {voice} for avatar: {avatar_id}")
+        return voice
+
+    def txt_to_audio(self, msg: tuple[str, dict]):
+        text, textevent = msg
+
+        if not text or len(text.strip()) == 0:
+            logger.warning("[KokoroTTS] Empty text, skipping")
+            return
+
+        # 初始化模型（如果还没初始化）
+        if not self._init_model():
+                logger.error("[KokoroTTS] Model not initialized, falling back")
+                # 回退到 EdgeTTS
+                edge_tts = EdgeTTS(self.opt, self.parent)
+                edge_tts.txt_to_audio(msg)
+                return
+
+        try:
+            from kokoro import KPipeline
+            import soundfile as sf
+            import tempfile
+
+            voice = self._get_voice()
+
+            # 创建 pipeline
+            pipeline = KPipeline(lang_code=voice[0], model=self._model)
+
+            # 加载音色
+            if not self._voices_loaded:
+                voice_dir = os.path.join(self.kokoro_path, "voices")
+                for vname in os.listdir(voice_dir):
+                    if vname.endswith(".pt"):
+                        voice_name = os.path.splitext(vname)[0]
+                        pipeline.voices[voice_name] = torch.load(
+                            os.path.join(voice_dir, vname),
+                            weights_only=True
+                        )
+                self._voices_loaded = True
+                logger.info(f"[KokoroTTS] Loaded {len(pipeline.voices)} voices")
+
+            # 生成音频
+            t_start = time.time()
+            generator = pipeline(
+                text,
+                voice=voice,
+                speed=1,
+                split_pattern=r'\n+'
+            )
+
+            # 收集所有音频片段
+            audios = []
+            for i, (gs, ps, audio) in enumerate(generator):
+                audios.append(audio)
+
+            if not audios:
+                logger.error("[KokoroTTS] No audio generated")
+                return
+
+            # 合并音频
+            audio_data = np.concatenate(audios)
+            logger.info(f"[KokoroTTS] Generated audio in {time.time() - t_start:.2f}s, length: {len(audio_data)} samples")
+
+            # 转换采样率 (24kHz -> 16kHz)
+            audio_data = resampy.resample(audio_data, sr_orig=24000, sr_new=self.sample_rate)
+
+            # 分块发送
+            streamlen = len(audio_data)
+            idx = 0
+            first = True
+
+            while streamlen >= self.chunk and self.state == State.RUNNING:
+                eventpoint = {}
+                if first:
+                    eventpoint = {'status': 'start', 'text': text}
+                    eventpoint.update(**textevent)
+                    first = False
+                self.parent.put_audio_frame(audio_data[idx:idx + self.chunk], eventpoint)
+                streamlen -= self.chunk
+                idx += self.chunk
+
+            # 发送结束事件
+            eventpoint = {'status': 'end', 'text': text}
+            eventpoint.update(**textevent)
+            self.parent.put_audio_frame(np.zeros(self.chunk, np.float32), eventpoint)
+
+        except Exception as e:
+            logger.exception(f"[KokoroTTS] Error: {e}")
+            # 回退到 EdgeTTS
+            try:
+                edge_tts = EdgeTTS(self.opt, self.parent)
+                edge_tts.txt_to_audio(msg)
+            except Exception as e2:
+                logger.error(f"[KokoroTTS] Fallback also failed: {e2}")

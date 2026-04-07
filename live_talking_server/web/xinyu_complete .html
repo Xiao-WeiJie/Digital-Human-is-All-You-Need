@@ -1,0 +1,4642 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>心语 — 基于具身智能的三维空间情感陪护系统</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cream: #faf6f1;
+    --cream2: #f3ece2;
+    --cream3: #e7ddd1;
+    --terracotta: #c4714a;
+    --terracotta-light: #e8a07a;
+    --terracotta-pale: #debdab;
+    --sage: #7a9e87;
+    --sage-light: #a8c4b0;
+    --sage-pale: #deeee3;
+    --sage-lt: #b9d2c1;
+    --lavender: #9b8bb4;
+    --lavender-pale: #ede8f5;
+    --mauve: #9b8bb4;
+    --text-dark: #2c2420;
+    --text-mid: #6b5b52;
+    --text-light: #a09080;
+    --ink: #2c2420;
+    --ink2: #4a3e36;
+    --ink3: #6b5b52;
+    --ink4: #a09080;
+    --warm: #c4714a;
+    --warm-lt: #e8a07a;
+    --warm-dk: #9f5a38;
+    --white: #ffffff;
+    --shadow-soft: 0 4px 24px rgba(44,36,32,0.08);
+    --shadow-card: 0 2px 12px rgba(44,36,32,0.06);
+    --shadow: 0 8px 24px rgba(44,36,32,0.08);
+    --shadow-md: 0 16px 40px rgba(44,36,32,0.16);
+    --radius: 20px;
+    --radius-sm: 12px;
+    --r-sm: 10px;
+    --r-md: 14px;
+    --r-lg: 20px;
+    --r-xl: 28px;
+    --nav-h: 64px;
+    --font-serif: 'Noto Serif SC', serif;
+    --font-sans: 'Noto Sans SC', sans-serif;
+
+    /* Digital World colors */
+    --dw-blue: #4a7ec4;
+    --dw-blue-light: #7aaae0;
+    --dw-blue-pale: #e0ecfa;
+
+    /* Physical World colors */
+    --pw-teal: #4a9e8a;
+    --pw-teal-light: #7ac4b0;
+    --pw-teal-pale: #d4f0ea;
+
+    /* New gradient colors */
+    --gradient-primary: linear-gradient(135deg, var(--terracotta), #e08050);
+    --gradient-secondary: linear-gradient(135deg, var(--sage), #5a8a6f);
+    --gradient-accent: linear-gradient(135deg, var(--lavender), #7a6ba0);
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-sans);
+    background: var(--cream);
+    color: var(--text-dark);
+    min-height: 100vh;
+  }
+
+  /* ===== NAV ===== */
+  .nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+    background: var(--cream);
+    border-bottom: 1px solid rgba(196,113,74,0.12);
+    padding: 0 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 64px;
+    transition: box-shadow 0.3s;
+  }
+  .nav.scrolled { box-shadow: var(--shadow-soft); }
+  .nav-logo {
+    font-family: var(--font-serif);
+    font-size: 22px; font-weight: 700;
+    color: var(--terracotta);
+    letter-spacing: 2px;
+    cursor: pointer;
+  }
+  .nav-logo span { color: var(--text-mid); font-weight: 300; font-size: 13px; margin-left: 8px; }
+  .nav-links { display: flex; gap: 4px; }
+  .nav-links button {
+    background: var(--cream); border: none;
+    font-family: var(--font-sans); font-size: 14px;
+    color: var(--text-dark); padding: 8px 14px; border-radius: 10px;
+    cursor: pointer; transition: all 0.3s ease;
+    display: flex; align-items: center; gap: 6px;
+    position: relative; overflow: hidden;
+  }
+  .nav-links button::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(196,113,74,0.1), transparent);
+    transition: left 0.4s;
+  }
+  .nav-links button:hover::before { left: 100%; }
+  .nav-links button:hover { background: var(--cream2); color: var(--terracotta); transform: translateY(-1px); }
+  .nav-links button.active { background: var(--terracotta); color: white; box-shadow: 0 4px 12px rgba(196,113,74,0.3); }
+  .nav-links button .nav-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  /* domain color dots */
+  .dot-spirit { background: var(--terracotta); }
+  .dot-digital { background: var(--dw-blue); }
+  .dot-physical { background: var(--pw-teal); }
+  .dot-neutral { background: var(--sage); }
+
+  /* ===== PAGE SYSTEM ===== */
+  .page { display: none; padding-top: 64px; min-height: 100vh; opacity: 0; transform: translateY(20px); transition: opacity 0.4s ease, transform 0.4s ease; }
+  .page.active { display: block; opacity: 1; transform: translateY(0); }
+
+  /* ===== BUTTONS ===== */
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 12px 24px; border-radius: 40px;
+    font-family: var(--font-sans); font-size: 16px; font-weight: 500;
+    cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-decoration: none; position: relative; overflow: hidden;
+  }
+  .btn::before {
+    content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+  }
+  .btn:hover::before { left: 100%; }
+  
+  .btn-primary { background: var(--terracotta-pale); color: var(--terracotta); }
+  .btn-primary:hover { background: var(--terracotta-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,113,74,0.35); }
+  .btn-outline { background: transparent; color: var(--terracotta); border: 2px solid var(--terracotta); }
+  .btn-outline:hover { background: var(--terracotta-pale); }
+  .btn-dw { background: var(--dw-blue); color: white; }
+  .btn-dw:hover { background: #3a6eb4; transform: translateY(-2px); }
+  .btn-pw { background: var(--pw-teal); color: white; }
+  .btn-pw:hover { background: #3a8e7a; transform: translateY(-2px); }
+
+  /* ===== CARDS ===== */
+  .card {
+    background: white; border-radius: var(--radius);
+    box-shadow: 0 4px 20px rgba(44,36,32,0.08), 0 1px 3px rgba(44,36,32,0.12);
+    padding: 24px; transition: all 0.3s ease;
+  }
+  .card:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(44,36,32,0.12), 0 2px 6px rgba(44,36,32,0.16); }
+
+  /* ===== BADGE ===== */
+  .badge {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 12px; border-radius: 20px;
+    font-size: 12px; font-weight: 500;
+  }
+  .badge-spirit { background: var(--terracotta-pale); color: var(--terracotta); }
+  .badge-digital { background: var(--dw-blue-pale); color: var(--dw-blue); }
+  .badge-physical { background: var(--pw-teal-pale); color: var(--pw-teal); }
+
+  /* ===================================================
+     PAGE 1: HOME
+  =================================================== */
+  .home-hero {
+    height: calc(100vh - 64px);
+    display: flex; flex-direction: column;
+    justify-content: center; align-items: center;
+    text-align: center;
+    padding: 60px 40px;
+    position: relative; overflow: hidden;
+    background: url('首页背景图.png');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+  }
+
+
+   .hero-content { position: relative; z-index: 1; max-width: 800px; align-self: flex-start; margin-left: 20px; margin-top: 450px; }
+  .hero-eyebrow {
+    display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; justify-content: flex-start;
+  }
+  .hero-title {
+    font-family: var(--font-serif);
+    font-size: clamp(36px, 5vw, 60px);
+    font-weight: 700; line-height: 1.25;
+    color: var(--text-dark);
+    margin-bottom: 30px;
+    text-align: left;
+  }
+  .hero-title .accent { color: var(--terracotta); }
+  .hero-subtitle {
+    font-size: 16px; color: var(--text-mid); line-height: 2;
+    margin-bottom: 32px; max-width: 600px; text-align: left;
+  }
+  .hero-btns { display: flex; gap: 16px; flex-wrap: wrap; justify-content: flex-start; margin-bottom: 48px; }
+  .hero-stats {
+    display: flex; gap: 40px; margin-top: 0; justify-content: flex-start;
+  }
+  .hero-stat-num { font-family: var(--font-serif); font-size: 32px; font-weight: 700; color: var(--terracotta); }
+  .hero-stat-label { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+
+  .hero-visual { position: relative; z-index: 1; display: flex; justify-content: center; margin-top: 20px; }
+  .hero-extra-actions { position: absolute; top: 14px; right: 14px; display: flex; gap: 8px; z-index: 10; }
+  .hero-extra-actions .btn { padding: 6px 10px; font-size: 12px; border-radius: 12px; }
+  .hero-card-stack { position: relative; width: 360px; height: 480px; }
+  .hero-main-card {
+    position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
+    width: 300px;
+    background: white; border-radius: 28px;
+    box-shadow: 0 20px 60px rgba(44,36,32,0.15);
+    padding: 28px; overflow: hidden;
+  }
+  .hero-avatar-ring {
+    width: 80px; height: 80px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--terracotta-pale), var(--terracotta));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px; margin: 0 auto 16px;
+    box-shadow: 0 8px 24px rgba(196,113,74,0.3);
+  }
+  .hero-chat-bubble {
+    background: var(--cream2); border-radius: 16px 16px 16px 4px;
+    padding: 12px 16px; font-size: 13px; color: var(--text-mid);
+    margin-bottom: 10px; line-height: 1.6;
+  }
+  .hero-typing { display: flex; gap: 4px; padding: 10px 16px; background: var(--terracotta); border-radius: 16px 16px 4px 16px; width: fit-content; margin-left: auto; }
+  .hero-typing span { width: 6px; height: 6px; border-radius: 50%; background: rgba(255,255,255,0.8); animation: typingBounce 1.2s ease-in-out infinite; }
+  .hero-typing span:nth-child(2) { animation-delay: 0.2s; }
+  .hero-typing span:nth-child(3) { animation-delay: 0.4s; }
+  @keyframes typingBounce { 0%,60%,100% { transform: translateY(0); } 30% { transform: translateY(-6px); } }
+
+  .hero-float-card {
+    position: absolute; background: white; border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(44,36,32,0.12);
+    padding: 14px 18px; font-size: 13px;
+  }
+  .hfc-agent { top: 0; right: 0; display: flex; align-items: center; gap: 8px; }
+  .hfc-agent .hfc-icon { width: 32px; height: 32px; background: var(--dw-blue-pale); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .hfc-hw { bottom: 20px; left: 0; }
+  .hw-pills { display: flex; gap: 6px; margin-top: 6px; }
+  .hw-pill { padding: 3px 10px; border-radius: 20px; font-size: 11px; }
+  .hw-pill-green { background: var(--pw-teal-pale); color: var(--pw-teal); }
+  .hw-pill-orange { background: var(--terracotta-pale); color: var(--terracotta); }
+
+  /* Three Worlds Section */
+  .three-worlds {
+    padding: 80px;
+    background: white;
+  }
+  .section-header { text-align: center; margin-bottom: 56px; }
+  .section-eyebrow { font-size: 13px; color: var(--terracotta); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+  .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }
+  .section-subtitle { font-size: 15px; color: var(--text-mid); max-width: 500px; margin: 0 auto; line-height: 1.8; }
+
+  .worlds-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; }
+  .world-card {
+    border-radius: var(--radius); padding: 36px 28px;
+    position: relative; overflow: hidden;
+    cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(255,255,255,0.95));
+    backdrop-filter: blur(10px);
+  }
+  .world-card::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: linear-gradient(135deg, rgba(196,113,74,0.05), rgba(122,158,142,0.05));
+    opacity: 0; transition: opacity 0.4s ease;
+  }
+  .world-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 20px 48px rgba(44,36,32,0.15); }
+  .world-card:hover::before { opacity: 1; }
+  .world-card:hover { transform: translateY(-6px); box-shadow: 0 20px 48px rgba(44,36,32,0.12); }
+  .wc-spirit { background: linear-gradient(135deg, #fff5f0, #fde8db); border: 1px solid rgba(196,113,74,0.2); }
+  .wc-digital { background: linear-gradient(135deg, #f0f5ff, #dbe8fb); border: 1px solid rgba(74,126,196,0.2); }
+  .wc-physical { background: linear-gradient(135deg, #f0faf6, #d4f0ea); border: 1px solid rgba(74,158,138,0.2); }
+  .wc-icon { font-size: 48px; margin-bottom: 20px; }
+  .wc-title { font-family: var(--font-serif); font-size: 22px; font-weight: 700; margin-bottom: 12px; }
+  .wc-spirit .wc-title { color: var(--terracotta); }
+  .wc-digital .wc-title { color: var(--dw-blue); }
+  .wc-physical .wc-title { color: var(--pw-teal); }
+  .wc-desc { font-size: 14px; color: var(--text-mid); line-height: 1.8; margin-bottom: 20px; }
+  .wc-features { list-style: none; display: flex; flex-direction: column; gap: 8px; }
+  .wc-features li { font-size: 13px; color: var(--text-mid); display: flex; align-items: center; gap: 8px; }
+  .wc-features li::before { content: ''; width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+  .wc-spirit .wc-features li::before { background: var(--terracotta); }
+  .wc-digital .wc-features li::before { background: var(--dw-blue); }
+  .wc-physical .wc-features li::before { background: var(--pw-teal); }
+  .wc-btn {
+    margin-top: 24px; display: inline-flex; align-items: center; gap: 6px;
+    font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 20px;
+    border: none; cursor: pointer; transition: all 0.2s;
+  }
+  .wc-spirit .wc-btn { background: var(--terracotta); color: white; }
+  .wc-digital .wc-btn { background: var(--dw-blue); color: white; }
+  .wc-physical .wc-btn { background: var(--pw-teal); color: white; }
+
+  /* Home Features / Tech / CTA */
+  .home-features { padding: 80px; background: var(--cream); }
+  .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .feat-card {
+    background: white; border-radius: var(--radius-sm); padding: 28px;
+    box-shadow: var(--shadow-card); transition: transform 0.3s;
+  }
+  .feat-card:hover { transform: translateY(-4px); }
+  .feat-icon { font-size: 32px; margin-bottom: 16px; }
+  .feat-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; }
+  .feat-desc { font-size: 13px; color: var(--text-mid); line-height: 1.7; }
+
+  .home-cta {
+    padding: 80px; text-align: center;
+    background: var(--gradient-primary);
+    color: white; position: relative; overflow: hidden;
+  }
+  .home-cta::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="50" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="30" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+  }
+  .home-cta > * { position: relative; z-index: 1; }
+  .home-cta h2 { font-family: var(--font-serif); font-size: 40px; margin-bottom: 16px; }
+  .home-cta p { font-size: 16px; opacity: 0.9; margin-bottom: 36px; }
+  .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+  .btn-white { background: var(--terracotta-pale); color: var(--terracotta); }
+  .btn-white:hover { background: var(--terracotta-light); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,113,74,0.35); }
+  .btn-outline-white { background: transparent; color: white; border: 2px solid white; }
+  .btn-outline-white:hover { background: rgba(255,255,255,0.15); }
+
+  /* ===== FOOTER ===== */
+  .site-footer {
+    background: var(--text-dark); color: white;
+    padding: 40px 80px; text-align: center; font-size: 13px; opacity: 0.9;
+  }
+  .site-footer .footer-logo { font-family: var(--font-serif); font-size: 24px; color: var(--terracotta-light); margin-bottom: 12px; }
+  .site-footer p { opacity: 0.5; }
+  .footer-links { display: flex; gap: 24px; justify-content: center; margin: 16px 0; }
+  .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; }
+  .footer-links a:hover { color: var(--terracotta-light); }
+
+  /* ===== RESPONSIVE ===== */
+  @media (max-width: 1100px) {
+    .home-hero { padding: 60px 40px; gap: 32px; }
+    .three-worlds { padding: 60px 40px; }
+    .worlds-grid { grid-template-columns: 1fr; gap: 16px; }
+    .home-features { padding: 60px 40px; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 768px) {
+    .nav-links button span { display: none; }
+    .home-hero { grid-template-columns: 1fr; padding: 40px 20px; }
+    .hero-visual { display: none; }
+    .three-worlds { padding: 40px 20px; }
+    .home-features { padding: 40px 20px; }
+    .features-grid { grid-template-columns: 1fr; }
+    .home-cta { padding: 60px 20px; }
+  }
+
+  /* Animations */
+  .fade-in { animation: fadeIn 0.5s ease both; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+
+  /* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   PAGE 2: CHAT (COMPANION)
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+#page-chat {
+  display: none;
+  flex-direction: row;
+  height: calc(100dvh - var(--nav-h));
+  background: var(--cream2);
+}
+#page-chat.active { display: flex; overflow: hidden; }
+
+/* History sidebar */
+.chat-sidebar {
+  width: 220px;
+  flex-shrink: 0;
+  border-right: 1px solid var(--cream3);
+  background: var(--cream);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.sidebar-head {
+  padding: 16px 14px 12px;
+  border-bottom: 1px solid var(--cream3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.sidebar-title { font-size: 13px; font-weight: 600; color: var(--ink2); }
+.icon-btn {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  border: none;
+  background: var(--cream2);
+  color: var(--ink2);
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background .15s;
+}
+.icon-btn:hover { background: var(--cream3); }
+
+.history-list {
+  flex: 1;
+  overflow-y: auto;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.history-list::-webkit-scrollbar { width: 3px; }
+.history-list::-webkit-scrollbar-thumb { background: var(--cream3); border-radius: 99px; }
+
+.hist-item {
+  padding: 10px 10px;
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background .15s;
+}
+.hist-item:hover { background: var(--cream2); }
+.hist-item.active { background: rgba(196,113,94,.1); }
+.hist-name { font-size: 12.5px; font-weight: 500; color: var(--ink2); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.hist-meta { display: flex; justify-content: space-between; align-items: center; }
+.hist-time { font-size: 10.5px; color: var(--ink4); }
+.hist-emo { font-size: 10px; padding: 1px 6px; border-radius: 99px; }
+
+/* Digital human center */
+.chat-center {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  gap: 12px;
+  background: var(--cream2);
+  min-width: 0;
+}
+
+.dh-label {
+  font-size: 11.5px;
+  font-weight: 600;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink3);
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.live-dot {
+  width: 7px; height: 7px;
+  border-radius: 50%;
+  background: var(--sage);
+  animation: pulse 2s infinite;
+}
+@keyframes pulse { 0%,100%{opacity:1;transform:scale(1)} 50%{opacity:.5;transform:scale(.8)} }
+
+.dh-screen {
+  /* 16:9 aspect ratio */
+  width: min(2000px, calc((100dvh - var(--nav-h) - 200px) * 16/9));
+  aspect-ratio: 16/9;
+  background: #0F0F0F;
+  border-radius: var(--r-lg);
+  box-shadow: 0 8px 40px rgba(0,0,0,.35), 0 0 0 1px rgba(255,255,255,.06);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dh-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+  padding: 20px;
+}
+.dh-icon { font-size: 36px; opacity: .4; }
+.dh-placeholder p { font-size: 11px; color: rgba(255,255,255,.3); line-height: 1.5; }
+
+.dh-corner-badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background: rgba(122,158,142,.2);
+  border: 1px solid rgba(122,158,142,.3);
+  color: var(--sage-lt);
+  font-size: 9px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  padding: 3px 8px;
+  border-radius: 6px;
+}
+
+.dh-scan {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+.scan-line {
+  position: absolute;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(122,158,142,.4), transparent);
+  animation: scan 4s linear infinite;
+}
+@keyframes scan { 0%{top:0%} 100%{top:100%} }
+
+/* Emotion badge below screen */
+.emo-badge-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+.emo-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 12px;
+  font-weight: 500;
+  background: var(--white);
+  box-shadow: var(--shadow);
+  color: var(--ink2);
+  cursor: pointer;
+  transition: box-shadow .15s;
+}
+.emo-badge:hover { box-shadow: var(--shadow-md); }
+
+/* Chat right panel */
+.chat-panel {
+  width: 340px;
+  flex-shrink: 0;
+  border-left: 1px solid var(--cream3);
+  background: var(--white);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.chat-head {
+  padding: 14px 16px;
+  border-bottom: 1px solid var(--cream3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.chat-head-title { font-size: 13.5px; font-weight: 600; color: var(--ink); }
+.chat-head-sub { font-size: 11px; color: var(--ink3); }
+
+.chat-msgs {
+  flex: 1;
+  overflow-y: auto;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.chat-msgs::-webkit-scrollbar { width: 4px; }
+  .chat-msgs::-webkit-scrollbar-track { background: rgba(196,113,74,0.05); border-radius: 10px; }
+  .chat-msgs::-webkit-scrollbar-thumb { background: rgba(196,113,74,0.2); border-radius: 10px; transition: background 0.3s ease; }
+  .chat-msgs::-webkit-scrollbar-thumb:hover { background: rgba(196,113,74,0.4); }
+
+.msg { display: flex; gap: 8px; align-items: flex-end; animation: msgSlideIn 0.4s ease-out; }
+  .msg.user { flex-direction: row-reverse; animation: msgSlideInRight 0.4s ease-out; }
+  @keyframes msgSlideIn { from { opacity: 0; transform: translateX(-20px); } to { opacity: 1; transform: translateX(0); } }
+  @keyframes msgSlideInRight { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+
+.msg-avatar {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 13px;
+}
+.msg-avatar.ai { background: linear-gradient(135deg, var(--warm-lt), var(--warm)); }
+.msg-avatar.user-av { background: linear-gradient(135deg, var(--sage-lt), var(--sage)); }
+
+.msg-bubble {
+  max-width: 210px;
+  padding: 9px 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--ink);
+}
+.msg.ai .msg-bubble { background: var(--cream2); border-radius: 4px 14px 14px 14px; }
+.msg.user .msg-bubble { background: var(--warm); color: #fff; border-radius: 14px 4px 14px 14px; }
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 10px 14px;
+}
+.dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink4); animation: bounce .9s infinite; }
+.dot:nth-child(2) { animation-delay: .15s; }
+.dot:nth-child(3) { animation-delay: .3s; }
+@keyframes bounce { 0%,60%,100%{transform:translateY(0)} 30%{transform:translateY(-5px)} }
+
+.quick-chips {
+  padding: 8px 12px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  border-top: 1px solid var(--cream2);
+}
+.chip {
+  font-size: 11.5px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--cream2);
+  color: var(--ink2);
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s;
+}
+.chip:hover { background: var(--cream3); }
+
+.chat-input-row {
+  padding: 10px 12px;
+  border-top: 1px solid var(--cream2);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.chat-input {
+  flex: 1;
+  background: var(--cream2);
+  border: none;
+  border-radius: 20px;
+  padding: 8px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  outline: none;
+  resize: none;
+}
+.chat-input::placeholder { color: var(--ink4); }
+  .chat-input:focus { background: white; box-shadow: 0 0 0 2px rgba(196,113,74,0.1); transform: scale(1.01); }
+.mic-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--cream2);
+  color: var(--ink3);
+  font-size: 15px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: all .2s;
+}
+.mic-btn:hover { background: var(--warm); color: #fff; }
+.mic-btn.recording { background: var(--warm); color: #fff; animation: glow 1s infinite; }
+@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(196,113,94,.4)} 50%{box-shadow:0 0 0 8px rgba(196,113,94,0)} }
+
+.send-btn {
+  width: 34px; height: 34px;
+  border-radius: 50%;
+  border: none;
+  background: var(--warm);
+  color: #fff;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+  transition: background .2s;
+}
+.send-btn:hover { background: var(--warm-dk); }
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   PAGE 3: AGENT
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+#page-agent {
+  display: none;
+  height: calc(100dvh - var(--nav-h));
+}
+#page-agent.active { display: grid; grid-template-columns: 280px 1fr; overflow: hidden; }
+
+.agent-sidebar {
+  background: #8b5313; color: white;
+  display: flex; flex-direction: column;
+  border-right: 1px solid rgba(74,126,196,0.2);
+}
+
+.agent-sidebar-head {
+  padding: 28px 24px; border-bottom: 1px solid rgba(74,126,196,0.15);
+}
+.agent-sidebar-title {
+  font-family: var(--font-serif); font-size: 20px; font-weight: 700; margin-bottom: 4px; color: white;
+}
+.agent-sidebar-sub { font-size: 13px; opacity: 0.6; color: white; }
+
+.task-list {
+  overflow-y: auto; flex: 1; padding: 0 12px 12px;
+}
+.task-list::-webkit-scrollbar { width: 3px; }
+.task-list::-webkit-scrollbar-thumb { background: rgba(255,255,255,.1); border-radius: 99px; }
+
+.task-item {
+  padding: 12px 14px; border-radius: 12px; cursor: pointer;
+  transition: background 0.2s; margin-bottom: 4px;
+  border: 1px solid transparent;
+}
+.task-item:hover { background: rgba(74,126,196,0.1); }
+.task-item.active { background: rgba(74,126,196,0.2); border-color: rgba(74,126,196,0.4); }
+.task-name { font-size: 13px; font-weight: 500; margin-bottom: 6px; color: white; }
+.task-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; opacity: 0.5; }
+.task-time { font-size: 11px; opacity: 0.5; color: #ffffff; }
+.task-status { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
+.status-done { background: rgba(74,222,128,0.2); color: #4ade80; }
+.status-run { background: rgba(250,204,21,0.2); color: #facc15; }
+.status-wait { background: rgba(148,163,184,0.2); color: #94a3b8; }
+
+.agent-main {
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  background: var(--cream);
+}
+
+.agent-head {
+  padding: 18px 24px 14px;
+  border-bottom: 1px solid var(--cream3);
+  background: var(--white);
+}
+.agent-head-title { font-size: 14.5px; font-weight: 600; color: var(--ink); margin-bottom: 4px; }
+.agent-head-sub { font-size: 12px; color: var(--ink3); }
+
+.agent-input-area {
+  padding: 16px 20px;
+  background: var(--white);
+  border-bottom: 1px solid var(--cream3);
+}
+.agent-input-wrap {
+  display: flex;
+  gap: 10px;
+  align-items: flex-end;
+}
+.agent-input {
+  flex: 1;
+  background: var(--cream2);
+  border: 1.5px solid var(--cream3);
+  border-radius: var(--r-md);
+  padding: 10px 14px;
+  font-family: inherit;
+  font-size: 13.5px;
+  color: var(--ink);
+  outline: none;
+  resize: none;
+  transition: border-color .15s;
+  height: 44px;
+}
+.agent-input:focus { border-color: var(--warm-lt); }
+.agent-input::placeholder { color: var(--ink4); }
+
+.shortcut-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 10px;
+}
+.stag {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 99px;
+  background: var(--cream2);
+  color: var(--ink2);
+  border: none;
+  font-family: inherit;
+  cursor: pointer;
+  transition: background .15s;
+}
+.stag:hover { background: var(--cream3); }
+
+.agent-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.agent-body::-webkit-scrollbar { width: 4px; }
+.agent-body::-webkit-scrollbar-thumb { background: var(--cream3); border-radius: 99px; }
+
+.exec-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.exec-card-head {
+  padding: 14px 18px;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.exec-task-name { font-size: 13px; font-weight: 600; color: rgba(255,255,255,.9); }
+.exec-badge { font-size: 10px; padding: 3px 8px; border-radius: 99px; }
+
+.exec-steps {
+  padding: 16px 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.step-row {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+.step-num {
+  width: 24px; height: 24px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px;
+  font-weight: 700;
+  flex-shrink: 0;
+}
+.step-done { background: rgba(122,158,142,.15); color: var(--sage); }
+.step-run { background: rgba(196,113,94,.15); color: var(--warm); animation: stepPulse 1s infinite; }
+.step-pending { background: var(--cream2); color: var(--ink4); }
+@keyframes stepPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
+
+.step-body {}
+.step-name { font-size: 13px; font-weight: 500; color: var(--ink); margin-bottom: 2px; }
+.step-desc { font-size: 11.5px; color: var(--ink3); }
+
+.log-area {
+  margin: 0 18px 16px;
+  max-height: 220px;
+  overflow: auto;
+  background:
+    radial-gradient(circle at top right, rgba(122,198,123,.08), transparent 28%),
+    linear-gradient(180deg, #07120f, #0a1713 48%, #0d1d18);
+  border: 1px solid rgba(112, 219, 171, .14);
+  border-radius: 10px;
+  padding: 12px 14px;
+  font-family: 'Courier New', monospace;
+  font-size: 11px;
+  color: rgba(208,255,226,.78);
+  line-height: 1.7;
+  box-shadow: inset 0 0 0 1px rgba(112, 219, 171, .05);
+}
+.log-line {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+  animation: fadeIn .25s ease both;
+}
+.log-time { color: rgba(174,255,214,.52); flex-shrink: 0; }
+.log-badge {
+  min-width: 46px;
+  display: inline-flex;
+  justify-content: center;
+  padding: 1px 7px;
+  border-radius: 999px;
+  border: 1px solid currentColor;
+  font-size: 10px;
+  line-height: 1.4;
+  letter-spacing: .04em;
+}
+.log-text {
+  flex: 1;
+  color: rgba(220,255,234,.92);
+  word-break: break-word;
+}
+.log-ok { color: #7BC67B; }
+.log-run { color: #F4C6AE; }
+.log-trace { color: #7BE2B7; }
+.log-url { color: #73D3FF; }
+.log-dom { color: #98F7BF; }
+.log-data { color: #FFD777; }
+.log-hit { color: #E7A3FF; }
+.log-warn { color: #FFB36B; }
+.exec-card-success {
+  background: linear-gradient(180deg, rgba(212,240,234,.72), rgba(255,255,255,.98) 38%);
+  border: 1px solid rgba(74,158,138,.24);
+  box-shadow: 0 18px 42px rgba(74,158,138,.16);
+}
+.exec-card-success .exec-card-head {
+  background: linear-gradient(135deg, #17342d, #275c4f 70%, #347665);
+}
+.status-ticket-success {
+  background: rgba(212,240,234,.95);
+  color: #1c5a4a;
+  box-shadow: inset 0 0 0 1px rgba(74,158,138,.18);
+}
+.exec-receipt {
+  margin: 0 18px 18px;
+  padding: 16px 18px;
+  border-radius: 16px;
+  background:
+    radial-gradient(circle at top right, rgba(122,196,176,.16), transparent 30%),
+    linear-gradient(135deg, rgba(255,255,255,.98), rgba(212,240,234,.9));
+  border: 1px solid rgba(74,158,138,.18);
+  box-shadow: 0 12px 28px rgba(74,158,138,.12);
+  animation: fadeIn .45s ease both;
+}
+.exec-receipt-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+.exec-receipt-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.exec-receipt-subtitle {
+  margin-top: 4px;
+  font-size: 11.5px;
+  color: var(--ink3);
+}
+.exec-receipt-price {
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--pw-teal);
+  white-space: nowrap;
+}
+.exec-receipt-route {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: rgba(255,255,255,.78);
+  border: 1px dashed rgba(74,158,138,.24);
+}
+.exec-receipt-station {
+  flex: 1;
+}
+.exec-receipt-station strong {
+  display: block;
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--ink);
+}
+.exec-receipt-station span {
+  display: block;
+  margin-top: 3px;
+  font-size: 11px;
+  color: var(--ink3);
+}
+.exec-receipt-arrow {
+  font-size: 18px;
+  color: var(--pw-teal);
+  opacity: .8;
+}
+.exec-receipt-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin-top: 12px;
+}
+.exec-receipt-item {
+  padding: 10px 12px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.7);
+}
+.exec-receipt-label {
+  font-size: 10.5px;
+  letter-spacing: .08em;
+  color: var(--ink3);
+  text-transform: uppercase;
+}
+.exec-receipt-value {
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.exec-receipt-foot {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(74,158,138,.18);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.exec-receipt-note {
+  font-size: 11px;
+  color: var(--ink3);
+}
+.exec-receipt-order {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--pw-teal);
+}
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   PAGE 4: HEALTH
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+#page-health {
+  padding: 24px;
+}
+
+.health-grid {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  grid-template-rows: auto 1fr;
+  gap: 16px;
+  max-width: 1200px;
+  margin: 20px auto 0;
+  min-height: calc(100dvh - var(--nav-h) - 48px);
+}
+
+.camera-card {
+  grid-column: 1;
+  grid-row: 1 / 3;
+  background: var(--white);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow);
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.camera-head {
+  padding: 16px 20px;
+  border-bottom: 1px solid var(--cream3);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.camera-title { font-size: 14px; font-weight: 600; color: var(--ink); }
+
+.live-badge {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  background: rgba(239,68,68,.08);
+  color: #EF4444;
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: .08em;
+  padding: 4px 10px;
+  border-radius: 99px;
+}
+.live-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; animation: liveblink .8s infinite; }
+@keyframes liveblink { 0%,100%{opacity:1} 50%{opacity:.2} }
+
+.camera-screen {
+  flex: 0 0 auto;
+  width: 100%;
+  aspect-ratio: 13 / 9;
+  background: #0A0A0A;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.camera-screen video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.camera-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  text-align: center;
+}
+.cam-icon { font-size: 40px; opacity: .25; }
+.camera-placeholder p { font-size: 12px; color: rgba(255,255,255,.25); line-height: 1.5; }
+
+/* Corner brackets */
+.cam-corner {
+  position: absolute;
+  width: 24px; height: 24px;
+  opacity: .35;
+}
+.cam-corner::before, .cam-corner::after { content:''; position:absolute; background: var(--sage-lt); }
+.cam-corner.tl { top: 16px; left: 16px; }
+.cam-corner.tl::before { top:0;left:0;width:2px;height:100%; }
+.cam-corner.tl::after { top:0;left:0;width:100%;height:2px; }
+.cam-corner.tr { top: 16px; right: 16px; }
+.cam-corner.tr::before { top:0;right:0;width:2px;height:100%; }
+.cam-corner.tr::after { top:0;right:0;width:100%;height:2px; }
+.cam-corner.bl { bottom: 16px; left: 16px; }
+.cam-corner.bl::before { bottom:0;left:0;width:2px;height:100%; }
+.cam-corner.bl::after { bottom:0;left:0;width:100%;height:2px; }
+.cam-corner.br { bottom: 16px; right: 16px; }
+.cam-corner.br::before { bottom:0;right:0;width:2px;height:100%; }
+.cam-corner.br::after { bottom:0;right:0;width:100%;height:2px; }
+
+.cam-scan { display:none; }
+.cam-scan-line { display:none; }
+
+.cam-status-bar {
+  padding: 10px 16px;
+  background: rgba(0,0,0,.6);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+}
+.cam-status-text { font-size: 11px; color: rgba(255,255,255,.6); display: flex; align-items: center; gap: 6px; }
+.cam-ok-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--sage-lt); animation: pulse 2s infinite; }
+
+.alert-card {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.alert-stat-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.mini-stat {
+  background: var(--white);
+  border-radius: var(--r-md);
+  padding: 16px;
+  box-shadow: var(--shadow);
+  text-align: center;
+}
+.mini-stat-num { font-size: 26px; font-weight: 700; color: var(--warm); font-family: 'DM Sans', sans-serif; }
+.mini-stat-label { font-size: 11px; color: var(--ink3); margin-top: 2px; }
+
+.alert-list-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+}
+
+.alert-items {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.alert-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px 10px;
+  border-radius: 10px;
+  background: var(--cream2);
+}
+.alert-icon { font-size: 16px; flex-shrink: 0; }
+.alert-body { flex: 1; }
+.alert-name { font-size: 12.5px; font-weight: 500; color: var(--ink2); }
+.alert-time { font-size: 11px; color: var(--ink4); }
+.alert-level {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 99px;
+}
+.level-high { background: rgba(239,68,68,.1); color: #EF4444; }
+.level-med { background: rgba(234,179,8,.1); color: #CA8A04; }
+.level-low { background: rgba(122,158,142,.1); color: var(--sage); }
+
+.tongue-card {
+  grid-column: 2;
+  grid-row: 2;
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  padding: 16px 18px;
+  overflow: hidden;
+}
+
+.tongue-upload {
+  border: 2px dashed var(--cream3);
+  border-radius: var(--r-md);
+  padding: 20px;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color .2s;
+  margin: 12px 0;
+}
+.tongue-upload:hover { border-color: var(--warm-lt); }
+.tongue-upload p { font-size: 12px; color: var(--ink3); }
+.tongue-result {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 12px;
+}
+.tongue-tag {
+  padding: 8px 10px;
+  background: var(--cream2);
+  border-radius: 10px;
+  font-size: 12px;
+}
+.tongue-tag-name { color: var(--ink3); font-size: 10.5px; margin-bottom: 2px; }
+.tongue-tag-val { color: var(--ink); font-weight: 600; }
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   PAGE 5: REPORT
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+#page-report {
+  padding: 24px;
+}
+
+.report-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 40px;
+  margin-bottom: 18px;
+}
+
+.report-title-block h2 {
+  font-size: 20px;
+  font-weight: 600;
+  font-family: 'Noto Serif SC', serif;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.report-title-block p { font-size: 12px; color: var(--ink3); }
+
+.period-tabs {
+  display: flex;
+  gap: 4px;
+  background: var(--cream2);
+  padding: 4px;
+  border-radius: 99px;
+}
+.period-tab {
+  padding: 5px 14px;
+  border-radius: 99px;
+  border: none;
+  font-family: inherit;
+  font-size: 12.5px;
+  font-weight: 500;
+  cursor: pointer;
+  background: transparent;
+  color: var(--ink3);
+  transition: all .15s;
+}
+.period-tab.active { background: var(--white); color: var(--ink); box-shadow: var(--shadow); }
+
+.report-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin-bottom: 18px;
+}
+.kpi-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 18px;
+  box-shadow: var(--shadow);
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.kpi-icon { font-size: 22px; flex-shrink: 0; margin-top: 2px; }
+.kpi-num {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--ink);
+  font-family: 'DM Sans', sans-serif;
+  line-height: 1;
+  margin-bottom: 3px;
+}
+.kpi-label { font-size: 12px; color: var(--ink3); }
+.kpi-delta { font-size: 11px; margin-top: 4px; }
+.delta-up { color: var(--sage); }
+.delta-dn { color: var(--warm); }
+
+.report-charts {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 14px;
+  margin-bottom: 14px;
+}
+
+.chart-card {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  padding: 18px 20px;
+  box-shadow: var(--shadow);
+}
+.chart-card-title {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--ink);
+  margin-bottom: 16px;
+}
+
+.trend-wrap {
+  height: 180px;
+  position: relative;
+}
+
+.donut-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+.donut-canvas-wrap {
+  width: 160px;
+  height: 160px;
+  flex-shrink: 0;
+  position: relative;
+}
+.donut-legend {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.legend-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+}
+.legend-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.legend-name { flex: 1; color: var(--ink2); }
+.legend-pct { color: var(--ink3); font-weight: 600; }
+
+.report-bottom {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+
+.insights-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.insight-item {
+  display: flex;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: var(--r-md);
+  background: var(--cream2);
+  align-items: flex-start;
+}
+.insight-icon { font-size: 18px; flex-shrink: 0; }
+.insight-text { font-size: 12.5px; color: var(--ink2); line-height: 1.5; }
+
+.conv-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 12px;
+}
+.conv-row {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  background: var(--cream2);
+  border-radius: var(--r-sm);
+}
+.conv-emo { font-size: 16px; }
+.conv-body { flex: 1; }
+.conv-title { font-size: 12.5px; font-weight: 500; color: var(--ink2); }
+.conv-meta { font-size: 11px; color: var(--ink4); display: flex; gap: 8px; }
+.conv-score {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--warm);
+  font-family: 'DM Sans', sans-serif;
+}
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   PAGE 6: PROFILE
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+#page-profile {
+  padding: 24px;
+}
+
+.profile-layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 20px;
+  max-width: 1100px;
+  margin: 60px auto 0;
+  min-height: calc(100dvh - var(--nav-h) - 48px);
+}
+
+.profile-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.profile-avatar-card {
+  background: var(--white);
+  border-radius: var(--r-xl);
+  box-shadow: var(--shadow);
+  padding: 28px 20px 20px;
+  text-align: center;
+}
+.pf-avatar {
+  width: 72px; height: 72px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--warm-lt), var(--warm));
+  font-size: 28px;
+  display: flex; align-items: center; justify-content: center;
+  margin: 0 auto 12px;
+  box-shadow: 0 4px 16px rgba(196,113,94,.3);
+}
+.pf-name { font-size: 15px; font-weight: 600; color: var(--ink); }
+.pf-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
+.pf-badges { display: flex; justify-content: center; gap: 6px; margin-top: 12px; flex-wrap: wrap; }
+.pf-badge { font-size: 14px; }
+
+.profile-nav-list {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.pf-nav-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  cursor: pointer;
+  transition: background .15s;
+  border-bottom: 1px solid var(--cream2);
+  font-size: 13px;
+  color: var(--ink2);
+}
+.pf-nav-item:last-child { border-bottom: none; }
+.pf-nav-item:hover { background: var(--cream2); }
+.pf-nav-item.active { background: rgba(196,113,94,.08); color: var(--warm); font-weight: 500; }
+.pf-nav-icon { font-size: 15px; }
+
+.profile-content {}
+
+.pf-panel { display: none; }
+.pf-panel.active { display: block; }
+
+.info-form {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  padding: 22px;
+}
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.form-field {}
+.form-label { font-size: 11.5px; color: var(--ink3); margin-bottom: 5px; font-weight: 500; }
+.form-input {
+  width: 100%;
+  padding: 9px 12px;
+  border: 1.5px solid var(--cream3);
+  border-radius: 10px;
+  font-family: inherit;
+  font-size: 13px;
+  color: var(--ink);
+  background: var(--cream2);
+  outline: none;
+  transition: border-color .15s;
+}
+.form-input:focus { border-color: var(--warm-lt); }
+
+.radar-wrap {
+  width: 180px; height: 180px;
+  margin: 16px auto 0;
+}
+
+.achievement-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+.ach-item {
+  background: var(--white);
+  border-radius: var(--r-md);
+  padding: 16px 12px;
+  text-align: center;
+  box-shadow: var(--shadow);
+}
+.ach-item.locked { opacity: .4; filter: grayscale(1); }
+.ach-icon { font-size: 26px; margin-bottom: 6px; }
+.ach-name { font-size: 11px; color: var(--ink2); font-weight: 500; }
+
+.toggle-list {
+  background: var(--white);
+  border-radius: var(--r-lg);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.toggle-row {
+  display: flex;
+  align-items: center;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--cream2);
+}
+.toggle-row:last-child { border-bottom: none; }
+.toggle-label { flex: 1; }
+.toggle-name { font-size: 13.5px; color: var(--ink); }
+.toggle-desc { font-size: 11.5px; color: var(--ink3); margin-top: 2px; }
+
+.toggle-sw {
+  position: relative;
+  width: 38px; height: 22px;
+  flex-shrink: 0;
+}
+.toggle-sw input { opacity: 0; width: 0; height: 0; }
+.toggle-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 99px;
+  background: var(--cream3);
+  cursor: pointer;
+  transition: background .2s;
+}
+.toggle-track::after {
+  content:'';
+  position: absolute;
+  top: 3px; left: 3px;
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform .2s;
+  box-shadow: 0 1px 4px rgba(0,0,0,.2);
+}
+.toggle-sw input:checked + .toggle-track { background: var(--warm); }
+.toggle-sw input:checked + .toggle-track::after { transform: translateX(16px); }
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   EMOTION MODAL
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+.modal-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(44,36,32,.4);
+  backdrop-filter: blur(6px);
+  z-index: 200;
+  align-items: center;
+  justify-content: center;
+}
+.modal-overlay.open { display: flex; }
+
+.modal-box {
+  background: var(--white);
+  border-radius: var(--r-xl);
+  padding: 24px;
+  width: min(360px, 90vw);
+  box-shadow: var(--shadow-md);
+}
+.modal-title { font-size: 15px; font-weight: 600; color: var(--ink); margin-bottom: 16px; }
+.modal-radar-wrap { width: 200px; height: 200px; margin: 0 auto 16px; }
+.modal-close-btn {
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: var(--r-md);
+  background: var(--cream2);
+  color: var(--ink2);
+  font-family: inherit;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.modal-close-btn:hover { background: var(--cream3); }
+
+/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
+   RESPONSIVE
+鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+@media (max-width: 900px) {
+  .home-hero { grid-template-columns: 1fr; padding: 40px 28px 32px; }
+  .hero-right { display: none; }
+  .home-features { padding: 40px 24px; }
+  .features-grid { grid-template-columns: 1fr 1fr; }
+  .home-stats { grid-template-columns: 1fr 1fr; }
+  .report-kpis { grid-template-columns: 1fr 1fr; }
+  .report-charts { grid-template-columns: 1fr; }
+  .report-bottom { grid-template-columns: 1fr; }
+  .health-grid { grid-template-columns: 1fr; }
+  .camera-card { grid-row: auto; }
+  .profile-layout { grid-template-columns: 1fr; }
+  .profile-sidebar { display: none; }
+  .achievement-grid { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (max-width: 640px) {
+  #nav { overflow-x: auto; gap: 2px; padding: 0 10px; }
+  .nav-logo { font-size: 15px; margin-right: 8px; }
+  .nav-btn { font-size: 12px; padding: 6px 10px; }
+  .nav-btn .icon { display: none; }
+  #page-chat.active { flex-direction: column; }
+  .chat-sidebar { display: none; }
+  .chat-center { padding: 12px; }
+  .chat-panel { width: 100%; border-left: none; border-top: 1px solid var(--cream3); height: 50vh; }
+  .features-grid { grid-template-columns: 1fr; }
+  .home-stats { grid-template-columns: 1fr 1fr; }
+  .achievement-grid { grid-template-columns: repeat(2, 1fr); }
+  #page-agent.active { grid-template-columns: 1fr; }
+  .agent-sidebar { display: none; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="mainNav">
+  <div class="nav-logo" onclick="showPage('home')">蹇冭 <span>鏅鸿兘鎯呮劅闄姢绯荤粺</span></div>
+  <div class="nav-links">
+    <button onclick="showPage('home')" class="active" id="nav-home">棣栭〉</button>
+    <button onclick="window.location.href='brief.html'">馃摪 绠€璁?/button>
+    <button onclick="openCompanionChat()" id="nav-chat">馃挰 闄即瀵硅瘽</button>
+    <button onclick="showPage('agent')" id="nav-agent">馃 鏅鸿兘鍔╂墜</button>
+    <button onclick="showPage('hardware')" id="nav-hardware">馃洝锔?鍋ュ悍瀹堟姢</button>
+    <button onclick="showPage('report')" id="nav-report">馃搳 鎯呯华鎶ュ憡</button>
+    <button onclick="showPage('profile')" id="nav-profile">馃懁 涓汉涓績</button>
+  </div>
+</nav>
+
+<!-- ===================================================
+     PAGE: HOME
+=================================================== -->
+<div class="page active" id="page-home">
+  <section class="home-hero">
+    <div class="hero-content fade-in">
+      <div class="hero-eyebrow">
+        <span class="badge badge-spirit">鎯呮劅闄即</span>
+        <span class="badge badge-digital">鏅鸿兘鍔╂墜</span>
+        <span class="badge badge-physical">鍋ュ悍瀹堟姢</span>
+      </div>
+      <h1 class="hero-title">蹇冭锛岄櫔浼?span class="accent">鏃犲涓嶅湪</span>鐨勪綘</h1>
+      <p class="hero-subtitle">鍩轰簬鍏疯韩鏅鸿兘鐨勪笁缁寸┖闂存儏鎰熼櫔鎶ょ郴缁?鈥?铻嶅悎鏁板瓧浜烘儏鎰熷璇濄€丟UI Agent鏅鸿兘鍔╂墜涓庣‖浠跺仴搴锋劅鐭ワ紝鏋勫缓鍏ㄥ満鏅韩蹇冨畧鎶や綋绯汇€?/p>
+      <div class="hero-btns">
+        <button class="btn btn-primary" onclick="openCompanionChat()">寮€濮嬪璇?/button>
+        <button class="btn btn-outline" onclick="showPage('agent')">浣撻獙 Agent</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="hero-stat-num">3</div>
+          <div class="hero-stat-label">铻嶅悎缁村害</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">24h</div>
+          <div class="hero-stat-label">鍏ㄥぉ瀹堟姢</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">5+</div>
+          <div class="hero-stat-label">鎯呯华缁村害</div>
+        </div>
+        <div>
+          <div class="hero-stat-num">AI</div>
+          <div class="hero-stat-label">椹卞姩寮曟搸</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card-stack">
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Three Worlds -->
+  <section class="three-worlds">
+    <div class="section-header">
+      <div class="section-eyebrow">涓変綅涓€浣撹В鍐虫柟妗?/div>
+      <h2 class="section-title">闄即 路 鍔╂墜 路 瀹堟姢锛屽叏鍩熷叧鎬€</h2>
+      <p class="section-subtitle">蹇冭灏嗘儏鎰熼櫔鎶ゅ欢浼歌嚦鐢熸椿鐨勬瘡涓淮搴︼紝璁╃鎶€鐪熸鎰熺煡銆佺悊瑙ｅ苟鏈嶅姟浜庝綘</p>
+    </div>
+    <div class="worlds-grid">
+      <div class="world-card wc-spirit" onclick="openCompanionChat()">
+        <div class="wc-title">鎯呮劅闄即</div>
+        <p class="wc-desc">閫氳繃澶氭ā鎬佷豢鐪熷紡浜や簰锛屾彁渚涙繁搴︽儏鎰熼櫔浼村拰涓撲笟蹇冪悊鏀寔锛岃鐢ㄦ埛鎰熷彈鍒扮湡瀹炵殑鎯呮劅鑱旂粨涓庢俯鏆栥€?/p>
+        <ul class="wc-features">
+          <li>鏁板瓧浜烘繁搴︽儏鎰熷璇?/li>
+          <li>澶氭ā鎬佹儏缁瘑鍒垎鏋?/li>
+          <li>涓撲笟蹇冪悊鏀寔寤鸿</li>
+          <li>涓€у寲鎯呮劅妗ｆ杩借釜</li>
+        </ul>
+        <button class="wc-btn">杩涘叆瀵硅瘽 鈫?/button>
+      </div>
+      <div class="world-card wc-digital" onclick="showPage('agent')">
+        <div class="wc-title">鏅鸿兘鍔╂墜</div>
+        <p class="wc-desc">鍒╃敤妗岄潰鏅鸿兘浣擄紙濡侽penClaw锛夛紝鍗忓姪鐢ㄦ埛楂樻晥瀹屾垚鏁板瓧浠诲姟锛屼赴瀵屾暟瀛楃敓娲讳綋楠岋紝閲婃斁绮惧姏鍏虫敞鍐呭績銆?/p>
+        <ul class="wc-features">
+          <li>鑷劧璇█浠诲姟涓嬭揪</li>
+          <li>GUI Agent鑷姩鍖栨墽琛?/li>
+          <li>璺ㄥ簲鐢ㄦ祦绋嬬紪鎺?/li>
+          <li>浠诲姟鎵ц鍙鍖栧洖鏀?/li>
+        </ul>
+        <button class="wc-btn">浣撻獙鍔╂墜 鈫?/button>
+      </div>
+      <div class="world-card wc-physical" onclick="showPage('hardware')">
+        <div class="wc-title">鍋ュ悍瀹堟姢</div>
+        <p class="wc-desc">鍊熷姪鏅鸿兘纭欢鎰熺煡鐢ㄦ埛韬綋鐘舵€侊紝鎻愪緵鐗╃悊灞傞潰鐨勫疄鏃跺叧鎬€涓庢湇鍔★紝瀹堟姢姣忎竴鍒荤殑浜鸿韩瀹夊叏涓庡仴搴枫€?/p>
+        <ul class="wc-features">
+          <li>鎽斿€掓娴嬩笌绱ф€ュ憡璀?/li>
+          <li>AI鑸岃瘖涓尰鍋ュ悍鍒嗘瀽</li>
+          <li>浣撳緛鏁版嵁瀹炴椂鐩戞祴</li>
+          <li>绱ф€ヨ仈绯讳汉涓€閿€氱煡</li>
+        </ul>
+        <button class="wc-btn">鏌ョ湅瀹堟姢 鈫?/button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="home-features">
+    <div class="section-header">
+      <div class="section-eyebrow">鏍稿績鎶€鏈?/div>
+      <h2 class="section-title">鎶€鏈┍鍔紝娓╁害涓哄厛</h2>
+    </div>
+    <div class="features-grid">
+      <div class="feat-card" onclick="openCompanionChat()" style="cursor: pointer;">
+        <div class="feat-icon">馃</div>
+        <div class="feat-title">澶氭ā鎬佹儏鎰熻绠?/div>
+        <p class="feat-desc">铻嶅悎璇煶銆佹枃鏈€佽〃鎯呬笁閫氶亾鎯呮劅淇″彿锛屽疄鏃剁悊瑙ｇ敤鎴锋儏缁姸鎬侊紝鎻愪緵绮惧噯鍝嶅簲銆?/p>
+      </div>
+      <div class="feat-card" onclick="openCompanionChat()" style="cursor: pointer;">
+        <div class="feat-icon">馃幁</div>
+        <div class="feat-title">鏁板瓧浜轰氦浜掑紩鎿?/div>
+        <p class="feat-desc">鍩轰簬娣卞害瀛︿範鐨勬暟瀛椾汉褰㈣薄椹卞姩锛屽疄鐜拌嚜鐒舵祦鐣呯殑闈㈤儴琛ㄦ儏涓庤偄浣撹瑷€鍚屾銆?/p>
+      </div>
+      <div class="feat-card" onclick="showPage('agent')" style="cursor: pointer;">
+        <div class="feat-icon">鈿?/div>
+        <div class="feat-title">GUI Agent 缂栨帓</div>
+        <p class="feat-desc">鍩轰簬瑙嗚鐞嗚В鐨凣UI鎿嶆帶鑳藉姏锛岀悊瑙ｅ睆骞曞唴瀹瑰苟鑷富瀹屾垚澶嶆潅鎿嶄綔浠诲姟銆?/p>
+      </div>
+      <div class="feat-card" onclick="showPage('hardware')" style="cursor: pointer;">
+        <div class="feat-icon">馃摗</div>
+        <div class="feat-title">杈圭紭璁＄畻鎰熺煡</div>
+        <p class="feat-desc">鎽斿€掓娴嬬畻娉曢儴缃蹭簬绔晶锛屾绉掔骇鍝嶅簲锛屾棤闇€浜戠锛屼繚闅滈殣绉佸畨鍏ㄣ€?/p>
+      </div>
+      <div class="feat-card" onclick="showPage('hardware')" style="cursor: pointer;">
+        <div class="feat-icon">馃憛</div>
+        <div class="feat-title">AI 涓尰鑸岃瘖</div>
+        <p class="feat-desc">鍩轰簬璁＄畻鏈鸿瑙夌殑鑸岃嫈棰滆壊銆佸舰鎬佸垎鏋愶紝鎻愪緵涓尰浣撹川杈ㄨ瘑涓庡仴搴峰缓璁€?/p>
+      </div>
+      <div class="feat-card" onclick="showPage('report')" style="cursor: pointer;">
+        <div class="feat-icon">馃敆</div>
+        <div class="feat-title">涓夊煙鏁版嵁铻嶅悎</div>
+        <p class="feat-desc">绮剧銆佹暟瀛椼€佺墿鐞嗕笁鍩熸暟鎹繁搴﹁瀺鍚堬紝鏋勫缓鍏ㄦ伅鐢ㄦ埛鐢诲儚锛屾彁渚涗釜鎬у寲鏈嶅姟銆?/p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="home-cta">
+    <h2>寮€鍚叏澶╁€欐櫤鑳介櫔鎶や箣鏃?/h2>
+    <p>璁╁績璇垚涓烘偍鐢熸椿涓殑鎯呮劅浼欎即銆佹櫤鑳藉姪鎵嬩笌鍋ュ悍瀹堟姢鑰?/p>
+    <div class="cta-btns">
+      <button class="btn btn-white" onclick="openCompanionChat()">寮€濮嬪璇?/button>
+      <button class="btn btn-outline-white" onclick="showPage('profile')">涓汉涓績</button>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="footer-logo">蹇冭</div>
+    <p>鍩轰簬鍏疯韩鏅鸿兘鐨勪笁缁寸┖闂存儏鎰熼櫔鎶ょ郴缁?/p>
+    <div class="footer-links">
+      <a href="#">鍏充簬鎴戜滑</a>
+      <a href="#">浣跨敤鎸囧崡</a>
+      <a href="#">闅愮鏀跨瓥</a>
+      <a href="#">鑱旂郴鎴戜滑</a>
+    </div>
+    <p>漏 2024 蹇冭鏅鸿兘. 淇濈暀鎵€鏈夋潈鍒?/p>
+  </footer>
+
+</div><!-- /page-home -->
+
+  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: CHAT
+  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
+  <div class="page" id="page-chat">
+
+    <!-- History Sidebar -->
+    <div class="chat-sidebar">
+      <div class="sidebar-head">
+        <span class="sidebar-title">瀵硅瘽璁板綍</span>
+        <button class="icon-btn" onclick="addHistory()" title="鏂板缓">锛?/button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="hist-item active" onclick="selectHist(this)">
+          <div class="hist-name">鍏充簬鏈€杩戠殑鍘嬪姏</div>
+          <div class="hist-meta"><span class="hist-time">浠婂ぉ 14:32</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">骞抽潤</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">瀹朵汉鐩稿闂</div>
+          <div class="hist-meta"><span class="hist-time">鏄ㄥぉ</span><span class="hist-emo" style="background:rgba(196,113,94,.1);color:var(--warm)">鎰夋偊</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">宸ヤ綔涓殑鍥版儜</div>
+          <div class="hist-meta"><span class="hist-time">3澶╁墠</span><span class="hist-emo" style="background:rgba(234,179,8,.1);color:#CA8A04">鎬濊檻</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">瀵规湭鏉ョ殑鏈熷緟</div>
+          <div class="hist-meta"><span class="hist-time">涓婂懆</span><span class="hist-emo" style="background:rgba(155,142,196,.1);color:var(--mauve)">鏈熷緟</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Digital Human Center -->
+    <div class="chat-center">
+      <div class="dh-label"><span class="live-dot"></span>鏁板瓧浜哄疄鏃剁敾闈?/div>
+
+      <div class="dh-screen">
+        <video id="female-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
+        <video id="male-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
+        <div class="dh-placeholder" id="dh-placeholder">
+          <div class="dh-icon">馃</div>
+          <p>鏁板瓧浜虹敾闈㈡帴鍏ュ尯<br><span style="font-size:9px;opacity:.6">鏇挎崲涓?&lt;video&gt; 鏍囩鎺ュ叆瀹炴椂娴?/span></p>
+        </div>
+        <div class="dh-corner-badge">READY</div>
+      </div>
+
+      <div class="emo-badge-row">
+        <div class="emo-badge" onclick="openModal()">馃幁 鎰夋偊 路 72 <span style="font-size:10px;color:var(--ink4)">鈻?/span></div>
+        <div class="emo-badge" style="cursor:default">馃帳 <span id="micStatus" style="font-size:11px;color:var(--ink3)">寰呮満涓?/span></div>
+      </div>
+
+      <div style="display: flex; gap: 10px; margin-top: 16px;">
+        <button class="btn btn-primary" onclick="selectDigitalHuman('female')">濂虫暟瀛椾汉</button>
+        <button class="btn btn-outline" onclick="selectDigitalHuman('male')">鐢锋暟瀛椾汉</button>
+      </div>
+    </div>
+
+    <!-- Chat Panel -->
+    <div class="chat-panel">
+      <div class="chat-head">
+        <div>
+          <div class="chat-head-title">涓庡績璇璇?/div>
+          <div class="chat-head-sub">浠婃棩绗?3 娆″璇?路 宸叉寔缁?12 鍒嗛挓</div>
+        </div>
+      </div>
+
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg ai">
+          <div class="msg-avatar ai">馃</div>
+          <div class="msg-bubble">浣犲ソ锛佹垜鏄績璇紝浠婂ぉ鏈変粈涔堟兂鑱婄殑鍚楋紵馃槉</div>
+        </div>
+        <div class="msg user">
+          <div class="msg-avatar user-av">馃懁</div>
+          <div class="msg-bubble">鏈€杩戝伐浣滃帇鍔涙湁鐐瑰ぇ锛岀潯鐪犱篃涓嶅お濂?/div>
+        </div>
+        <div class="msg ai">
+          <div class="msg-avatar ai">馃</div>
+          <div class="msg-bubble">鎴戠悊瑙ｏ紝宸ヤ綔鍘嬪姏褰卞搷鐫＄湢鏄緢甯歌鐨勩€傝兘鍛婅瘔鎴戞槸浠€涔堣浣犳劅鍒扮壒鍒揣寮犲悧锛?/div>
+        </div>
+      </div>
+
+      <div class="quick-chips">
+        <button class="chip" onclick="sendChip(this)">馃様 蹇冩儏涓嶅ソ</button>
+        <button class="chip" onclick="sendChip(this)">馃挱 鎯冲€捐瘔</button>
+        <button class="chip" onclick="sendChip(this)">馃槾 鐫＄湢鍥版壈</button>
+        <button class="chip" onclick="sendChip(this)">馃専 鍒嗕韩濂戒簨</button>
+      </div>
+
+      <div class="chat-input-row">
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="璇煶杈撳叆">馃帳</button>
+        <input class="chat-input" id="chatInput" placeholder="璇寸偣浠€涔堚€? onkeydown="if(event.key==='Enter')sendMsg()" />
+        <button class="send-btn" onclick="sendMsg()">鈫?/button>
+      </div>
+    </div>
+
+  </div><!-- /page-chat -->
+
+  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: AGENT
+  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
+  <div class="page" id="page-agent">
+
+    <div class="agent-sidebar">
+      <div class="agent-sidebar-head">
+        <div class="agent-sidebar-title">浠诲姟鍘嗗彶</div>
+        <div class="agent-sidebar-sub">杩?7 澶╁叡 12 鏉′换鍔?/div>
+      </div>
+      <div class="task-list">
+        <div class="task-item active">
+          <div class="task-name">鏌ヨ鏄庡ぉ澶╂皵骞舵彁閱掑嚭琛?/div>
+          <div class="task-meta"><span class="task-time">浠婂ぉ 14:20</span><span class="task-status status-run">杩涜涓?/span></div>
+        </div>
+        <div class="task-item">
+          <div class="task-name">甯垜璁粖鏅氱殑澶栧崠</div>
+          <div class="task-meta"><span class="task-time">浠婂ぉ 12:05</span><span class="task-status status-done">宸插畬鎴?/span></div>
+        </div>
+        <div class="task-item">
+          <div class="task-name">棰勭害鍛ㄤ簲鐨勭ぞ鍖哄尰闄?/div>
+          <div class="task-meta"><span class="task-time">鏄ㄥぉ</span><span class="task-status status-done">宸插畬鎴?/span></div>
+        </div>
+        <div class="task-item">
+          <div class="task-name">鍙戦€佽妭鏃ラ棶鍊欑粰瀹朵汉</div>
+          <div class="task-meta"><span class="task-time">3澶╁墠</span><span class="task-status status-done">宸插畬鎴?/span></div>
+        </div>
+        <div class="task-item">
+          <div class="task-name">鏌ョ湅閾惰璐﹀崟</div>
+          <div class="task-meta"><span class="task-time">4澶╁墠</span><span class="task-status status-done">宸插畬鎴?/span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="agent-main">
+      <div class="agent-head">
+        <div class="agent-head-title">馃 GUI Agent 路 鏅鸿兘浠诲姟鍔╂墜</div>
+        <div class="agent-head-sub">鐢ㄨ嚜鐒惰瑷€鎻忚堪浠诲姟锛屽績璇嚜鍔ㄥ畬鎴愮晫闈㈡搷浣?/div>
+      </div>
+
+      <div class="agent-input-area">
+        <div class="agent-input-wrap">
+          <input class="agent-input" id="agentInput" placeholder="鍛婅瘔鎴戜綘鎯冲仛浠€涔堬紝姣斿锛氬府鎴戞煡鏄庡ぉ鐨勫ぉ姘斺€? />
+          <button class="btn btn-primary" onclick="runAgent()">鎵ц 鈫?/button>
+        </div>
+        <div class="shortcut-tags">
+          <button class="stag" onclick="fillAgent(this)">馃嵄 鐐瑰鍗?/button>
+          <button class="stag" onclick="fillAgent(this)">馃彞 棰勭害鎸傚彿</button>
+          <button class="stag" onclick="fillAgent(this)">鈽侊笍 鏌ヨ澶╂皵</button>
+          <button class="stag" onclick="fillAgent(this)">馃拰 鍙戦€佹秷鎭?/button>
+          <button class="stag" onclick="fillAgent(this)">馃棐 鏌ョ湅鏃ュ巻</button>
+          <button class="stag" onclick="fillAgent(this)">馃洅 缃戜笂璐墿</button>
+        </div>
+      </div>
+
+      <div class="agent-body" id="agentBody">
+
+        <div class="exec-card">
+          <div class="exec-card-head">
+            <span class="exec-task-name">鈿?鏌ヨ鏄庡ぉ澶╂皵骞舵彁閱掑嚭琛?/span>
+            <span class="exec-badge status-run">杩涜涓?/span>
+          </div>
+
+          <div class="exec-steps">
+            <div class="step-row">
+              <div class="step-num step-done">鉁?/div>
+              <div class="step-body">
+                <div class="step-name">瑙ｆ瀽浠诲姟鎰忓浘</div>
+                <div class="step-desc">璇嗗埆涓恒€屽ぉ姘旀煡璇?+ 鍑鸿鎻愰啋銆嶏紝瀹氫綅鐩爣搴旂敤锛氬ぉ姘斻€佹棩鍘?/div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num step-done">鉁?/div>
+              <div class="step-body">
+                <div class="step-name">鎵撳紑澶╂皵搴旂敤</div>
+                <div class="step-desc">宸插畾浣嶅ぉ姘?App锛岀偣鍑汇€屾槑澶┿€嶆爣绛捐幏鍙栭鎶?/div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num step-run">鉄?/div>
+              <div class="step-body">
+                <div class="step-name">鐢熸垚鍑鸿寤鸿</div>
+                <div class="step-desc">鏄庡ぉ灏忛洦锛屾皵娓?14鈥?0掳C锛屾鍦ㄧ敓鎴愮┛琛ｅ拰鍑鸿鎻愰啋鈥?/div>
+              </div>
+            </div>
+            <div class="step-row">
+              <div class="step-num step-pending">4</div>
+              <div class="step-body">
+                <div class="step-name">鍐欏叆鏃ュ巻鎻愰啋</div>
+                <div class="step-desc">绛夊緟鐢熸垚瀹屾垚鍚庤嚜鍔ㄥ垱寤烘彁閱掍簨浠?/div>
+              </div>
+            </div>
+          </div>
+
+          <div class="log-area">
+            <div class="log-line"><span class="log-time">14:20:06</span><span class="log-run">[RUN]</span><span>鐢熸垚鍑鸿寤鸿涓€?/span></div>
+          </div>
+        </div>
+
+        <div class="exec-card" style="opacity:.6">
+          <div class="exec-card-head">
+            <span class="exec-task-name">鉁?甯垜璁粖鏅氱殑澶栧崠</span>
+            <span class="exec-badge status-done">宸插畬鎴?/span>
+          </div>
+          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸叉垚鍔熷湪缇庡洟鐐瑰崟锛氱暘鑼勯浮铔嬬洊楗?脳 1锛岄璁?18:40 閫佽揪銆?/div>
+        </div>
+
+        <div class="exec-card" style="opacity:.6">
+          <div class="exec-card-head">
+            <span class="exec-task-name">鉁?棰勭害鍛ㄤ簲鐨勭ぞ鍖哄尰闄?/span>
+            <span class="exec-badge status-done">宸插畬鎴?/span>
+          </div>
+          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸茶仈绯荤ぞ鍖哄尰闄㈡寕鍙峰彴锛屾垚鍔熼绾﹀懆浜斾笂鍗?10:00 涓撳鍙枫€?/div>
+        </div>
+
+        <div class="exec-card" style="opacity:.6">
+          <div class="exec-card-head">
+            <span class="exec-task-name">鉁?鍙戦€佽妭鏃ラ棶鍊欑粰瀹朵汉</span>
+            <span class="exec-badge status-done">宸插畬鎴?/span>
+          </div>
+          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸查€氳繃寰俊缇ゅ彂绁濈璇苟闄勪笂瀹跺涵鍚堢収锛屽浜哄凡鍥炲鈥滄敹鍒帮紝澶俯鏆栦簡鈥濄€?/div>
+        </div>
+
+        <div class="exec-card" style="opacity:.6">
+          <div class="exec-card-head">
+            <span class="exec-task-name">鉁?鏌ョ湅閾惰璐﹀崟</span>
+            <span class="exec-badge status-done">宸插畬鎴?/span>
+          </div>
+          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸叉墦寮€閾惰 APP锛岀瓫閫夋湰鏈堣处鍗曞苟鐢熸垚鏀嚭鍒嗘瀽鎶ュ憡銆?/div>
+        </div>
+
+      </div>
+    </div>
+
+  </div><!-- /page-agent -->
+
+  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: HARDWARE
+  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
+  <div class="page" id="page-hardware">
+    <div class="health-grid">
+
+      <!-- Camera card -->
+      <div class="camera-card">
+        <div class="camera-head">
+          <div class="camera-title">馃摗 鎽斿€掓娴?路 瀹炴椂鐩戞帶</div>
+          <div class="live-badge"><span class="live-badge-dot"></span>LIVE</div>
+        </div>
+        <div class="camera-screen">
+          <div class="cam-corner tl"></div>
+          <div class="cam-corner tr"></div>
+          <div class="cam-corner bl"></div>
+          <div class="cam-corner br"></div>
+          <video src="摔倒检测.mp4" width="100%" height="100%" autoplay muted loop style="object-fit:cover;"></video>
+          <div class="cam-status-bar">
+            <div class="cam-status-text"><span class="cam-ok-dot"></span>AI 妫€娴嬪凡灏辩华 路 鏈娴嬪埌寮傚父</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.3)">1920脳1080 路 30fps</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Alert stats -->
+      <div class="alert-card">
+        <div class="alert-stat-row">
+          <div class="mini-stat">
+            <div class="mini-stat-num">0</div>
+            <div class="mini-stat-label">浠婃棩鍛婅</div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-num">3</div>
+            <div class="mini-stat-label">鏈湀鍛婅</div>
+          </div>
+        </div>
+
+        <div class="alert-list-card">
+          <div class="section-label">鍘嗗彶鍛婅璁板綍</div>
+          <div class="alert-items">
+            <div class="alert-row">
+              <div class="alert-icon">鈿狅笍</div>
+              <div class="alert-body">
+                <div class="alert-name">鐤戜技鎽斿€?/div>
+                <div class="alert-time">2024-03-15 路 瀹㈠巺 路 宸茬‘璁ゅ畨鍏?/div>
+              </div>
+              <div class="alert-level level-med">涓骇</div>
+            </div>
+            <div class="alert-row">
+              <div class="alert-icon">馃敶</div>
+              <div class="alert-body">
+                <div class="alert-name">纭鎽斿€掑憡璀?/div>
+                <div class="alert-time">2024-03-08 路 鍗敓闂?路 宸查€氱煡瀹朵汉</div>
+              </div>
+              <div class="alert-level level-high">绱ф€?/div>
+            </div>
+            <div class="alert-row">
+              <div class="alert-icon">鈩癸笍</div>
+              <div class="alert-body">
+                <div class="alert-name">寮傚父濮挎€佹彁绀?/div>
+                <div class="alert-time">2024-02-27 路 鍗у 路 璇姤</div>
+              </div>
+              <div class="alert-level level-low">浣庣骇</div>
+            </div>
+          </div>
+          <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:12px" onclick="alert('妯℃嫙鎽斿€掑憡璀﹁Е鍙戯紒')">馃И 妯℃嫙鍛婅娴嬭瘯</button>
+        </div>
+      </div>
+
+      <!-- Tongue diagnosis -->
+      <div class="tongue-card">
+        <div class="section-label">馃尶 AI 鑸岃瘖鍒嗘瀽</div>
+        <div class="tongue-upload" onclick="handleTongueClick()">
+          <div style="font-size:28px;margin-bottom:6px">馃摲</div>
+          <p>鐐瑰嚮鎷嶆憚鎴栦笂浼犺垖鑻斿浘鐗?br>AI 绉掔骇鍒嗘瀽浣撹川鐘舵€?/p>
+        </div>
+        <div id="tongueResult" style="display:none">
+          <div class="tongue-result">
+            <div class="tongue-tag"><div class="tongue-tag-name">鑸岃壊</div><div class="tongue-tag-val">娣＄孩</div></div>
+            <div class="tongue-tag"><div class="tongue-tag-name">鑸岃嫈</div><div class="tongue-tag-val">钖勭櫧鑻?/div></div>
+            <div class="tongue-tag"><div class="tongue-tag-name">浣撹川</div><div class="tongue-tag-val">姘旇櫄璐?/div></div>
+            <div class="tongue-tag"><div class="tongue-tag-name">璋冪悊</div><div class="tongue-tag-val">鍋ヨ劸鐩婃皵</div></div>
+          </div>
+          <div style="margin-top:10px;padding:10px 12px;background:rgba(122,158,142,.08);border-radius:10px;font-size:12px;color:var(--ink2);line-height:1.6">
+            馃挕 寤鸿閫傚綋澧炲姞灞辫嵂銆佺孩鏋ｇ瓑鍋ヨ劸椋熸潗锛岄伩鍏嶈繃搴﹀姵绱紝淇濊瘉鍏呰冻鐫＄湢銆?          </div>
+        </div>
+      </div>
+
+    </div>
+  </div><!-- /page-hardware -->
+
+  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: REPORT
+  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
+  <div class="page" id="page-report">
+
+    <div class="report-header">
+      <div class="report-title-block">
+        <h2>鎯呯华鍋ュ悍鎶ュ憡</h2>
+        <p>鍩轰簬瀵硅瘽涓庤涓虹殑澶氱淮鍒嗘瀽</p>
+      </div>
+      <div class="period-tabs">
+        <button class="period-tab active" onclick="setPeriod(this,'week')">鏈懆</button>
+        <button class="period-tab" onclick="setPeriod(this,'month')">鏈湀</button>
+        <button class="period-tab" onclick="setPeriod(this,'quarter')">杩戜笁鏈?/button>
+      </div>
+    </div>
+
+    <div class="report-kpis">
+      <div class="kpi-card"><div class="kpi-icon">馃槉</div><div><div class="kpi-num">82</div><div class="kpi-label">骞冲潎骞哥鎰?/div><div class="kpi-delta delta-up">鈫?5.2 杈冧笂鍛?/div></div></div>
+      <div class="kpi-card"><div class="kpi-icon">馃挰</div><div><div class="kpi-num">24</div><div class="kpi-label">鏈懆瀵硅瘽娆℃暟</div><div class="kpi-delta delta-up">鈫?3 杈冧笂鍛?/div></div></div>
+      <div class="kpi-card"><div class="kpi-icon">鈴?/div><div><div class="kpi-num">3.2h</div><div class="kpi-label">绱闄即鏃堕暱</div><div class="kpi-delta delta-up">鈫?0.8h</div></div></div>
+      <div class="kpi-card"><div class="kpi-icon">馃専</div><div><div class="kpi-num">68%</div><div class="kpi-label">绉瀬鎯呯华鍗犳瘮</div><div class="kpi-delta delta-dn">鈫?2% 杈冧笂鍛?/div></div></div>
+    </div>
+
+    <div class="report-charts">
+      <div class="chart-card">
+        <div class="chart-card-title">鎯呯华瓒嬪娍</div>
+        <div class="trend-wrap"><canvas id="trendChart"></canvas></div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">鎯呯华鍒嗗竷</div>
+        <div class="donut-wrap">
+          <div class="donut-canvas-wrap"><canvas id="donutChart"></canvas></div>
+          <div class="donut-legend" id="donutLegend"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="report-bottom">
+      <div class="chart-card">
+        <div class="chart-card-title">馃挕 鏅鸿兘娲炲療</div>
+        <div class="insights-list">
+          <div class="insight-item"><div class="insight-icon">馃搱</div><div class="insight-text">鏈懆鎯呯华鏁翠綋鍚戝ソ锛屽懆涓夊嚭鐜版槑鏄句綆璋凤紝鍙兘涓庡伐浣滃帇鍔涙湁鍏炽€?/div></div>
+          <div class="insight-item"><div class="insight-icon">馃寵</div><div class="insight-text">浣犻€氬父鍦ㄦ櫄涓?9鈥?0 鐐规儏缁渶浣筹紝寤鸿鍦ㄦ鏃舵杩涜鏀炬澗瀵硅瘽銆?/div></div>
+          <div class="insight-item"><div class="insight-icon">馃尶</div><div class="insight-text">鏈懆鐒﹁檻鎸囨暟鏈夋墍涓嬮檷锛岄櫔浼村璇濆鎯呯华璋冭妭鏁堟灉鏄捐憲銆?/div></div>
+        </div>
+      </div>
+
+      <div class="chart-card">
+        <div class="chart-card-title">馃搵 杩戞湡瀵硅瘽</div>
+        <div class="conv-list">
+          <div class="conv-row"><div class="conv-emo">馃槉</div><div class="conv-body"><div class="conv-title">鍏充簬宸ヤ綔鍘嬪姏鐨勫璇?/div><div class="conv-meta"><span>浠婂ぉ</span><span>18鍒嗛挓</span></div></div><div class="conv-score">88</div></div>
+          <div class="conv-row"><div class="conv-emo">馃槍</div><div class="conv-body"><div class="conv-title">瀹朵汉鐩稿闂</div><div class="conv-meta"><span>鏄ㄥぉ</span><span>12鍒嗛挓</span></div></div><div class="conv-score">74</div></div>
+          <div class="conv-row"><div class="conv-emo">馃</div><div class="conv-body"><div class="conv-title">瀵规湭鏉ョ殑鍥版儜</div><div class="conv-meta"><span>3澶╁墠</span><span>25鍒嗛挓</span></div></div><div class="conv-score">62</div></div>
+          <div class="conv-row"><div class="conv-emo">馃槃</div><div class="conv-body"><div class="conv-title">鍒嗕韩浠婃棩寮€蹇冧簨</div><div class="conv-meta"><span>4澶╁墠</span><span>8鍒嗛挓</span></div></div><div class="conv-score">95</div></div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page-report -->
+
+  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: PROFILE
+  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
+  <div class="page" id="page-profile">
+    <div class="profile-layout">
+
+      <div class="profile-sidebar">
+        <div class="profile-avatar-card">
+          <div class="pf-avatar">馃槉</div>
+          <div class="pf-name">灏忔潕</div>
+          <div class="pf-sub">鍔犲叆 42 澶?路 姘旇櫄璐ㄤ綋璐?/div>
+          <div class="pf-badges">
+            <span class="pf-badge" title="杩炵画鎵撳崱">馃敟</span>
+            <span class="pf-badge" title="鎯呯华杈句汉">馃幁</span>
+            <span class="pf-badge" title="鍋ュ悍鍏堥攱">馃尶</span>
+          </div>
+        </div>
+
+        <div class="profile-nav-list">
+          <div class="pf-nav-item active" onclick="showPfPanel('info',this)"><span class="pf-nav-icon">馃懁</span>涓汉璧勬枡</div>
+          <div class="pf-nav-item" onclick="showPfPanel('hist',this)"><span class="pf-nav-icon">馃挰</span>瀵硅瘽鍘嗗彶</div>
+          <div class="pf-nav-item" onclick="showPfPanel('ach',this)"><span class="pf-nav-icon">馃弲</span>鎴戠殑鎴愬氨</div>
+          <div class="pf-nav-item" onclick="showPfPanel('pref',this)"><span class="pf-nav-icon">鈿欙笍</span>鍋忓ソ璁剧疆</div>
+          <div class="pf-nav-item" onclick="showPfPanel('dh',this)"><span class="pf-nav-icon">馃</span>鏁板瓧浜洪厤缃?/div>
+        </div>
+      </div>
+
+      <div class="profile-content">
+
+        <!-- Info Panel -->
+        <div class="pf-panel active" id="pfpanel-info">
+          <div class="info-form">
+            <div class="section-label" style="margin-bottom:18px">鍩烘湰淇℃伅</div>
+            <div class="form-grid">
+              <div class="form-field"><div class="form-label">鏄电О</div><input class="form-input" value="灏忔潕" /></div>
+              <div class="form-field"><div class="form-label">骞撮緞</div><input class="form-input" value="67" /></div>
+              <div class="form-field"><div class="form-label">鑱旂郴鐢佃瘽</div><input class="form-input" value="138****8888" /></div>
+              <div class="form-field"><div class="form-label">绱ф€ヨ仈绯讳汉</div><input class="form-input" value="鏉庢槑锛堝効瀛愶級" /></div>
+            </div>
+            <div class="section-label" style="margin-top:22px;margin-bottom:8px">鎯呮劅鐢诲儚</div>
+            <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+            <button class="btn btn-primary" style="margin-top:16px">淇濆瓨淇敼</button>
+          </div>
+        </div>
+
+        <!-- Hist Panel -->
+        <div class="pf-panel" id="pfpanel-hist">
+          <div class="card">
+            <div class="section-label">鍏ㄩ儴瀵硅瘽璁板綍</div>
+            <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+              <input class="form-input" style="flex:1;min-width:160px" placeholder="鎼滅储鍏抽敭璇嶁€? />
+              <select class="form-input" style="width:120px"><option>鍏ㄩ儴鎯呯华</option><option>鎰夋偊</option><option>骞抽潤</option><option>鐒﹁檻</option></select>
+            </div>
+            <div class="conv-list">
+              <div class="conv-row"><div class="conv-emo">馃槉</div><div class="conv-body"><div class="conv-title">鍏充簬宸ヤ綔鍘嬪姏鐨勫璇?/div><div class="conv-meta"><span>2024-03-18</span><span>18鍒嗛挓</span><span style="color:var(--sage)">鎰夋偊</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+              <div class="conv-row"><div class="conv-emo">馃槍</div><div class="conv-body"><div class="conv-title">瀹朵汉鐩稿闂</div><div class="conv-meta"><span>2024-03-17</span><span>12鍒嗛挓</span><span style="color:var(--sage)">骞抽潤</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+              <div class="conv-row"><div class="conv-emo">馃</div><div class="conv-body"><div class="conv-title">瀵规湭鏉ョ殑鍥版儜</div><div class="conv-meta"><span>2024-03-15</span><span>25鍒嗛挓</span><span style="color:#CA8A04">鎬濊檻</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Achievement Panel -->
+        <div class="pf-panel" id="pfpanel-ach">
+          <div class="card">
+            <div class="section-label">鎴戠殑鎴愬氨</div>
+            <div class="achievement-grid">
+              <div class="ach-item"><div class="ach-icon">馃敟</div><div class="ach-name">7鏃ヨ繛缁?/div></div>
+              <div class="ach-item"><div class="ach-icon">馃挰</div><div class="ach-name">棣栨瀵硅瘽</div></div>
+              <div class="ach-item"><div class="ach-icon">馃尶</div><div class="ach-name">鑸岃瘖鍒濇帰</div></div>
+              <div class="ach-item"><div class="ach-icon">馃槃</div><div class="ach-name">鎯呯华杈句汉</div></div>
+              <div class="ach-item"><div class="ach-icon">馃</div><div class="ach-name">AI鍔╂墜</div></div>
+              <div class="ach-item"><div class="ach-icon">馃摗</div><div class="ach-name">瀹夊叏瀹堟姢</div></div>
+              <div class="ach-item locked"><div class="ach-icon">馃弳</div><div class="ach-name">鏈堝害杈句汉</div></div>
+              <div class="ach-item locked"><div class="ach-icon">猸?/div><div class="ach-name">鎯呮劅涓撳</div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pref Panel -->
+        <div class="pf-panel" id="pfpanel-pref">
+          <div class="toggle-list">
+            <div class="toggle-row">
+              <div class="toggle-label"><div class="toggle-name">姣忔棩鎯呯华鎺ㄩ€?/div><div class="toggle-desc">姣忓ぉ鏃╂櫒鏀跺埌鎯呯华鏃╂姤涓庤皟鐞嗗缓璁?/div></div>
+              <label class="toggle-sw"><input type="checkbox" checked /><div class="toggle-track"></div></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-label"><div class="toggle-name">鍛婅閫氱煡</div><div class="toggle-desc">鎽斿€掓娴嬭Е鍙戞椂閫氱煡绱ф€ヨ仈绯讳汉</div></div>
+              <label class="toggle-sw"><input type="checkbox" checked /><div class="toggle-track"></div></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-label"><div class="toggle-name">璇煶浜や簰</div><div class="toggle-desc">瀵硅瘽鏃朵紭鍏堜娇鐢ㄨ闊宠緭鍏?/div></div>
+              <label class="toggle-sw"><input type="checkbox" /><div class="toggle-track"></div></label>
+            </div>
+            <div class="toggle-row">
+              <div class="toggle-label"><div class="toggle-name">娣辫壊妯″紡</div><div class="toggle-desc">澶滈棿鑷姩鍒囨崲娣辫壊鐣岄潰锛堝紑鍙戜腑锛?/div></div>
+              <label class="toggle-sw"><input type="checkbox" /><div class="toggle-track"></div></label>
+            </div>
+          </div>
+        </div>
+
+        <!-- DH Panel -->
+        <div class="pf-panel" id="pfpanel-dh">
+          <div class="card">
+            <div class="section-label">閫夋嫨鏁板瓧浜哄舰璞?/div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+              <div style="border:2px solid var(--warm);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer">
+                <div style="font-size:28px;margin-bottom:6px">馃</div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">鏆栨殩</div>
+                <div style="font-size:10px;color:var(--ink3)">娓╂煍鑰愬績鍨?/div>
+              </div>
+              <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
+                <div style="font-size:28px;margin-bottom:6px">馃</div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">闈欏績</div>
+                <div style="font-size:10px;color:var(--ink3)">鍐烽潤鐞嗘€у瀷</div>
+              </div>
+              <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
+                <div style="font-size:28px;margin-bottom:6px">馃専</div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">鏄熷疂</div>
+                <div style="font-size:10px;color:var(--ink3)">娲绘臣寮€鏈楀瀷</div>
+              </div>
+            </div>
+            <div class="section-label">瀵硅瘽椋庢牸</div>
+            <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+              <button class="chip" style="border:1.5px solid var(--warm);color:var(--warm)">娓╂煍鍛垫姢</button>
+              <button class="chip">鐞嗘€у垎鏋?/button>
+              <button class="chip">骞介粯椋庤叮</button>
+              <button class="chip">绠€娲侀珮鏁?/button>
+            </div>
+            <button class="btn btn-primary">淇濆瓨閰嶇疆</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div><!-- /page-profile -->
+
+  </div><!-- /pages -->
+</div><!-- /app -->
+
+<!-- Emotion Modal -->
+<div class="modal-overlay" id="emoModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <div class="modal-title">馃幁 褰撳墠鎯呯华闆疯揪</div>
+    <div class="modal-radar-wrap"><canvas id="modalRadar"></canvas></div>
+    <button class="modal-close-btn" onclick="closeModal()">鍏抽棴</button>
+  </div>
+</div>
+
+<script>
+/* 鈹€鈹€鈹€ PAGE ROUTING 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+const CHART_PAGES = new Set();
+const COMPANION_CHAT_SERVER_URL = 'http://127.0.0.1:8010/batch_video.html?v=20260404-navfix';
+
+function openCompanionChat() {
+  const isBatchServerPage = window.location.hostname === '127.0.0.1' && window.location.port === '8010';
+  window.location.href = isBatchServerPage ? '/batch_video.html?v=20260404-navfix' : COMPANION_CHAT_SERVER_URL;
+}
+
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+    p.scrollTop = 0;
+  });
+  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+
+  const page = document.getElementById('page-' + name);
+  page.classList.add('active');
+  document.getElementById('nav-' + name).classList.add('active');
+
+  // init charts once
+  if (name === 'report' && !CHART_PAGES.has('report')) { CHART_PAGES.add('report'); initReportCharts(); }
+  if (name === 'profile' && !CHART_PAGES.has('radar')) { CHART_PAGES.add('radar'); initRadar(); }
+
+  if (name === 'chat') {
+    selectDigitalHuman('female');
+  }
+}
+
+/* 鈹€鈹€鈹€ CHAT 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+const aiReplies = [
+  '我理解你的感受，可以继续告诉我更多。',
+  '辛苦了，我们一步一步来，我会陪着你。',
+  '你已经做得很好了，先别着急。',
+  '如果你愿意，我可以帮你把事情梳理清楚。',
+  '先深呼吸一下，我们慢慢来。'
+];
+let aiIdx = 0;
+
+function sendMsg() {
+  const input = document.getElementById('chatInput');
+  const text = input.value.trim();
+  if (!text) return;
+  appendMsg('user', text);
+  input.value = '';
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    appendMsg('ai', aiReplies[aiIdx++ % aiReplies.length]);
+  }, 1200);
+}
+
+function sendChip(el) {
+  appendMsg('user', el.textContent.trim());
+  showTyping();
+  setTimeout(() => {
+    removeTyping();
+    appendMsg('ai', aiReplies[aiIdx++ % aiReplies.length]);
+  }, 1200);
+}
+
+function appendMsg(role, text) {
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div');
+  div.className = 'msg ' + role;
+  div.innerHTML = role === 'ai'
+    ? `<div class="msg-avatar ai">馃</div><div class="msg-bubble">${text}</div>`
+    : `<div class="msg-avatar user-av">馃懁</div><div class="msg-bubble">${text}</div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+
+function showTyping() {
+  const msgs = document.getElementById('chatMsgs');
+  const div = document.createElement('div');
+  div.className = 'msg ai'; div.id = 'typingRow';
+  div.innerHTML = `<div class="msg-avatar ai">馃</div><div class="msg-bubble typing-indicator"><span class="dot"></span><span class="dot"></span><span class="dot"></span></div>`;
+  msgs.appendChild(div);
+  msgs.scrollTop = msgs.scrollHeight;
+}
+function removeTyping() {
+  const t = document.getElementById('typingRow');
+  if (t) t.remove();
+}
+
+let micOn = false;
+function toggleMic() {
+  micOn = !micOn;
+  document.getElementById('micBtn').classList.toggle('recording', micOn);
+  document.getElementById('micStatus').textContent = micOn ? '录音中…' : '待机中';
+}
+
+function addHistory() {
+  const list = document.getElementById('historyList');
+  const div = document.createElement('div');
+  div.className = 'hist-item';
+  div.onclick = function(){ selectHist(this); };
+  div.innerHTML = `<div class="hist-name">新的对话</div><div class="hist-meta"><span class="hist-time">刚刚</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">开始</span></div>`;
+  list.prepend(div);
+  selectHist(div);
+}
+
+function selectHist(el) {
+  document.querySelectorAll('.hist-item').forEach(i => i.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* 鈹€鈹€鈹€ EMOTION MODAL 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+let modalRadarInst;
+function openModal() {
+  if (typeof Chart === 'undefined') {
+    alert('当前未加载 Chart.js，情绪图表暂不可用。请联网后刷新页面再试。');
+    return;
+  }
+  document.getElementById('emoModal').classList.add('open');
+  if (!modalRadarInst) {
+    const ctx = document.getElementById('modalRadar').getContext('2d');
+    modalRadarInst = new Chart(ctx, {
+      type: 'radar',
+      data: {
+        labels: ['愉悦','平静','活力','专注','安全','满足','放松'],
+        datasets: [{
+          data: [72,58,44,65,80,55,68],
+          backgroundColor: 'rgba(196,113,94,.15)',
+          borderColor: '#C4715E',
+          pointBackgroundColor: '#C4715E',
+          borderWidth: 2,
+        }]
+      },
+      options: {
+        responsive: true, maintainAspectRatio: true,
+        scales: { r: { suggestedMin: 0, suggestedMax: 100, grid:{ color:'rgba(0,0,0,.06)' }, ticks:{ display:false }, pointLabels:{ font:{ size:11 }, color:'#5A4A44' } } },
+        plugins: { legend:{ display:false } }
+      }
+    });
+  }
+}
+function closeModal() {
+  document.getElementById('emoModal').classList.remove('open');
+}
+
+/* 鈹€鈹€鈹€ AGENT 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+const AGENT_API_BASE = 'http://localhost:3010';
+const AGENT_DEMO_PROMPT = '请帮我订 2026-05-01 10:00 从北京到上海的高铁二等座';
+const AGENT_STATUS_LABELS = {
+  draft: '草稿',
+  parsing_intent: '解析意图中',
+  awaiting_slot_clarification: '待补充信息',
+  awaiting_intent_confirmation: '待确认意图',
+  queued: '排队中',
+  searching: '查票中',
+  search_results_ready: '候选车次就绪',
+  awaiting_candidate_confirmation: '待确认车次',
+  login_required: '需要登录',
+  awaiting_human_verification: '待扫码/验证',
+  selecting_train: '选座中',
+  awaiting_final_submit_confirmation: '待最终提交',
+  submitting_order: '提交订单中',
+  awaiting_payment: '待支付',
+  completed: '已完成',
+  failed: '失败',
+  cancelled: '已取消',
+  expired: '已过期'
+};
+const AGENT_TERMINAL_STATUSES = new Set(['completed', 'failed', 'cancelled', 'expired']);
+const AGENT_ACTIONABLE_STATUSES = new Set([
+  'awaiting_slot_clarification',
+  'awaiting_intent_confirmation',
+  'search_results_ready',
+  'awaiting_candidate_confirmation',
+  'awaiting_human_verification',
+  'awaiting_final_submit_confirmation',
+  'awaiting_payment'
+]);
+
+let activeAgentSession = null;
+let activeAgentHistoryTaskId = 'weather-commute';
+
+const AGENT_HISTORY_TASKS = [
+  {
+    id: 'weather-commute',
+    title: '查询明天天气并提醒出行',
+    time: '今天 14:20',
+    statusText: '进行中',
+    statusClass: 'status-run',
+    icon: '🌤'
+  },
+  {
+    id: 'takeout-tonight',
+    title: '帮我订今晚的外卖',
+    time: '今天 12:05',
+    statusText: '已完成',
+    statusClass: 'status-done',
+    icon: '🍱'
+  },
+  {
+    id: 'clinic-friday',
+    title: '预约周五的社区医院',
+    time: '昨天',
+    statusText: '已完成',
+    statusClass: 'status-done',
+    icon: '🏥',
+    summary: '已预约周五上午 10:00 社区医院全科门诊，并同步写入就诊提醒。'
+  },
+  {
+    id: 'holiday-message',
+    title: '发送节日问候给家人',
+    time: '3 天前',
+    statusText: '已完成',
+    statusClass: 'status-done',
+    icon: '💌',
+    summary: '已通过家庭群发送节日问候与合照，家人已回复“收到，节日快乐”。'
+  },
+  {
+    id: 'bank-bill',
+    title: '查看银行账单',
+    time: '4 天前',
+    statusText: '已完成',
+    statusClass: 'status-done',
+    icon: '💳',
+    summary: '已打开银行 App 并生成本月账单摘要，提醒本周餐饮支出偏高。'
+  }
+];
+
+function getAgentTaskMeta(taskId) {
+  return AGENT_HISTORY_TASKS.find(task => task.id === taskId) || AGENT_HISTORY_TASKS[0];
+}
+
+function getAgentTaskListMarkup() {
+  return AGENT_HISTORY_TASKS.map(task => `
+      <div class="task-item ${task.id === activeAgentHistoryTaskId ? 'active' : ''}" onclick="openAgentHistoryTask('${task.id}')">
+        <div class="task-name">${escapeHtml(task.title)}</div>
+        <div class="task-meta"><span class="task-time">${escapeHtml(task.time)}</span><span class="task-status ${escapeHtml(task.statusClass)}">${escapeHtml(task.statusText)}</span></div>
+      </div>
+    `).join('');
+}
+
+function getAgentWeatherHistoryMarkup() {
+  return `
+      <div class="exec-card">
+        <div class="exec-card-head">
+          <span class="exec-task-name">🌤 查询明天天气并提醒出行</span>
+          <span class="exec-badge status-run">进行中</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">解析任务意图</div>
+              <div class="step-desc">识别为“天气查询 + 出行提醒”，并定位天气与日历相关能力。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">打开天气服务</div>
+              <div class="step-desc">已获取明日天气：小雨，14℃ ~ 20℃，适合提前准备雨具。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-run">…</div>
+            <div class="step-body">
+              <div class="step-name">生成出行建议</div>
+              <div class="step-desc">正在整理穿衣建议与日程提醒内容。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-pending">4</div>
+            <div class="step-body">
+              <div class="step-name">写入提醒事项</div>
+              <div class="step-desc">完成建议生成后，将自动为你创建出行提醒。</div>
+            </div>
+          </div>
+        </div>
+        <div class="log-area">
+          <div class="log-line"><span class="log-time">14:20:06</span><span class="log-badge log-run">[RUN]</span><span class="log-text">正在生成出行建议…</span></div>
+        </div>
+      </div>
+      <div class="exec-card" style="opacity:.72;cursor:pointer" onclick="openAgentHistoryTask('takeout-tonight')">
+        <div class="exec-card-head">
+          <span class="exec-task-name">✅ 帮我订今晚的外卖</span>
+          <span class="exec-badge status-done">已完成</span>
+        </div>
+        <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">已成功下单：番茄鸡蛋盖饭 × 1，预计 18:40 送达。点击查看完整订单摘要。</div>
+      </div>
+      <div class="exec-card" style="opacity:.72;cursor:pointer" onclick="openAgentHistoryTask('clinic-friday')">
+        <div class="exec-card-head">
+          <span class="exec-task-name">✅ 预约周五的社区医院</span>
+          <span class="exec-badge status-done">已完成</span>
+        </div>
+        <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">已预约周五上午 10:00 社区医院全科门诊。点击查看完整就诊摘要。</div>
+      </div>
+      <div class="exec-card" style="opacity:.72;cursor:pointer" onclick="openAgentHistoryTask('bank-bill')">
+        <div class="exec-card-head">
+          <span class="exec-task-name">✅ 查看银行账单</span>
+          <span class="exec-badge status-done">已完成</span>
+        </div>
+        <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">已生成本月账单分析，提醒餐饮与打车支出较上周上升。</div>
+      </div>
+    `;
+}
+
+function getAgentTakeoutHistoryMarkup() {
+  return `
+      <div class="exec-card exec-card-success">
+        <div class="exec-card-head">
+          <span class="exec-task-name">🍱 帮我订今晚的外卖</span>
+          <span class="exec-badge status-ticket-success">✅ 已完成</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">理解晚餐需求</div>
+              <div class="step-desc">解析“今晚的外卖”为即时配送任务，并提取晚餐、热食、清淡口味等偏好。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">筛选外卖候选商家</div>
+              <div class="step-desc">在附近商家中按照评分、距离、预计送达时间与人均价格进行综合排序。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">自动确认菜品与备注</div>
+              <div class="step-desc">选择番茄鸡蛋盖饭与热汤套餐，并写入“少油少盐，不要香菜”的备注。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">核对地址与优惠</div>
+              <div class="step-desc">校验默认收货地址，叠加满减券与配送券，确认总价落在预算范围内。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">提交订单并返回结果</div>
+              <div class="step-desc">订单已支付成功，当前状态为“商家已接单，骑手待取餐”。</div>
+            </div>
+          </div>
+        </div>
+        <div class="log-area">
+          <div class="log-line"><span class="log-time">12:05:02</span><span class="log-badge log-run">[RUN]</span><span class="log-text">已识别任务类型：外卖即时下单。</span></div>
+          <div class="log-line"><span class="log-time">12:05:05</span><span class="log-badge log-dom">[DOM]</span><span class="log-text">打开美团外卖首页，自动定位默认配送地址。</span></div>
+          <div class="log-line"><span class="log-time">12:05:10</span><span class="log-badge log-data">[DATA]</span><span class="log-text">候选商家 Top 3：谷田稻香、禾味简餐、米小满轻食。</span></div>
+          <div class="log-line"><span class="log-time">12:05:16</span><span class="log-badge log-hit">[HIT]</span><span class="log-text">命中最优商家“谷田稻香 · 轻食简餐”，预计 35 分钟送达。</span></div>
+          <div class="log-line"><span class="log-time">12:05:22</span><span class="log-badge log-ok">[OK]</span><span class="log-text">订单已提交成功，支付金额 ￥26.8，预计 18:40 送达。</span></div>
+        </div>
+        <div class="exec-receipt">
+          <div class="exec-receipt-head">
+            <div>
+              <div class="exec-receipt-title">🍜 外卖订单 / 配送摘要</div>
+              <div class="exec-receipt-subtitle">已根据“今晚晚餐、热食优先、30 分钟内送达”的历史偏好完成自动下单。</div>
+            </div>
+            <div class="exec-receipt-price">￥26.8</div>
+          </div>
+          <div class="exec-receipt-route">
+            <div class="exec-receipt-station">
+              <strong>谷田稻香 · 轻食简餐</strong>
+              <span>商家评分 4.9 · 月售 1800+ · 距离 1.2 km</span>
+            </div>
+            <div class="exec-receipt-arrow">🛵</div>
+            <div class="exec-receipt-station" style="text-align:right">
+              <strong>预计 18:40 送达</strong>
+              <span>配送地址 · 星河苑 2 栋 1002 室</span>
+            </div>
+          </div>
+          <div class="exec-receipt-grid">
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">主餐</div>
+              <div class="exec-receipt-value">番茄鸡蛋盖饭 × 1</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">加购</div>
+              <div class="exec-receipt-value">海带排骨汤 × 1</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">口味备注</div>
+              <div class="exec-receipt-value">少油少盐，不要香菜</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">支付方式</div>
+              <div class="exec-receipt-value">美团支付 · 已完成</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">优惠信息</div>
+              <div class="exec-receipt-value">满减 ￥8 + 配送券 ￥3</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">骑手信息</div>
+              <div class="exec-receipt-value">王师傅 · 尾号 3817</div>
+            </div>
+          </div>
+          <div class="exec-receipt-foot">
+            <div class="exec-receipt-note">订单已由智能助手完成筛选、备注填写与支付确认，目前处于配送中，可直接等待送达。</div>
+            <div class="exec-receipt-order">订单号：MT2026040512053817</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+function getAgentClinicHistoryMarkup() {
+  return `
+      <div class="exec-card exec-card-success">
+        <div class="exec-card-head">
+          <span class="exec-task-name">🏥 预约周五的社区医院</span>
+          <span class="exec-badge status-ticket-success">✅ 已完成</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">理解挂号需求</div>
+              <div class="step-desc">将任务识别为“周五就诊预约”，提取时间约束、社区医院、全科门诊等核心条件。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">筛选可预约医院与号源</div>
+              <div class="step-desc">在附近社区医院中对比距离、科室空余号源、上午时段可预约情况。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">匹配最优就诊时段</div>
+              <div class="step-desc">命中周五上午 10:00 全科门诊号源，并保留前后 30 分钟备选时间段。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">核验就诊人与联系方式</div>
+              <div class="step-desc">自动读取常用就诊人信息，确认手机号与医保状态可正常预约。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">提交预约并生成提醒</div>
+              <div class="step-desc">挂号成功，已同步创建就诊前提醒与携带医保卡提示。</div>
+            </div>
+          </div>
+        </div>
+        <div class="log-area">
+          <div class="log-line"><span class="log-time">09:12:08</span><span class="log-badge log-run">[RUN]</span><span class="log-text">已识别任务类型：社区医院预约挂号。</span></div>
+          <div class="log-line"><span class="log-time">09:12:12</span><span class="log-badge log-dom">[DOM]</span><span class="log-text">打开“健康南山”预约入口，进入社区医院挂号页面。</span></div>
+          <div class="log-line"><span class="log-time">09:12:18</span><span class="log-badge log-data">[DATA]</span><span class="log-text">检索到可用号源 6 个，最早可约时间为周五 09:30。</span></div>
+          <div class="log-line"><span class="log-time">09:12:24</span><span class="log-badge log-hit">[HIT]</span><span class="log-text">命中“星河街道社区医院 · 全科门诊 10:00”最优号源。</span></div>
+          <div class="log-line"><span class="log-time">09:12:31</span><span class="log-badge log-ok">[OK]</span><span class="log-text">预约已确认，挂号费 ￥18.0，就诊提醒已写入日历。</span></div>
+        </div>
+        <div class="exec-receipt">
+          <div class="exec-receipt-head">
+            <div>
+              <div class="exec-receipt-title">🩺 挂号预约 / 就诊摘要</div>
+              <div class="exec-receipt-subtitle">已完成门诊预约与提醒同步，当前无需额外操作，按时到院即可。</div>
+            </div>
+            <div class="exec-receipt-price">￥18.0</div>
+          </div>
+          <div class="exec-receipt-route">
+            <div class="exec-receipt-station">
+              <strong>星河街道社区医院</strong>
+              <span>全科门诊 · 3 号诊室 · 步行约 12 分钟</span>
+            </div>
+            <div class="exec-receipt-arrow">🩺</div>
+            <div class="exec-receipt-station" style="text-align:right">
+              <strong>周五 10:00 就诊</strong>
+              <span>已签到提醒 · 提前 30 分钟到院</span>
+            </div>
+          </div>
+          <div class="exec-receipt-grid">
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">就诊人</div>
+              <div class="exec-receipt-value">李阿姨</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">科室</div>
+              <div class="exec-receipt-value">全科门诊</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">预约时间</div>
+              <div class="exec-receipt-value">2026-04-10 10:00</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">挂号方式</div>
+              <div class="exec-receipt-value">线上实名预约</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">提醒事项</div>
+              <div class="exec-receipt-value">医保卡、身份证、既往病历</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">联系人</div>
+              <div class="exec-receipt-value">138****6208</div>
+            </div>
+          </div>
+          <div class="exec-receipt-foot">
+            <div class="exec-receipt-note">已同步添加“提前 1 天”和“出门前 30 分钟”两条提醒，避免错过挂号时段。</div>
+            <div class="exec-receipt-order">预约号：HOSP202604040912</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+function getAgentHolidayMessageHistoryMarkup() {
+  return `
+      <div class="exec-card exec-card-success">
+        <div class="exec-card-head">
+          <span class="exec-task-name">💌 发送节日问候给家人</span>
+          <span class="exec-badge status-ticket-success">✅ 已完成</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">识别消息发送任务</div>
+              <div class="step-desc">将需求解析为“节日祝福 + 家庭成员群发 + 温暖语气”的沟通任务。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">生成个性化祝福文案</div>
+              <div class="step-desc">基于家庭场景生成简洁温暖的节日祝福，并附上近期家庭合照。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">核对发送对象</div>
+              <div class="step-desc">自动识别“相亲相爱一家人”家庭群，并确认发送对象覆盖父母与子女。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">发送消息并回收反馈</div>
+              <div class="step-desc">消息发送成功，已收到家人“收到，节日快乐”的即时回复。</div>
+            </div>
+          </div>
+        </div>
+        <div class="log-area">
+          <div class="log-line"><span class="log-time">18:32:01</span><span class="log-badge log-run">[RUN]</span><span class="log-text">正在生成适合家庭群发送的节日祝福语。</span></div>
+          <div class="log-line"><span class="log-time">18:32:06</span><span class="log-badge log-data">[DATA]</span><span class="log-text">已匹配发送对象：爸爸、妈妈、儿子、家庭群。</span></div>
+          <div class="log-line"><span class="log-time">18:32:12</span><span class="log-badge log-dom">[DOM]</span><span class="log-text">打开微信家庭群会话，插入祝福文本与图片。</span></div>
+          <div class="log-line"><span class="log-time">18:32:17</span><span class="log-badge log-ok">[OK]</span><span class="log-text">消息发送成功，首条回复来自妈妈：“收到啦，节日快乐。”</span></div>
+        </div>
+        <div class="exec-receipt">
+          <div class="exec-receipt-head">
+            <div>
+              <div class="exec-receipt-title">💬 家庭消息 / 发送摘要</div>
+              <div class="exec-receipt-subtitle">已完成节日问候发送，并保留文案与回执摘要，便于复用。</div>
+            </div>
+            <div class="exec-receipt-price">已送达</div>
+          </div>
+          <div class="exec-receipt-route">
+            <div class="exec-receipt-station">
+              <strong>微信家庭群</strong>
+              <span>相亲相爱一家人 · 共 6 位成员</span>
+            </div>
+            <div class="exec-receipt-arrow">💬</div>
+            <div class="exec-receipt-station" style="text-align:right">
+              <strong>18:32 发出</strong>
+              <span>18:33 收到首条回复</span>
+            </div>
+          </div>
+          <div class="exec-receipt-grid">
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">发送对象</div>
+              <div class="exec-receipt-value">家庭群 + 父母置顶联系人</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">文案风格</div>
+              <div class="exec-receipt-value">温暖、简洁、节日祝福</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">附加内容</div>
+              <div class="exec-receipt-value">家庭合照 1 张</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">已读状态</div>
+              <div class="exec-receipt-value">4 人已读</div>
+            </div>
+          </div>
+          <div class="exec-receipt-foot">
+            <div class="exec-receipt-note">示例文案：祝大家节日快乐，身体健康，平安喜乐，我们周末见～</div>
+            <div class="exec-receipt-order">消息回执：MSG202604021832</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+function getAgentBankBillHistoryMarkup() {
+  return `
+      <div class="exec-card exec-card-success">
+        <div class="exec-card-head">
+          <span class="exec-task-name">💳 查看银行账单</span>
+          <span class="exec-badge status-ticket-success">✅ 已完成</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">识别账单分析任务</div>
+              <div class="step-desc">任务被解析为“进入银行 App → 读取本月账单 → 输出收支摘要与异常提醒”。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">进入账单中心</div>
+              <div class="step-desc">自动登录常用银行卡账户，打开“本月账单”与分类统计页面。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">汇总收支结构</div>
+              <div class="step-desc">按餐饮、打车、医疗、日用品等类别计算支出占比，识别大额支出记录。</div>
+            </div>
+          </div>
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">生成智能提醒</div>
+              <div class="step-desc">输出“餐饮支出偏高、医保报销尚未到账”的账单洞察与风险提示。</div>
+            </div>
+          </div>
+        </div>
+        <div class="log-area">
+          <div class="log-line"><span class="log-time">20:14:03</span><span class="log-badge log-run">[RUN]</span><span class="log-text">开始读取招商银行卡本月账单。</span></div>
+          <div class="log-line"><span class="log-time">20:14:07</span><span class="log-badge log-dom">[DOM]</span><span class="log-text">进入“收支明细”页面，切换至 2026 年 4 月视图。</span></div>
+          <div class="log-line"><span class="log-time">20:14:13</span><span class="log-badge log-data">[DATA]</span><span class="log-text">本月支出 ￥4,286.2，收入 ￥6,800.0，净结余 ￥2,513.8。</span></div>
+          <div class="log-line"><span class="log-time">20:14:19</span><span class="log-badge log-hit">[HIT]</span><span class="log-text">发现餐饮支出环比上涨 18%，打车支出上涨 12%。</span></div>
+          <div class="log-line"><span class="log-time">20:14:23</span><span class="log-badge log-ok">[OK]</span><span class="log-text">账单摘要已生成，可用于后续预算控制与家庭护理开支评估。</span></div>
+        </div>
+        <div class="exec-receipt">
+          <div class="exec-receipt-head">
+            <div>
+              <div class="exec-receipt-title">📊 账单汇总 / 分析摘要</div>
+              <div class="exec-receipt-subtitle">已读取本月主要账户流水，并生成重点消费分类与趋势提醒。</div>
+            </div>
+            <div class="exec-receipt-price">结余 ￥2513.8</div>
+          </div>
+          <div class="exec-receipt-route">
+            <div class="exec-receipt-station">
+              <strong>招商银行储蓄卡</strong>
+              <span>统计周期 · 2026-04-01 至 2026-04-30</span>
+            </div>
+            <div class="exec-receipt-arrow">💳</div>
+            <div class="exec-receipt-station" style="text-align:right">
+              <strong>账单已汇总</strong>
+              <span>最近更新 · 今天 20:14</span>
+            </div>
+          </div>
+          <div class="exec-receipt-grid">
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">本月收入</div>
+              <div class="exec-receipt-value">￥6,800.0</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">本月支出</div>
+              <div class="exec-receipt-value">￥4,286.2</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">最高支出类别</div>
+              <div class="exec-receipt-value">餐饮 ￥1,126.0</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">次高支出类别</div>
+              <div class="exec-receipt-value">打车 ￥632.0</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">大额提醒</div>
+              <div class="exec-receipt-value">医疗缴费 ￥480.0</div>
+            </div>
+            <div class="exec-receipt-item">
+              <div class="exec-receipt-label">智能建议</div>
+              <div class="exec-receipt-value">下周餐饮预算控制在 ￥250 内</div>
+            </div>
+          </div>
+          <div class="exec-receipt-foot">
+            <div class="exec-receipt-note">系统已将“餐饮支出偏高”标记为关注项，后续可联动提醒减少高频外卖消费。</div>
+            <div class="exec-receipt-order">账单编号：BILL202604032014</div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+function getAgentGenericHistoryMarkup(taskId) {
+  const task = getAgentTaskMeta(taskId);
+  return `
+      <div class="exec-card">
+        <div class="exec-card-head">
+          <span class="exec-task-name">${escapeHtml(task.icon || '📌')} ${escapeHtml(task.title)}</span>
+          <span class="exec-badge ${escapeHtml(task.statusClass)}">${escapeHtml(task.statusText)}</span>
+        </div>
+        <div class="exec-steps">
+          <div class="step-row">
+            <div class="step-num step-done">✓</div>
+            <div class="step-body">
+              <div class="step-name">历史任务摘要</div>
+              <div class="step-desc">${escapeHtml(task.summary || '该任务已完成，当前保留摘要信息用于演示。')}</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    `;
+}
+
+function getAgentHistoryMarkup(taskId) {
+  switch (taskId) {
+    case 'weather-commute':
+      return getAgentWeatherHistoryMarkup();
+    case 'takeout-tonight':
+      return getAgentTakeoutHistoryMarkup();
+    case 'clinic-friday':
+      return getAgentClinicHistoryMarkup();
+    case 'holiday-message':
+      return getAgentHolidayMessageHistoryMarkup();
+    case 'bank-bill':
+      return getAgentBankBillHistoryMarkup();
+    default:
+      return getAgentGenericHistoryMarkup(taskId);
+  }
+}
+
+function renderAgentHistoryTask(taskId, options = {}) {
+  const task = getAgentTaskMeta(taskId);
+  if (!task) return;
+
+  if (!options.preserveSession) {
+    closeActiveAgentSession();
+  }
+
+  activeAgentHistoryTaskId = task.id;
+
+  const taskList = document.querySelector('#page-agent .task-list');
+  if (taskList) {
+    taskList.innerHTML = getAgentTaskListMarkup();
+  }
+
+  if (activeAgentSession) return;
+
+  const agentBody = document.getElementById('agentBody');
+  if (agentBody) {
+    agentBody.innerHTML = getAgentHistoryMarkup(task.id);
+  }
+}
+
+function openAgentHistoryTask(taskId) {
+  renderAgentHistoryTask(taskId);
+}
+
+function generateIdempotencyKey(prefix) {
+  if (window.crypto && typeof window.crypto.randomUUID === 'function') {
+    return `${prefix}-${window.crypto.randomUUID()}`;
+  }
+
+  return `${prefix}-${Date.now()}-${Math.random().toString(16).slice(2)}`;
+}
+
+function escapeHtml(value) {
+  return String(value ?? '')
+    .replaceAll('&', '&amp;')
+    .replaceAll('<', '&lt;')
+    .replaceAll('>', '&gt;')
+    .replaceAll('"', '&quot;')
+    .replaceAll("'", '&#39;');
+}
+
+function normalizeAgentPrompt(rawText) {
+  const text = rawText.trim();
+  if (!text) return text;
+
+  const isBookingShortcut = /订高铁票|订火车票|买高铁票|买火车票/.test(text);
+  const hasRouteAndDate = /从.+到.+/.test(text) && /\d{4}-\d{2}-\d{2}/.test(text);
+
+  if (isBookingShortcut && !hasRouteAndDate) {
+    return AGENT_DEMO_PROMPT;
+  }
+
+  return text;
+}
+
+function getStatusLabel(status) {
+  return AGENT_STATUS_LABELS[status] || status;
+}
+
+function getStepVisual(status) {
+  if (AGENT_TERMINAL_STATUSES.has(status)) {
+    return { className: 'step-done', text: '✓' };
+  }
+
+  if (
+    AGENT_ACTIONABLE_STATUSES.has(status) ||
+    ['queued', 'searching', 'login_required', 'selecting_train', 'submitting_order'].includes(status)
+  ) {
+    return { className: 'step-run', text: '…' };
+  }
+
+  return { className: 'step-done', text: '✓' };
+}
+
+function updateAgentBadge(session, status) {
+  if (!session || !session.badgeEl) return;
+
+  session.badgeEl.textContent = status === 'completed' ? '✅ 订票成功' : getStatusLabel(status);
+  session.badgeEl.className = 'exec-badge';
+  session.badgeEl.style.background = '';
+  session.badgeEl.style.color = '';
+  session.card.classList.toggle('exec-card-success', status === 'completed');
+
+  if (status === 'completed') {
+    session.badgeEl.classList.add('status-ticket-success');
+    return;
+  }
+
+  if (status === 'failed' || status === 'cancelled' || status === 'expired') {
+    session.badgeEl.style.background = 'rgba(239,68,68,.15)';
+    session.badgeEl.style.color = '#ef4444';
+    return;
+  }
+
+  session.badgeEl.classList.add('status-run');
+}
+
+function closeActiveAgentSession() {
+  if (!activeAgentSession) return;
+
+  if (activeAgentSession.eventSource) {
+    activeAgentSession.eventSource.close();
+  }
+
+  if (activeAgentSession.refreshTimer) {
+    clearTimeout(activeAgentSession.refreshTimer);
+  }
+
+  activeAgentSession = null;
+}
+
+function createAgentTaskCard(displayText, submittedText) {
+  const agentBody = document.getElementById('agentBody');
+  agentBody.innerHTML = '';
+
+  const card = document.createElement('div');
+  card.className = 'exec-card';
+
+  const head = document.createElement('div');
+  head.className = 'exec-card-head';
+
+  const taskNameEl = document.createElement('span');
+  taskNameEl.className = 'exec-task-name';
+  taskNameEl.textContent = `🎫 ${displayText}`;
+
+  const badgeEl = document.createElement('span');
+  badgeEl.className = 'exec-badge status-run';
+  badgeEl.textContent = '准备中';
+
+  head.appendChild(taskNameEl);
+  head.appendChild(badgeEl);
+
+  const stepsEl = document.createElement('div');
+  stepsEl.className = 'exec-steps';
+
+  const logEl = document.createElement('div');
+  logEl.className = 'log-area';
+
+  card.appendChild(head);
+  card.appendChild(stepsEl);
+  card.appendChild(logEl);
+  agentBody.appendChild(card);
+
+  const session = {
+    taskId: null,
+    card,
+    taskNameEl,
+    badgeEl,
+    stepsEl,
+    logEl,
+    summaryEl: null,
+    eventSource: null,
+    refreshTimer: null,
+    renderedSequences: new Set(),
+    latestStepDot: null,
+    snapshot: null,
+    displayText,
+    submittedText
+  };
+
+  appendAgentLog(session, 'RUN', '正在创建任务并连接 12306 订票助手后端…');
+  if (displayText !== submittedText) {
+    appendAgentLog(session, 'RUN', `检测到快捷口令，已自动补全为演示订票指令：${submittedText}`);
+  }
+
+  return session;
+}
+
+function formatAgentLogTimestamp(timestamp) {
+  const date = timestamp ? new Date(timestamp) : new Date();
+  if (Number.isNaN(date.getTime())) {
+    return new Date().toLocaleTimeString('zh-CN', { hour12: false });
+  }
+  return date.toLocaleTimeString('zh-CN', { hour12: false });
+}
+
+function resolveAgentLogClass(level) {
+  switch (String(level || '').toUpperCase()) {
+    case 'OK':
+      return 'log-ok';
+    case 'TRACE':
+      return 'log-trace';
+    case 'URL':
+      return 'log-url';
+    case 'DOM':
+      return 'log-dom';
+    case 'DATA':
+      return 'log-data';
+    case 'HIT':
+      return 'log-hit';
+    case 'WARN':
+      return 'log-warn';
+    default:
+      return 'log-run';
+  }
+}
+
+function appendAgentLog(session, level, text, options = {}) {
+  if (!session || !session.logEl) return;
+
+  const line = document.createElement('div');
+  line.className = 'log-line';
+
+  const timeEl = document.createElement('span');
+  timeEl.className = 'log-time';
+  timeEl.textContent = formatAgentLogTimestamp(options.timestamp);
+
+  const levelEl = document.createElement('span');
+  levelEl.className = `log-badge ${resolveAgentLogClass(level)}`;
+  levelEl.textContent = `[${String(level || 'RUN').toUpperCase()}]`;
+
+  const textEl = document.createElement('span');
+  textEl.className = 'log-text';
+  textEl.textContent = text;
+
+  line.appendChild(timeEl);
+  line.appendChild(levelEl);
+  line.appendChild(textEl);
+  session.logEl.appendChild(line);
+  session.logEl.scrollTop = session.logEl.scrollHeight;
+}
+
+function markPreviousStepDone(session) {
+  if (!session || !session.latestStepDot) return;
+  session.latestStepDot.className = 'step-num step-done';
+  session.latestStepDot.textContent = '✓';
+  session.latestStepDot = null;
+}
+
+function appendAgentStep(session, eventData) {
+  if (!session || !eventData) return;
+
+  markPreviousStepDone(session);
+
+  const visual = getStepVisual(eventData.status);
+  const row = document.createElement('div');
+  row.className = 'step-row';
+  row.dataset.sequenceId = String(eventData.sequenceId);
+  row.dataset.status = eventData.status;
+
+  const dot = document.createElement('div');
+  dot.className = `step-num ${visual.className}`;
+  dot.textContent = visual.text;
+
+  const body = document.createElement('div');
+  body.className = 'step-body';
+
+  const title = document.createElement('div');
+  title.className = 'step-name';
+  title.textContent = eventData.message || getStatusLabel(eventData.status);
+
+  const desc = document.createElement('div');
+  desc.className = 'step-desc';
+  const checkpointText = eventData.checkpointId ? ` · 检查点：${eventData.checkpointId}` : '';
+  desc.textContent = `状态：${getStatusLabel(eventData.status)} · 事件：${eventData.type}${checkpointText}`;
+
+  body.appendChild(title);
+  body.appendChild(desc);
+  row.appendChild(dot);
+  row.appendChild(body);
+  session.stepsEl.appendChild(row);
+
+  if (!AGENT_TERMINAL_STATUSES.has(eventData.status)) {
+    session.latestStepDot = dot;
+  }
+
+  updateAgentBadge(session, eventData.status);
+  appendAgentLog(
+    session,
+    eventData.requiresAck || AGENT_ACTIONABLE_STATUSES.has(eventData.status) ? 'RUN' : 'OK',
+    `${getStatusLabel(eventData.status)}：${eventData.message || eventData.type}`
+  );
+}
+
+function appendAgentTelemetryLog(session, eventData) {
+  const payload = eventData?.payload || {};
+  const level = String(payload.logLevel || 'TRACE').toUpperCase();
+  appendAgentLog(session, level, eventData.message || '浏览器执行细节', {
+    timestamp: eventData.createdAt || eventData.timestamp
+  });
+}
+
+function renderAgentEvent(session, eventData) {
+  if (!session || !eventData || session.renderedSequences.has(eventData.sequenceId)) return;
+
+  session.renderedSequences.add(eventData.sequenceId);
+
+  if (eventData.type === 'browser_progress') {
+    appendAgentTelemetryLog(session, eventData);
+    return;
+  }
+
+  appendAgentStep(session, eventData);
+}
+
+async function requestAgentApi(path, body) {
+  const res = await fetch(`${AGENT_API_BASE}${path}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(body)
+  });
+
+  const payload = await res.json().catch(() => null);
+  if (!res.ok || !payload || !payload.success) {
+    throw new Error(payload?.error?.message || `请求失败：${res.status}`);
+  }
+  return payload.data;
+}
+
+async function fetchTaskSnapshot(taskId) {
+  const res = await fetch(`${AGENT_API_BASE}/api/tasks/${taskId}`);
+  const payload = await res.json().catch(() => null);
+  if (!res.ok || !payload || !payload.success) {
+    throw new Error(payload?.error?.message || `查询任务失败：${res.status}`);
+  }
+  return payload.data;
+}
+
+function getActionHost(session, status) {
+  const rows = [...session.stepsEl.querySelectorAll('.step-row')];
+  for (let i = rows.length - 1; i >= 0; i--) {
+    if (rows[i].dataset.status === status) {
+      return rows[i].querySelector('.step-body');
+    }
+  }
+  const lastRow = rows[rows.length - 1];
+  return lastRow ? lastRow.querySelector('.step-body') : session.stepsEl;
+}
+
+function clearAgentActions(session) {
+  if (!session) return;
+  session.card.querySelectorAll('.agent-action-wrap').forEach(node => node.remove());
+}
+
+function createAgentActionButton(text, variant) {
+  const btn = document.createElement('button');
+  btn.className = variant === 'outline' ? 'btn btn-outline' : 'btn btn-primary';
+  btn.textContent = text;
+  btn.style.padding = '8px 16px';
+  btn.style.fontSize = '12px';
+  btn.style.borderRadius = '999px';
+  return btn;
+}
+
+function disableActionButton(btn, text) {
+  btn.disabled = true;
+  btn.textContent = text;
+  btn.style.opacity = '.6';
+  btn.style.cursor = 'not-allowed';
+}
+
+function getAgentOrderSummary(snapshot) {
+  const task = snapshot?.task || {};
+  const intent = task.intent || {};
+  const candidates = Array.isArray(snapshot?.candidates) ? snapshot.candidates : [];
+  const selectedCandidate =
+    candidates.find(candidate => candidate.trainNo === task.selectedCandidateId) ||
+    candidates.find(candidate => candidate.isRecommended) ||
+    candidates[0] ||
+    null;
+
+  const trainNo = selectedCandidate?.trainNo || task.selectedCandidateId || 'G101';
+  const seatType =
+    selectedCandidate?.seatInventory?.[0]?.seatType ||
+    intent?.seatPreferences?.[0] ||
+    '二等座';
+  const departureTime = selectedCandidate?.departureTime || intent?.departureTimeLowerBound || '--:--';
+  const arrivalTime = selectedCandidate?.arrivalTime || '--:--';
+  const origin = intent?.origin || selectedCandidate?.originStation || '北京';
+  const destination = intent?.destination || selectedCandidate?.destinationStation || '上海';
+  const travelDate = intent?.travelDate || '2026-05-01';
+  const orderNo = `OC${String(task.id || '').replaceAll(/[^a-zA-Z0-9]/g, '').slice(-8).toUpperCase() || '12306'}`;
+
+  return {
+    origin,
+    destination,
+    travelDate,
+    trainNo,
+    seatType,
+    departureTime,
+    arrivalTime,
+    amount: '￥553.0',
+    orderNo
+  };
+}
+
+function renderAgentCompletionSummary(session, snapshot) {
+  if (!session || !session.card) return;
+
+  if (snapshot?.task?.status !== 'completed') {
+    if (session.summaryEl) {
+      session.summaryEl.remove();
+      session.summaryEl = null;
+    }
+    session.card.classList.remove('exec-card-success');
+    return;
+  }
+
+  const summary = getAgentOrderSummary(snapshot);
+
+  if (!session.summaryEl) {
+    const summaryEl = document.createElement('div');
+    summaryEl.className = 'exec-receipt';
+    session.summaryEl = summaryEl;
+    session.card.appendChild(summaryEl);
+  }
+
+  session.summaryEl.innerHTML = `
+    <div class="exec-receipt-head">
+      <div>
+        <div class="exec-receipt-title">🎟️ 行程单 / 订单摘要</div>
+        <div class="exec-receipt-subtitle">支付已完成，以下为本次订票任务的模拟出票凭证。</div>
+      </div>
+      <div class="exec-receipt-price">${escapeHtml(summary.amount)}</div>
+    </div>
+    <div class="exec-receipt-route">
+      <div class="exec-receipt-station">
+        <strong>${escapeHtml(summary.origin)}</strong>
+        <span>出发地 · ${escapeHtml(summary.departureTime)}</span>
+      </div>
+      <div class="exec-receipt-arrow">→</div>
+      <div class="exec-receipt-station" style="text-align:right">
+        <strong>${escapeHtml(summary.destination)}</strong>
+        <span>目的地 · ${escapeHtml(summary.arrivalTime)}</span>
+      </div>
+    </div>
+    <div class="exec-receipt-grid">
+      <div class="exec-receipt-item">
+        <div class="exec-receipt-label">出发日期</div>
+        <div class="exec-receipt-value">${escapeHtml(summary.travelDate)}</div>
+      </div>
+      <div class="exec-receipt-item">
+        <div class="exec-receipt-label">车次</div>
+        <div class="exec-receipt-value">${escapeHtml(summary.trainNo)}</div>
+      </div>
+      <div class="exec-receipt-item">
+        <div class="exec-receipt-label">席别</div>
+        <div class="exec-receipt-value">${escapeHtml(summary.seatType)}</div>
+      </div>
+      <div class="exec-receipt-item">
+        <div class="exec-receipt-label">票价</div>
+        <div class="exec-receipt-value">${escapeHtml(summary.amount)}</div>
+      </div>
+    </div>
+    <div class="exec-receipt-foot">
+      <div class="exec-receipt-note">祝您旅途愉快，愿这趟行程平安顺利、一路有光。</div>
+      <div class="exec-receipt-order">订单号：${escapeHtml(summary.orderNo)}</div>
+    </div>
+  `;
+}
+
+async function refreshAgentSnapshot(session, hydrateEvents) {
+  if (!session || !session.taskId || activeAgentSession !== session) return;
+
+  const snapshot = await fetchTaskSnapshot(session.taskId);
+  if (activeAgentSession !== session) return;
+
+  session.snapshot = snapshot;
+  if (hydrateEvents) {
+    snapshot.recentEvents.forEach(eventData => renderAgentEvent(session, eventData));
+  }
+  updateAgentBadge(session, snapshot.task.status);
+  renderAgentHumanActions(session, snapshot);
+  renderAgentCompletionSummary(session, snapshot);
+}
+
+function scheduleAgentSnapshotRefresh(session, delayMs = 200) {
+  if (!session || activeAgentSession !== session) return;
+
+  if (session.refreshTimer) {
+    clearTimeout(session.refreshTimer);
+  }
+
+  session.refreshTimer = setTimeout(() => {
+    refreshAgentSnapshot(session, false).catch(error => appendAgentLog(session, 'RUN', error.message));
+  }, delayMs);
+}
+
+function renderAgentHumanActions(session, snapshot) {
+  if (!session || !snapshot || !snapshot.task) return;
+
+  clearAgentActions(session);
+
+  const status = snapshot.task.status;
+  if (!AGENT_ACTIONABLE_STATUSES.has(status)) return;
+
+  const host = getActionHost(session, status);
+  const wrap = document.createElement('div');
+  wrap.className = 'agent-action-wrap';
+  wrap.style.display = 'flex';
+  wrap.style.flexWrap = 'wrap';
+  wrap.style.gap = '8px';
+  wrap.style.marginTop = '10px';
+
+  const tip = document.createElement('div');
+  tip.style.width = '100%';
+  tip.style.fontSize = '11.5px';
+  tip.style.color = 'var(--ink3)';
+
+  if (status === 'awaiting_slot_clarification') {
+    tip.textContent = '当前后端 MVP 暂未实现补充槽位接口，点击下方按钮可直接切换为演示订票指令继续跑通闭环。';
+    const retryBtn = createAgentActionButton('使用演示样例继续', 'outline');
+    retryBtn.onclick = () => {
+      disableActionButton(retryBtn, '正在重启任务…');
+      document.getElementById('agentInput').value = AGENT_DEMO_PROMPT;
+      runAgent();
+    };
+    wrap.appendChild(tip);
+    wrap.appendChild(retryBtn);
+    host.appendChild(wrap);
+    return;
+  }
+
+  if (status === 'awaiting_intent_confirmation') {
+    tip.textContent = '订票意图已解析完成，请确认后进入查票队列。';
+    const confirmBtn = createAgentActionButton('确认意图');
+    confirmBtn.onclick = async () => {
+      disableActionButton(confirmBtn, '已发送确认…');
+      try {
+        await requestAgentApi(`/api/tasks/${session.taskId}/confirm-intent`, {
+          idempotencyKey: generateIdempotencyKey('confirm-intent'),
+          confirmed: true
+        });
+        appendAgentLog(session, 'RUN', '已提交“确认意图”指令，等待浏览器查票。');
+        clearAgentActions(session);
+        scheduleAgentSnapshotRefresh(session, 100);
+      } catch (error) {
+        appendAgentLog(session, 'RUN', `确认意图失败：${error.message}`);
+      }
+    };
+    wrap.appendChild(tip);
+    wrap.appendChild(confirmBtn);
+    host.appendChild(wrap);
+    return;
+  }
+
+  if (status === 'search_results_ready' || status === 'awaiting_candidate_confirmation') {
+    const candidates = Array.isArray(snapshot.candidates) ? snapshot.candidates : [];
+    const chosen = candidates.find(candidate => candidate.isRecommended) || candidates[0];
+    const autoSelectedTrainNo = snapshot.task?.selectedCandidateId;
+
+    if (autoSelectedTrainNo) {
+      tip.textContent = `系统已自动确认最佳候选 ${autoSelectedTrainNo}，浏览器正在尝试点击“预订”…`;
+      wrap.appendChild(tip);
+      host.appendChild(wrap);
+      return;
+    }
+
+    if (!chosen) {
+      tip.textContent = '候选车次正在整理中，请稍等实时流继续推送。';
+      wrap.appendChild(tip);
+      host.appendChild(wrap);
+      return;
+    }
+
+    const seatType = chosen.seatInventory?.[0]?.seatType || snapshot.task.intent?.seatPreferences?.[0] || '二等座';
+    const trainSummary = candidates
+      .slice(0, 3)
+      .map(candidate => `${candidate.trainNo} ${candidate.originStation}→${candidate.destinationStation} ${candidate.departureTime}`)
+      .join(' ｜ ');
+    tip.textContent = `候选车次：${trainSummary}`;
+
+    const candidateBtn = createAgentActionButton(`确认车次（选 ${chosen.trainNo}）`);
+    candidateBtn.onclick = async () => {
+      disableActionButton(candidateBtn, '正在确认车次…');
+      try {
+        await requestAgentApi(`/api/tasks/${session.taskId}/confirm-candidate`, {
+          idempotencyKey: generateIdempotencyKey('confirm-candidate'),
+          candidateTrainNo: chosen.trainNo,
+          seatType,
+          allowWaitlist: true
+        });
+        appendAgentLog(session, 'RUN', `已确认候选车次 ${chosen.trainNo}，等待浏览器继续选座。`);
+        clearAgentActions(session);
+        scheduleAgentSnapshotRefresh(session, 100);
+      } catch (error) {
+        appendAgentLog(session, 'RUN', `确认车次失败：${error.message}`);
+      }
+    };
+
+    wrap.appendChild(tip);
+    wrap.appendChild(candidateBtn);
+    host.appendChild(wrap);
+    return;
+  }
+
+  if (status === 'awaiting_human_verification') {
+    const checkpointId = snapshot.pendingHumanAction?.checkpointId || `cp_${session.taskId}_human_verification`;
+    tip.textContent = snapshot.pendingHumanAction?.prompt || '请在弹出的 12306 浏览器页面里完成扫码登录或验证码验证。';
+
+    const humanBtn = createAgentActionButton('已扫码 / 已完成验证');
+    humanBtn.onclick = async () => {
+      disableActionButton(humanBtn, '正在通知后端…');
+      try {
+        await requestAgentApi(`/api/tasks/${session.taskId}/human-step-done`, {
+          idempotencyKey: generateIdempotencyKey('human-step-done'),
+          checkpointId,
+          actionType: snapshot.pendingHumanAction?.type || 'complete_qr_login'
+        });
+        appendAgentLog(session, 'RUN', '已通知后端“人工验证完成”，等待浏览器恢复执行。');
+        clearAgentActions(session);
+        scheduleAgentSnapshotRefresh(session, 100);
+      } catch (error) {
+        appendAgentLog(session, 'RUN', `提交人工验证结果失败：${error.message}`);
+      }
+    };
+
+    wrap.appendChild(tip);
+    wrap.appendChild(humanBtn);
+    host.appendChild(wrap);
+    return;
+  }
+
+  if (status === 'awaiting_final_submit_confirmation') {
+    const autoSubmitPending = Array.isArray(snapshot.recentEvents)
+      && snapshot.recentEvents.some(event =>
+        event.status === 'awaiting_final_submit_confirmation'
+        && event.payload
+        && event.payload.autoSubmit
+      );
+    const checkpointId = snapshot.pendingHumanAction?.checkpointId || `cp_${session.taskId}_final_submit`;
+    if (autoSubmitPending) {
+      tip.textContent = '车次与席位已就绪，系统正在自动提交订单并跳转支付页…';
+      wrap.appendChild(tip);
+      host.appendChild(wrap);
+      return;
+    }
+
+    tip.textContent = snapshot.pendingHumanAction?.prompt || '车次与席位已就绪，请确认是否最终提交订单。';
+
+    const submitBtn = createAgentActionButton('确认提交');
+    submitBtn.onclick = async () => {
+      disableActionButton(submitBtn, '正在提交订单…');
+      try {
+        await requestAgentApi(`/api/tasks/${session.taskId}/confirm-submit`, {
+          idempotencyKey: generateIdempotencyKey('confirm-submit'),
+          checkpointId,
+          confirmed: true
+        });
+        appendAgentLog(session, 'RUN', '已确认最终提交，等待 12306 返回待支付状态。');
+        clearAgentActions(session);
+        scheduleAgentSnapshotRefresh(session, 100);
+      } catch (error) {
+        appendAgentLog(session, 'RUN', `确认提交失败：${error.message}`);
+      }
+    };
+
+    wrap.appendChild(tip);
+    wrap.appendChild(submitBtn);
+    host.appendChild(wrap);
+    return;
+  }
+
+  if (status === 'awaiting_payment') {
+    const checkpointId = snapshot.pendingHumanAction?.checkpointId || `cp_${session.taskId}_payment`;
+    tip.textContent = snapshot.pendingHumanAction?.prompt || '订单已提交，请模拟完成支付以结束本次任务。';
+
+    const payBtn = createAgentActionButton('模拟支付');
+    payBtn.onclick = async () => {
+      disableActionButton(payBtn, '正在确认支付…');
+      try {
+        await requestAgentApi(`/api/tasks/${session.taskId}/complete-payment`, {
+          idempotencyKey: generateIdempotencyKey('complete-payment'),
+          checkpointId
+        });
+        appendAgentLog(session, 'RUN', '已提交“模拟支付”指令，等待任务圆满完成。');
+        clearAgentActions(session);
+        scheduleAgentSnapshotRefresh(session, 100);
+      } catch (error) {
+        appendAgentLog(session, 'RUN', `模拟支付失败：${error.message}`);
+      }
+    };
+
+    wrap.appendChild(tip);
+    wrap.appendChild(payBtn);
+    host.appendChild(wrap);
+  }
+}
+
+function connectAgentStream(session) {
+  if (!session || !session.taskId) return;
+
+  if (session.eventSource) {
+    session.eventSource.close();
+  }
+
+  const source = new EventSource(`${AGENT_API_BASE}/api/tasks/${session.taskId}/stream`);
+  session.eventSource = source;
+
+  source.onopen = () => {
+    appendAgentLog(session, 'OK', 'SSE 实时连接已建立。');
+  };
+
+  source.addEventListener('task_event', event => {
+    if (activeAgentSession !== session) return;
+    try {
+      const eventData = JSON.parse(event.data);
+      renderAgentEvent(session, eventData);
+      scheduleAgentSnapshotRefresh(session, 120);
+    } catch (error) {
+      appendAgentLog(session, 'RUN', `实时事件解析失败：${error.message}`);
+    }
+  });
+
+  source.onerror = () => {
+    if (activeAgentSession === session) {
+      appendAgentLog(session, 'RUN', 'SSE 连接发生波动，浏览器会自动尝试重连。');
+    }
+  };
+}
+
+async function runAgent() {
+  const inputEl = document.getElementById('agentInput');
+  const displayText = inputEl.value.trim();
+  if (!displayText) return;
+
+  const submittedText = normalizeAgentPrompt(displayText);
+
+  closeActiveAgentSession();
+  activeAgentSession = createAgentTaskCard(displayText, submittedText);
+  const session = activeAgentSession;
+
+  try {
+    const data = await requestAgentApi('/api/assistant/tasks', {
+      taskType: 'book_train_ticket',
+      rawText: submittedText,
+      idempotencyKey: generateIdempotencyKey('create-task')
+    });
+
+    if (activeAgentSession !== session) return;
+
+    session.taskId = data.taskId;
+    appendAgentLog(session, 'OK', `任务创建成功：${data.taskId}`);
+    await refreshAgentSnapshot(session, true);
+    connectAgentStream(session);
+  } catch (error) {
+    updateAgentBadge(session, 'failed');
+    appendAgentLog(session, 'RUN', `任务启动失败：${error.message}`);
+    alert(`任务启动失败：${error.message}`);
+  }
+}
+
+function fillAgent(el) {
+  const buttons = [...document.querySelectorAll('.shortcut-tags .stag')];
+  const index = buttons.indexOf(el);
+  const samples = [
+    '帮我订一份附近评分最高的外卖。',
+    '帮我预约最近的社区医院全科门诊。',
+    '查询明天的天气，如果下雨提醒我带伞。',
+    '帮我给儿子发一条消息，说我今天很好。',
+    '查看我这周有哪些安排。',
+    '帮我在网上买一盒菊花茶。'
+  ];
+
+  document.getElementById('agentInput').value = samples[index] || el.textContent.trim();
+}
+
+function bindAgentInput() {
+  const input = document.getElementById('agentInput');
+  if (!input || input.dataset.boundRunAgent === 'true') return;
+
+  input.addEventListener('keydown', event => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      runAgent();
+    }
+  });
+  input.dataset.boundRunAgent = 'true';
+}
+
+function selectDigitalHuman(gender) {
+  const femaleVideo = document.getElementById('female-video');
+  const maleVideo = document.getElementById('male-video');
+  const placeholder = document.getElementById('dh-placeholder');
+  const placeholderText = placeholder ? placeholder.querySelector('p') : null;
+  const showPlaceholder = message => {
+    femaleVideo.style.display = 'none';
+    maleVideo.style.display = 'none';
+    placeholder.style.display = 'flex';
+    if (placeholderText) {
+      placeholderText.innerHTML = `${message}<br><span style="font-size:9px;opacity:.6">当前未接入数字人实时视频流，可先体验智能助手与 12306 任务链路。</span>`;
+    }
+  };
+  
+  // 鍋滄骞堕噸缃墍鏈夎棰?  femaleVideo.pause();
+  maleVideo.pause();
+  femaleVideo.currentTime = 0;
+  maleVideo.currentTime = 0;
+
+  // 闅愯棌鎵€鏈夎棰戝拰鍗犱綅绗?  femaleVideo.style.display = 'none';
+  maleVideo.style.display = 'none';
+  placeholder.style.display = 'none';
+  
+  // 鏄剧ず閫変腑鐨勮棰戝苟灏濊瘯鎾斁
+  const selectedVideo = gender === 'female' ? femaleVideo : maleVideo;
+  const label = gender === 'female' ? '女数字人画面暂未接入' : '男数字人画面暂未接入';
+  const source = selectedVideo.getAttribute('src');
+
+  if (!source) {
+    showPlaceholder(label);
+    return;
+  }
+
+  selectedVideo.style.display = 'block';
+  selectedVideo.muted = false;
+  selectedVideo.play().catch(() => {
+    selectedVideo.muted = true;
+    selectedVideo.play().catch(() => {
+      showPlaceholder(`${label}，已切换为占位预览`);
+    });
+  });
+}
+
+/* 鈹€鈹€鈹€ HEALTH 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+function showTongueResult() {
+  const tongueResult = document.getElementById('tongueResult');
+  if (tongueResult) {
+    tongueResult.style.display = 'block';
+  }
+}
+
+function handleTongueClick() {
+  const uploadDiv = document.querySelector('#page-hardware .tongue-upload');
+  const tongueResult = document.getElementById('tongueResult');
+  if (uploadDiv && !uploadDiv.querySelector('img')) {
+    uploadDiv.innerHTML = '<img src="舌苔.jpg" alt="舌苔图片" style="width:100%; height:auto; border-radius:10px;">';
+    if (tongueResult) {
+      tongueResult.style.display = 'none';
+    }
+    return;
+  }
+  showTongueResult();
+}
+
+/* 鈹€鈹€鈹€ REPORT CHARTS 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+function initReportCharts() {
+  if (typeof Chart === 'undefined') {
+    alert('当前未加载 Chart.js，情绪报告图表暂不可用。请联网后刷新页面再试。');
+    return;
+  }
+  // Trend
+  const tCtx = document.getElementById('trendChart').getContext('2d');
+  new Chart(tCtx, {
+    type: 'line',
+    data: {
+      labels: ['周一','周二','周三','周四','周五','周六','周日'],
+      datasets: [
+        { label:'愉悦值', data:[65,70,55,72,80,78,82], borderColor:'#C4715E', backgroundColor:'rgba(196,113,94,.08)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+        { label:'平静值', data:[58,60,50,65,68,70,66], borderColor:'#7A9E8E', backgroundColor:'rgba(122,158,142,.06)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+        { label:'焦虑值', data:[42,38,55,30,28,25,20], borderColor:'#9B8EC4', backgroundColor:'rgba(155,142,196,.05)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: { legend:{ labels:{ font:{ size:11 }, boxWidth:12, padding:14 } } },
+      scales: {
+        x: { grid:{ display:false }, ticks:{ font:{ size:11 } } },
+        y: { min:0, max:100, grid:{ color:'rgba(0,0,0,.05)' }, ticks:{ font:{ size:11 }, stepSize:25 } }
+      }
+    }
+  });
+
+  // Donut
+  const dCtx = document.getElementById('donutChart').getContext('2d');
+  const dColors = ['#C4715E','#7A9E8E','#9B8EC4','#E8C88A','#A8C4B8'];
+  const dLabels = ['愉悦','平静','激活','焦虑','其他'];
+  const dData = [38,25,18,12,7];
+  new Chart(dCtx, {
+    type: 'doughnut',
+    data: { labels: dLabels, datasets: [{ data: dData, backgroundColor: dColors, borderWidth: 0, hoverOffset: 6 }] },
+    options: {
+      responsive: true, maintainAspectRatio: true, cutout: '68%',
+      plugins: { legend:{ display:false } }
+    }
+  });
+
+  // Legend
+  const leg = document.getElementById('donutLegend');
+  leg.innerHTML = '';
+  dLabels.forEach((l,i) => {
+    const r = document.createElement('div');
+    r.className = 'legend-row';
+    r.innerHTML = `<span class="legend-dot" style="background:${dColors[i]}"></span><span class="legend-name">${l}</span><span class="legend-pct">${dData[i]}%</span>`;
+    leg.appendChild(r);
+  });
+}
+
+function setPeriod(btn) {
+  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* 鈹€鈹€鈹€ RADAR (PROFILE) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+function initRadar() {
+  if (typeof Chart === 'undefined') {
+    alert('当前未加载 Chart.js，个人画像图表暂不可用。请联网后刷新页面再试。');
+    return;
+  }
+  const ctx = document.getElementById('radarChart').getContext('2d');
+  new Chart(ctx, {
+    type: 'radar',
+    data: {
+      labels: ['社交', '情绪稳定', '自我调节', '积极性', '专注力', '共情'],
+      datasets: [{
+        data: [68,75,60,82,55,78],
+        backgroundColor: 'rgba(122,158,142,.15)',
+        borderColor: '#7A9E8E',
+        pointBackgroundColor: '#7A9E8E',
+        borderWidth: 2,
+      }]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: true,
+      scales: { r: { suggestedMin:0, suggestedMax:100, grid:{color:'rgba(0,0,0,.06)'}, ticks:{display:false}, pointLabels:{font:{size:10},color:'#5A4A44'} } },
+      plugins: { legend:{display:false} }
+    }
+  });
+}
+
+/* 鈹€鈹€鈹€ PROFILE PANELS 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+function showPfPanel(id, el) {
+  document.querySelectorAll('.pf-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.pf-nav-item').forEach(i => i.classList.remove('active'));
+  document.getElementById('pfpanel-' + id).classList.add('active');
+  el.classList.add('active');
+  if (id === 'info' && !CHART_PAGES.has('radar')) { CHART_PAGES.add('radar'); initRadar(); }
+}
+
+function normalizePageStructure() {
+  const nav = document.getElementById('mainNav');
+  if (!nav) return;
+
+  let pagesRoot = document.getElementById('pages-root');
+  if (!pagesRoot) {
+    pagesRoot = document.createElement('div');
+    pagesRoot.id = 'pages-root';
+    nav.insertAdjacentElement('afterend', pagesRoot);
+  }
+
+  const orderedPageIds = [
+    'page-home',
+    'page-chat',
+    'page-agent',
+    'page-hardware',
+    'page-report',
+    'page-profile'
+  ];
+
+  orderedPageIds.forEach(pageId => {
+    const pageNode = document.getElementById(pageId);
+    if (pageNode && pageNode.parentElement !== pagesRoot) {
+      pagesRoot.appendChild(pageNode);
+    }
+  });
+
+  const modal = document.getElementById('emoModal');
+  if (modal && modal.parentElement !== document.body) {
+    document.body.appendChild(modal);
+  }
+
+  const agentPage = document.getElementById('page-agent');
+  if (agentPage) {
+    const agentSidebar = agentPage.querySelector('.agent-sidebar');
+    const agentSidebarHead = agentPage.querySelector('.agent-sidebar-head');
+    const taskList = agentPage.querySelector('.task-list');
+    const agentMain = agentPage.querySelector('.agent-main');
+    const agentHead = agentPage.querySelector('.agent-head');
+    const agentInputArea = agentPage.querySelector('.agent-input-area');
+    const agentBody = agentPage.querySelector('.agent-body');
+
+    if (agentSidebar && agentSidebarHead && agentSidebarHead.parentElement !== agentSidebar) {
+      agentSidebar.appendChild(agentSidebarHead);
+    }
+    if (agentSidebar && taskList && taskList.parentElement !== agentSidebar) {
+      agentSidebar.appendChild(taskList);
+    }
+    if (agentMain && agentMain.parentElement !== agentPage) {
+      agentPage.appendChild(agentMain);
+    }
+    if (agentMain && agentHead && agentHead.parentElement !== agentMain) {
+      agentMain.appendChild(agentHead);
+    }
+    if (agentMain && agentInputArea && agentInputArea.parentElement !== agentMain) {
+      agentMain.appendChild(agentInputArea);
+    }
+    if (agentMain && agentBody && agentBody.parentElement !== agentMain) {
+      agentMain.appendChild(agentBody);
+    }
+  }
+
+  const reportPage = document.getElementById('page-report');
+  if (reportPage) {
+    ['report-header', 'report-kpis', 'report-charts', 'report-bottom'].forEach(className => {
+      const section = reportPage.querySelector(`.${className}`);
+      if (section && section.parentElement !== reportPage) {
+        reportPage.appendChild(section);
+      }
+    });
+
+    const reportKpis = reportPage.querySelector('.report-kpis');
+    if (reportKpis) {
+      reportKpis.innerHTML = `
+        <div class="kpi-card"><div class="kpi-icon">😊</div><div><div class="kpi-num">82</div><div class="kpi-label">平均幸福感</div><div class="kpi-delta delta-up">↑ 5.2 较上周</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon">💬</div><div><div class="kpi-num">24</div><div class="kpi-label">本周对话次数</div><div class="kpi-delta delta-up">↑ 3 较上周</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon">⏱️</div><div><div class="kpi-num">3.2h</div><div class="kpi-label">累计陪伴时长</div><div class="kpi-delta delta-up">↑ 0.8h</div></div></div>
+        <div class="kpi-card"><div class="kpi-icon">🌟</div><div><div class="kpi-num">68%</div><div class="kpi-label">积极情绪占比</div><div class="kpi-delta delta-dn">↓ 2% 较上周</div></div></div>
+      `;
+    }
+  }
+
+  const profilePage = document.getElementById('page-profile');
+  if (profilePage) {
+    const profileLayout = profilePage.querySelector('.profile-layout');
+    const profileSidebar = profilePage.querySelector('.profile-sidebar');
+    const profileAvatarCard = profilePage.querySelector('.profile-avatar-card');
+    const profileNavList = profilePage.querySelector('.profile-nav-list');
+    const profileContent = profilePage.querySelector('.profile-content');
+
+    if (profileLayout && profileSidebar && profileSidebar.parentElement !== profileLayout) {
+      profileLayout.appendChild(profileSidebar);
+    }
+    if (profileSidebar && profileAvatarCard && profileAvatarCard.parentElement !== profileSidebar) {
+      profileSidebar.appendChild(profileAvatarCard);
+    }
+    if (profileSidebar && profileNavList && profileNavList.parentElement !== profileSidebar) {
+      profileSidebar.appendChild(profileNavList);
+    }
+    if (profileLayout && profileContent && profileContent.parentElement !== profileLayout) {
+      profileLayout.appendChild(profileContent);
+    }
+  }
+}
+
+function rebuildAgentStaticSections() {
+  const taskList = document.querySelector('#page-agent .task-list');
+  if (taskList) {
+    taskList.innerHTML = getAgentTaskListMarkup();
+  }
+
+  const agentInputArea = document.querySelector('#page-agent .agent-input-area');
+  if (agentInputArea) {
+    agentInputArea.innerHTML = `
+      <div class="agent-input-wrap">
+        <input class="agent-input" id="agentInput" placeholder="告诉我你想做什么，比如：帮我订高铁票" />
+        <button class="btn btn-primary" onclick="runAgent()">执行 →</button>
+      </div>
+      <div class="shortcut-tags">
+        <button class="stag" onclick="fillAgent(this)">🍱 点外卖</button>
+        <button class="stag" onclick="fillAgent(this)">📅 预约挂号</button>
+        <button class="stag" onclick="fillAgent(this)">☀️ 查询天气</button>
+        <button class="stag" onclick="fillAgent(this)">💬 发送消息</button>
+        <button class="stag" onclick="fillAgent(this)">🗓 查看日历</button>
+        <button class="stag" onclick="fillAgent(this)">🛒 网上购物</button>
+      </div>
+    `;
+  }
+
+  const agentBody = document.getElementById('agentBody');
+  if (agentBody && !activeAgentSession) {
+    agentBody.innerHTML = getAgentHistoryMarkup(activeAgentHistoryTaskId);
+  }
+}
+
+function rebuildHomeStaticSections() {
+  const featuresGrid = document.querySelector('#page-home .features-grid');
+  if (featuresGrid) {
+    featuresGrid.innerHTML = `
+      <div class="feat-card" onclick="openCompanionChat()" style="cursor: pointer;">
+        <div class="feat-icon">🧠</div>
+        <div class="feat-title">多模态情绪计算</div>
+        <p class="feat-desc">融合语音、文本与表情等多通道情绪信号，实时理解用户状态并给出更准确的响应。</p>
+      </div>
+      <div class="feat-card" onclick="openCompanionChat()" style="cursor: pointer;">
+        <div class="feat-icon">🎭</div>
+        <div class="feat-title">数字人交互引擎</div>
+        <p class="feat-desc">通过数字人驱动引擎实现自然流畅的面部表情、语音与动作协同交互。</p>
+      </div>
+      <div class="feat-card" onclick="showPage('agent')" style="cursor: pointer;">
+        <div class="feat-icon">🤖</div>
+        <div class="feat-title">GUI Agent 编排</div>
+        <p class="feat-desc">依靠视觉理解与界面操作能力，自主完成复杂 GUI 任务并实时反馈进度。</p>
+      </div>
+      <div class="feat-card" onclick="showPage('hardware')" style="cursor: pointer;">
+        <div class="feat-icon">📷</div>
+        <div class="feat-title">边缘计算感知</div>
+        <p class="feat-desc">将关键感知与检测能力部署在端侧，获得更快响应与更高隐私安全性。</p>
+      </div>
+      <div class="feat-card" onclick="showPage('hardware')" style="cursor: pointer;">
+        <div class="feat-icon">👅</div>
+        <div class="feat-title">AI 中医舌诊</div>
+        <p class="feat-desc">基于计算机视觉分析舌象颜色与形态，为中医体质判断提供辅助建议。</p>
+      </div>
+      <div class="feat-card" onclick="showPage('report')" style="cursor: pointer;">
+        <div class="feat-icon">🧩</div>
+        <div class="feat-title">三域数据融合</div>
+        <p class="feat-desc">融合情感、数字行为与健康数据，构建更完整的全息用户画像。</p>
+      </div>
+    `;
+  }
+
+  const footer = document.querySelector('#page-home .site-footer');
+  if (footer) {
+    footer.innerHTML = `
+      <div class="footer-logo">心语</div>
+      <p>基于具身智能的三维空间情感陪护系统</p>
+      <div class="footer-links">
+        <a href="#">关于我们</a>
+        <a href="#">使用指南</a>
+        <a href="#">隐私政策</a>
+        <a href="#">联系我们</a>
+      </div>
+      <p>© 2024 心语智能 · 保留所有权利</p>
+    `;
+  }
+}
+
+function rebuildChatStaticSections() {
+  const chatSidebar = document.querySelector('#page-chat .chat-sidebar');
+  if (chatSidebar) {
+    chatSidebar.innerHTML = `
+      <div class="sidebar-head">
+        <span class="sidebar-title">对话记录</span>
+        <button class="icon-btn" onclick="addHistory()" title="新建">+</button>
+      </div>
+      <div class="history-list" id="historyList">
+        <div class="hist-item active" onclick="selectHist(this)">
+          <div class="hist-name">关于最近的压力</div>
+          <div class="hist-meta"><span class="hist-time">今天 14:32</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">平静</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">家人相处问题</div>
+          <div class="hist-meta"><span class="hist-time">昨天</span><span class="hist-emo" style="background:rgba(196,113,94,.1);color:var(--warm)">愉悦</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">工作中的困惑</div>
+          <div class="hist-meta"><span class="hist-time">3 天前</span><span class="hist-emo" style="background:rgba(234,179,8,.1);color:#CA8A04">思虑</span></div>
+        </div>
+        <div class="hist-item" onclick="selectHist(this)">
+          <div class="hist-name">对未来的期待</div>
+          <div class="hist-meta"><span class="hist-time">上周</span><span class="hist-emo" style="background:rgba(155,142,196,.1);color:var(--mauve)">期待</span></div>
+        </div>
+      </div>
+    `;
+  }
+
+  const chatCenter = document.querySelector('#page-chat .chat-center');
+  if (chatCenter) {
+    chatCenter.innerHTML = `
+      <div class="dh-label"><span class="live-dot"></span>● 数字人实时画面</div>
+      <div class="dh-screen">
+        <video id="female-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
+        <video id="male-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
+        <div class="dh-placeholder" id="dh-placeholder">
+          <div class="dh-icon">🤖</div>
+          <p>数字人画面接入区<br><span style="font-size:9px;opacity:.6">后续可替换为实时数字人视频流或 WebRTC 画面。</span></p>
+        </div>
+        <div class="dh-corner-badge">READY</div>
+      </div>
+      <div class="emo-badge-row">
+        <div class="emo-badge" onclick="openModal()">🎯 愉悦 · 72 <span style="font-size:10px;color:var(--ink4)">●</span></div>
+        <div class="emo-badge" style="cursor:default">🎙 <span id="micStatus" style="font-size:11px;color:var(--ink3)">待机中</span></div>
+      </div>
+      <div style="display: flex; gap: 10px; margin-top: 16px;">
+        <button class="btn btn-primary" onclick="selectDigitalHuman('female')">女数字人</button>
+        <button class="btn btn-outline" onclick="selectDigitalHuman('male')">男数字人</button>
+      </div>
+    `;
+  }
+
+  const chatPanel = document.querySelector('#page-chat .chat-panel');
+  if (chatPanel) {
+    chatPanel.innerHTML = `
+      <div class="chat-head">
+        <div>
+          <div class="chat-head-title">与心语对话</div>
+          <div class="chat-head-sub">今天第 3 次对话 · 已持续 12 分钟</div>
+        </div>
+      </div>
+      <div class="chat-msgs" id="chatMsgs">
+        <div class="msg ai">
+          <div class="msg-avatar ai">🤖</div>
+          <div class="msg-bubble">你好！我是心语，今天有什么想聊的吗？</div>
+        </div>
+        <div class="msg user">
+          <div class="msg-avatar user-av">👤</div>
+          <div class="msg-bubble">最近工作压力有点大，睡眠也不太好。</div>
+        </div>
+        <div class="msg ai">
+          <div class="msg-avatar ai">🤖</div>
+          <div class="msg-bubble">我理解，工作压力影响睡眠很常见。能告诉我是什么让你感到特别紧张吗？</div>
+        </div>
+      </div>
+      <div class="quick-chips">
+        <button class="chip" onclick="sendChip(this)">😊 心情不好</button>
+        <button class="chip" onclick="sendChip(this)">🤍 想倾诉</button>
+        <button class="chip" onclick="sendChip(this)">😴 睡眠困扰</button>
+        <button class="chip" onclick="sendChip(this)">🎉 分享好事</button>
+      </div>
+      <div class="chat-input-row">
+        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="语音输入">🎙</button>
+        <input class="chat-input" id="chatInput" placeholder="说点什么…" onkeydown="if(event.key==='Enter')sendMsg()" />
+        <button class="send-btn" onclick="sendMsg()">→</button>
+      </div>
+    `;
+  }
+}
+
+function rebuildHardwareStaticSections() {
+  const cameraTitle = document.querySelector('#page-hardware .camera-title');
+  if (cameraTitle) cameraTitle.textContent = '📷 跌倒检测 · 实时监控';
+
+  const cameraStatus = document.querySelector('#page-hardware .cam-status-text');
+  if (cameraStatus) {
+    cameraStatus.innerHTML = '<span class="cam-ok-dot"></span>AI 检测已就绪 · 当前未发现异常';
+  }
+
+  const cameraMeta = document.querySelector('#page-hardware .cam-status-bar > div:last-child');
+  if (cameraMeta) {
+    cameraMeta.textContent = '1920×1080 · 30fps';
+  }
+
+  const alertListCard = document.querySelector('#page-hardware .alert-list-card');
+  if (alertListCard) {
+    alertListCard.innerHTML = `
+      <div class="section-label">📋 历史告警记录</div>
+      <div class="alert-items">
+        <div class="alert-row">
+          <div class="alert-icon">⚠️</div>
+          <div class="alert-body">
+            <div class="alert-name">疑似跌倒提醒</div>
+            <div class="alert-time">2024-03-15 · 客厅 · 已确认安全</div>
+          </div>
+          <div class="alert-level level-med">中级</div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-icon">🚨</div>
+          <div class="alert-body">
+            <div class="alert-name">确认跌倒告警</div>
+            <div class="alert-time">2024-03-08 · 卫生间 · 已通知家人</div>
+          </div>
+          <div class="alert-level level-high">紧急</div>
+        </div>
+        <div class="alert-row">
+          <div class="alert-icon">ℹ️</div>
+          <div class="alert-body">
+            <div class="alert-name">异常姿态提示</div>
+            <div class="alert-time">2024-02-27 · 卧室 · 误报</div>
+          </div>
+          <div class="alert-level level-low">低级</div>
+        </div>
+      </div>
+      <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:12px" onclick="alert('模拟跌倒告警触发！')">🧪 模拟告警测试</button>
+    `;
+  }
+
+  const healthGrid = document.querySelector('#page-hardware .health-grid');
+  let tongueCard = document.querySelector('#page-hardware .tongue-card');
+  if (!tongueCard && healthGrid) {
+    tongueCard = document.createElement('div');
+    tongueCard.className = 'tongue-card';
+    healthGrid.appendChild(tongueCard);
+  }
+  if (tongueCard) {
+    tongueCard.innerHTML = `
+      <div class="section-label">👅 AI 舌诊分析</div>
+      <div class="tongue-upload" onclick="handleTongueClick()">
+        <div style="font-size:28px;margin-bottom:6px">📷</div>
+        <p>点击拍摄或上传舌苔图片<br>AI 将快速分析体质状态</p>
+      </div>
+      <div id="tongueResult" style="display:none">
+        <div class="tongue-result">
+          <div class="tongue-tag"><div class="tongue-tag-name">舌色</div><div class="tongue-tag-val">淡红</div></div>
+          <div class="tongue-tag"><div class="tongue-tag-name">舌苔</div><div class="tongue-tag-val">薄白苔</div></div>
+          <div class="tongue-tag"><div class="tongue-tag-name">体质</div><div class="tongue-tag-val">气虚体质</div></div>
+          <div class="tongue-tag"><div class="tongue-tag-name">调理</div><div class="tongue-tag-val">健脾益气</div></div>
+        </div>
+        <div style="margin-top:10px;padding:10px 12px;background:rgba(122,158,142,.08);border-radius:10px;font-size:12px;color:var(--ink2);line-height:1.6">
+          💡 建议适当增加山药、红枣等健脾食材，避免过度劳累，并保持充足睡眠。
+        </div>
+      </div>
+    `;
+  }
+}
+
+function rebuildReportStaticSections() {
+  const reportBottom = document.querySelector('#page-report .report-bottom');
+  if (reportBottom) {
+    reportBottom.innerHTML = `
+      <div class="chart-card">
+        <div class="chart-card-title">💡 智能洞察</div>
+        <div class="insights-list">
+          <div class="insight-item"><div class="insight-icon">📈</div><div class="insight-text">本周情绪整体向好，周三出现短暂低谷，可能与工作压力有关。</div></div>
+          <div class="insight-item"><div class="insight-icon">🌙</div><div class="insight-text">你通常在晚间 9 点到 10 点更适合进行放松对话，可安排为固定舒缓时段。</div></div>
+          <div class="insight-item"><div class="insight-icon">🧘</div><div class="insight-text">焦虑指数较上周下降，说明持续陪伴对情绪调节已经产生明显效果。</div></div>
+        </div>
+      </div>
+      <div class="chart-card">
+        <div class="chart-card-title">📝 近期对话</div>
+        <div class="conv-list">
+          <div class="conv-row"><div class="conv-emo">😊</div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>今天</span><span>18 分钟</span></div></div><div class="conv-score">88</div></div>
+          <div class="conv-row"><div class="conv-emo">😌</div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>昨天</span><span>12 分钟</span></div></div><div class="conv-score">74</div></div>
+          <div class="conv-row"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>3 天前</span><span>25 分钟</span></div></div><div class="conv-score">62</div></div>
+          <div class="conv-row"><div class="conv-emo">🎉</div><div class="conv-body"><div class="conv-title">分享今天的开心事</div><div class="conv-meta"><span>4 天前</span><span>8 分钟</span></div></div><div class="conv-score">95</div></div>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function rebuildProfileStaticSections() {
+  const avatarCard = document.querySelector('#page-profile .profile-avatar-card');
+  if (avatarCard) {
+    avatarCard.innerHTML = `
+      <div class="pf-avatar">😊</div>
+      <div class="pf-name">小李</div>
+      <div class="pf-sub">加入 42 天 · 气虚体质</div>
+      <div class="pf-badges">
+        <span class="pf-badge" title="连续打卡">🔥</span>
+        <span class="pf-badge" title="情绪达人">🎖️</span>
+        <span class="pf-badge" title="健康先锋">🩺</span>
+      </div>
+    `;
+  }
+
+  const navList = document.querySelector('#page-profile .profile-nav-list');
+  if (navList) {
+    navList.innerHTML = `
+      <div class="pf-nav-item active" onclick="showPfPanel('info',this)"><span class="pf-nav-icon">👤</span>个人资料</div>
+      <div class="pf-nav-item" onclick="showPfPanel('hist',this)"><span class="pf-nav-icon">💬</span>对话历史</div>
+      <div class="pf-nav-item" onclick="showPfPanel('ach',this)"><span class="pf-nav-icon">🏆</span>我的成就</div>
+      <div class="pf-nav-item" onclick="showPfPanel('pref',this)"><span class="pf-nav-icon">⚙️</span>偏好设置</div>
+      <div class="pf-nav-item" onclick="showPfPanel('dh',this)"><span class="pf-nav-icon">🤖</span>数字人配置</div>
+    `;
+  }
+
+  const profileContent = document.querySelector('#page-profile .profile-content');
+  if (profileContent) {
+    profileContent.innerHTML = `
+      <div class="pf-panel active" id="pfpanel-info">
+        <div class="info-form">
+          <div class="section-label" style="margin-bottom:18px">基本信息</div>
+          <div class="form-grid">
+            <div class="form-field"><div class="form-label">昵称</div><input class="form-input" value="小李" /></div>
+            <div class="form-field"><div class="form-label">年龄</div><input class="form-input" value="67" /></div>
+            <div class="form-field"><div class="form-label">联系电话</div><input class="form-input" value="138****8888" /></div>
+            <div class="form-field"><div class="form-label">紧急联系人</div><input class="form-input" value="李明（儿子）" /></div>
+          </div>
+          <div class="section-label" style="margin-top:22px;margin-bottom:8px">情感画像</div>
+          <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
+          <button class="btn btn-primary" style="margin-top:16px">保存修改</button>
+        </div>
+      </div>
+      <div class="pf-panel" id="pfpanel-hist">
+        <div class="card">
+          <div class="section-label">全部对话记录</div>
+          <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
+            <input class="form-input" style="flex:1;min-width:160px" placeholder="搜索关键词…" />
+            <select class="form-input" style="width:120px"><option>全部情绪</option><option>愉悦</option><option>平静</option><option>焦虑</option></select>
+          </div>
+          <div class="conv-list">
+            <div class="conv-row"><div class="conv-emo">😊</div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>2024-03-18</span><span>18 分钟</span><span style="color:var(--sage)">愉悦</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
+            <div class="conv-row"><div class="conv-emo">😌</div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>2024-03-17</span><span>12 分钟</span><span style="color:var(--sage)">平静</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
+            <div class="conv-row"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>2024-03-15</span><span>25 分钟</span><span style="color:#CA8A04">思虑</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pf-panel" id="pfpanel-ach">
+        <div class="card">
+          <div class="section-label">我的成就</div>
+          <div class="achievement-grid">
+            <div class="ach-item"><div class="ach-icon">🔥</div><div class="ach-name">7 日连续打卡</div></div>
+            <div class="ach-item"><div class="ach-icon">💬</div><div class="ach-name">首次深度对话</div></div>
+            <div class="ach-item"><div class="ach-icon">👅</div><div class="ach-name">舌诊初体验</div></div>
+            <div class="ach-item"><div class="ach-icon">🌟</div><div class="ach-name">情绪达人</div></div>
+            <div class="ach-item"><div class="ach-icon">🤖</div><div class="ach-name">AI 助手玩家</div></div>
+            <div class="ach-item"><div class="ach-icon">🛡️</div><div class="ach-name">安全守护者</div></div>
+            <div class="ach-item locked"><div class="ach-icon">🏅</div><div class="ach-name">月度达人</div></div>
+            <div class="ach-item locked"><div class="ach-icon">✨</div><div class="ach-name">情感专家</div></div>
+          </div>
+        </div>
+      </div>
+      <div class="pf-panel" id="pfpanel-pref">
+        <div class="toggle-list">
+          <div class="toggle-row">
+            <div class="toggle-label"><div class="toggle-name">每日情绪摘要</div><div class="toggle-desc">每天早晨推送情绪概览与调理建议</div></div>
+            <label class="toggle-sw"><input type="checkbox" checked /><div class="toggle-track"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label"><div class="toggle-name">告警通知</div><div class="toggle-desc">检测到跌倒或异常时立即通知紧急联系人</div></div>
+            <label class="toggle-sw"><input type="checkbox" checked /><div class="toggle-track"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label"><div class="toggle-name">语音交互优先</div><div class="toggle-desc">对话时优先使用语音输入和语音播报</div></div>
+            <label class="toggle-sw"><input type="checkbox" /><div class="toggle-track"></div></label>
+          </div>
+          <div class="toggle-row">
+            <div class="toggle-label"><div class="toggle-name">深色模式</div><div class="toggle-desc">夜间自动切换深色主题（开发中）</div></div>
+            <label class="toggle-sw"><input type="checkbox" /><div class="toggle-track"></div></label>
+          </div>
+        </div>
+      </div>
+      <div class="pf-panel" id="pfpanel-dh">
+        <div class="card">
+          <div class="section-label">选择数字人形象</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
+            <div style="border:2px solid var(--warm);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer">
+              <div style="font-size:28px;margin-bottom:6px">👩</div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink)">暖暖</div>
+              <div style="font-size:10px;color:var(--ink3)">温柔耐心型</div>
+            </div>
+            <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
+              <div style="font-size:28px;margin-bottom:6px">🧑</div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink)">静心</div>
+              <div style="font-size:10px;color:var(--ink3)">冷静理性型</div>
+            </div>
+            <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
+              <div style="font-size:28px;margin-bottom:6px">✨</div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink)">星宝</div>
+              <div style="font-size:10px;color:var(--ink3)">活泼开朗型</div>
+            </div>
+          </div>
+          <div class="section-label">对话风格</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
+            <button class="chip" style="border:1.5px solid var(--warm);color:var(--warm)">温柔陪伴</button>
+            <button class="chip">理性分析</button>
+            <button class="chip">幽默有趣</button>
+            <button class="chip">简洁高效</button>
+          </div>
+          <button class="btn btn-primary">保存配置</button>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function repairVisibleText() {
+  const setText = (selector, text) => {
+    const node = document.querySelector(selector);
+    if (node) node.textContent = text;
+  };
+
+  const setHTML = (selector, html) => {
+    const node = document.querySelector(selector);
+    if (node) node.innerHTML = html;
+  };
+
+  const setTexts = (selector, texts) => {
+    document.querySelectorAll(selector).forEach((node, index) => {
+      if (texts[index] !== undefined) {
+        node.textContent = texts[index];
+      }
+    });
+  };
+
+  document.title = '银龄通 — 基于具身智能的三维空间情感陪护系统';
+
+  setHTML('.nav-logo', '银龄通 <span>智能情感陪护系统</span>');
+  setText('#nav-home', '首页');
+  setText('.nav-links button:nth-child(2)', '📘 简介');
+  setText('#nav-chat', '💬 陪伴对话');
+  setText('#nav-agent', '🤖 智能助手');
+  setText('#nav-hardware', '🛡️ 健康守护');
+  setText('#nav-report', '📊 情绪报告');
+  setText('#nav-profile', '👤 个人中心');
+
+  setTexts('.hero-eyebrow .badge', ['情感陪伴', '智能助手', '健康守护']);
+  setHTML('.hero-title', '<span class="accent">银龄通</span>，陪伴<span class="accent">无处不在</span>的你');
+  setText('.hero-subtitle', '基于具身智能的三维空间情感陪护系统——融合数字人情感对话、GUI Agent 智能助手与硬件健康感知，构建全场景身心守护体系。');
+  setTexts('.hero-btns .btn', ['开始对话', '体验 Agent']);
+  setTexts('.hero-stat-label', ['融合维度', '全天守护', '情绪维度', '驱动引擎']);
+
+  setText('.three-worlds .section-eyebrow', '三位一体解决方案');
+  setText('.three-worlds .section-title', '陪伴 · 助手 · 守护，全域关怀');
+  setText('.three-worlds .section-subtitle', '银龄通将情感陪护延伸至生活的每一个维度，让科技真正感知、理解并服务于你。');
+  setTexts('.world-card .wc-title', ['情感陪伴', '智能助手', '健康守护']);
+  setTexts('.world-card .wc-desc', [
+    '通过多模态拟真交互，提供深度情感陪伴与心理支持，让用户感受到真实、温暖且持续的理解。',
+    '利用 GUI Agent 自动化能力，帮助用户高效完成数字任务，把更多精力留给真正重要的生活。',
+    '结合智能硬件与感知能力，提供实时健康守护与风险提醒，守护每一刻的安心。'
+  ]);
+  setTexts('.world-card .wc-btn', ['进入对话 →', '体验助手 →', '查看守护 →']);
+  const worldFeatures = document.querySelectorAll('.world-card .wc-features');
+  if (worldFeatures[0]) {
+    worldFeatures[0].innerHTML = '<li>数字人深度情感对话</li><li>多模态情绪识别分析</li><li>专业心理支持建议</li><li>个性化情感档案追踪</li>';
+  }
+  if (worldFeatures[1]) {
+    worldFeatures[1].innerHTML = '<li>自然语言任务下达</li><li>GUI Agent 自动化执行</li><li>跨应用流程编排</li><li>任务执行可视化回放</li>';
+  }
+  if (worldFeatures[2]) {
+    worldFeatures[2].innerHTML = '<li>跌倒检测与紧急告警</li><li>AI 中医舌诊分析</li><li>体征数据实时监测</li><li>紧急联系人一键通知</li>';
+  }
+
+  setText('.home-features .section-eyebrow', '核心技术');
+  setText('.home-features .section-title', '技术驱动，温度为先');
+  setTexts('.feat-title', ['多模态情绪计算', '数字人交互引擎', 'GUI Agent 编排', '边缘计算感知', 'AI 中医舌诊', '三域数据融合']);
+  setTexts('.feat-desc', [
+    '融合语音、文本与表情等多通道情绪信号，实时理解用户状态并给出更准确的响应。',
+    '通过数字人驱动引擎实现自然流畅的面部表情、语音与动作协同交互。',
+    '依靠视觉理解与界面操作能力，自主完成复杂 GUI 任务并实时反馈进度。',
+    '将关键感知与检测能力部署在端侧，获得更快响应与更高隐私安全性。',
+    '基于计算机视觉分析舌象颜色与形态，为中医体质判断提供辅助建议。',
+    '融合情感、数字行为与健康数据，构建更完整的全息用户画像。'
+  ]);
+
+  setText('.home-cta h2', '开启全天候智能陪护之旅');
+  setText('.home-cta p', '让银龄通成为您生活中的情感伙伴、智能助手与健康守护者。');
+  setTexts('.home-cta .btn', ['开始对话', '个人中心']);
+  setText('.footer-logo', '银龄通');
+  setTexts('.site-footer p', ['基于具身智能的三维空间情感陪护系统', '© 2024 银龄通智能 · 保留所有权利']);
+  setTexts('.footer-links a', ['关于我们', '使用指南', '隐私政策', '联系我们']);
+
+  setText('.sidebar-title', '对话记录');
+  setText('.sidebar-head .icon-btn', '+');
+  setText('.dh-label', '● 数字人实时画面');
+  setHTML('.dh-placeholder p', '数字人画面接入区<br><span style="font-size:9px;opacity:.6">后续可替换为实时数字人视频流或 WebRTC 画面。</span>');
+  setText('#micStatus', '待机中');
+  setTexts('.chat-center .btn', ['女数字人', '男数字人']);
+  setText('.chat-head-title', '与心语对话');
+  setText('.chat-head-sub', '今天第 3 次对话 · 已持续 12 分钟');
+  setTexts('#historyList .hist-name', ['关于最近的压力', '家人相处问题', '工作中的困惑', '对未来的期待']);
+  setTexts('#historyList .hist-time', ['今天 14:32', '昨天', '3 天前', '上周']);
+  setTexts('#historyList .hist-emo', ['平静', '愉悦', '思虑', '期待']);
+  setTexts('.quick-chips .chip', ['😊 心情不好', '🤍 想倾诉', '😴 睡眠困扰', '🎉 分享好事']);
+  const chatInput = document.getElementById('chatInput');
+  if (chatInput) chatInput.placeholder = '说点什么…';
+  setText('.send-btn', '→');
+  setTexts('#chatMsgs .msg-bubble', [
+    '你好！我是心语，今天有什么想聊的吗？',
+    '最近工作压力有点大，睡眠也不太好。',
+    '我理解，工作压力影响睡眠很常见。能告诉我是什么让你感到特别紧张吗？'
+  ]);
+
+  setText('.agent-sidebar-title', '任务历史');
+  setText('.agent-sidebar-sub', '近 7 天共 12 条任务');
+  setTexts('.task-name', ['查询明天天气并提醒出行', '帮我订今晚的外卖', '预约周五的社区医院', '发送节日问候给家人', '查看银行账单']);
+  setTexts('.task-time', ['今天 14:20', '今天 12:05', '昨天', '3 天前', '4 天前']);
+  setTexts('.task-status', ['进行中', '已完成', '已完成', '已完成', '已完成']);
+
+  setText('.agent-head-title', '🎯 GUI Agent · 智能任务助手');
+  setText('.agent-head-sub', '用自然语言描述任务，心语会调用后端 API 并实时展示执行过程。');
+  const agentInput = document.getElementById('agentInput');
+  if (agentInput) agentInput.placeholder = '告诉我你想做什么，比如：帮我订高铁票';
+  setText('.agent-input-wrap .btn', '执行 →');
+  setTexts('.shortcut-tags .stag', ['🍱 点外卖', '📅 预约挂号', '☀️ 查询天气', '💬 发送消息', '🗓 查看日历', '🛒 网上购物']);
+  setText('.exec-task-name', '🌤 查询明天天气并提醒出行');
+  setText('.exec-badge', '进行中');
+
+  setText('#page-hardware .camera-title', '📷 跌倒检测 · 实时监控');
+  setTexts('#page-hardware .mini-stat-label', ['今日告警', '本月告警']);
+  setText('#page-hardware .section-label', '📋 历史告警记录');
+
+  setText('#page-report .report-title-block h2', '情绪健康报告');
+  setText('#page-report .report-title-block p', '基于对话与行为的多维分析');
+  setTexts('#page-report .period-tab', ['本周', '本月', '近三月']);
+  setTexts('#page-report .chart-card-title', ['情绪趋势', '情绪分布', '💡 智能洞察', '📝 近期对话']);
+
+  setText('#page-profile .pf-name', '小李');
+  setText('#page-profile .pf-sub', '加入 42 天 · 气虚体质');
+  setTexts('#page-profile .pf-nav-item', ['👤 个人资料', '💬 对话历史', '🏆 我的成就', '⚙️ 偏好设置', '🤖 数字人配置']);
+
+  rebuildHomeStaticSections();
+  rebuildChatStaticSections();
+  rebuildAgentStaticSections();
+  rebuildHardwareStaticSections();
+  rebuildReportStaticSections();
+  rebuildProfileStaticSections();
+  bindAgentInput();
+}
+
+normalizePageStructure();
+repairVisibleText();
+</script>
+</body>
+</html>
+
+
+
+
+
+
+

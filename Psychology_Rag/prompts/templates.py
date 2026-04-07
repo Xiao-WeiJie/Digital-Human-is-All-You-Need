@@ -124,7 +124,7 @@ GUARDRAIL_ADDENDUM = """\
 """
 
 CHITCHAT_ADDENDUM = """\
-{emotion_context}【当前模式���日常交流】
+{emotion_context}【当前模式：日常交流】
 
 对方在进行日常交流。你可以自然地打招呼、自我介绍，
 或温和地引导对方聊聊近况。保持亲切自然，不需要展示过多专业知识。

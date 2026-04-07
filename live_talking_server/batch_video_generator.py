@@ -346,12 +346,14 @@ class BatchVideoGeneratorSimple:
         joyvasa_pipeline,
         output_dir: str = None,
         ffmpeg_path: str = "ffmpeg",
-        emotion_config=None
+        emotion_config=None,
+        motion_seed: int = None
     ):
         self.pipeline = pipeline
         self.joyvasa = joyvasa_pipeline
         self.ffmpeg = ffmpeg_path
         self.emotion_config = emotion_config
+        self.motion_seed = motion_seed  # 运动生成随机种子
 
         if output_dir is None:
             output_dir = os.path.join(tempfile.gettempdir(), "digital_human_videos")
@@ -432,7 +434,9 @@ class BatchVideoGeneratorSimple:
             raise RuntimeError(f"Invalid audio file: {e}")
 
         try:
-            motion_info = self.joyvasa.gen_motion_sequence(audio_path)
+            motion_info = self.joyvasa.gen_motion_sequence(audio_path, seed=self.motion_seed)
+            if self.motion_seed is not None:
+                logger.info(f"[SimpleBatch] JoyVASA using fixed seed: {self.motion_seed}")
             logger.info(f"[SimpleBatch] JoyVASA returned motion_info keys: {list(motion_info.keys()) if motion_info else 'None'}")
         except Exception as e:
             logger.error(f"[SimpleBatch] JoyVASA failed: {e}")

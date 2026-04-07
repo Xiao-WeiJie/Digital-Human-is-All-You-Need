@@ -154,7 +154,7 @@ def get_emotion_config() -> EmotionExpressionConfig:
 #   解决：增大 clamp_min 的绝对值 (如 -0.10)
 #
 # 【开心表情参数】(HappyExpressionConfig)
-# - 问���：笑容不明显
+# - 问题：笑容不明显
 #   解决：增大 mouth_offset (如 0.02)
 # - 问题：表情太夸张
 #   解决：减小所有偏移量 (如 mouth_offset: 0.01)

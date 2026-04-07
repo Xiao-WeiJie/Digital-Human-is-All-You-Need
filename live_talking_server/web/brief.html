@@ -1,0 +1,464 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>心语 - 简讯中心</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --cream: #faf6f1;
+            --cream2: #f3ece2;
+            --terracotta: #c4714a;
+            --terracotta-light: #e8a07a;
+            --terracotta-pale: #f5e0d4;
+            --sage: #7a9e87;
+            --sage-light: #a8c4b0;
+            --sage-pale: #deeee3;
+            --lavender: #9b8bb4;
+            --lavender-pale: #ede8f5;
+            --text-dark: #2c2420;
+            --text-mid: #6b5b52;
+            --text-light: #a09080;
+            --white: #ffffff;
+            --shadow-soft: 0 4px 24px rgba(44,36,32,0.08);
+            --shadow-card: 0 2px 12px rgba(44,36,32,0.06);
+            --radius: 20px;
+            --radius-sm: 12px;
+            --font-serif: 'Noto Serif SC', serif;
+            --font-sans: 'Noto Sans SC', sans-serif;
+            --nav-h: 64px;
+
+            /* Digital World colors */
+            --dw-blue: #4a7ec4;
+            --dw-blue-light: #7aaae0;
+            --dw-blue-pale: #e0ecfa;
+
+            /* Physical World colors */
+            --pw-teal: #4a9e8a;
+            --pw-teal-light: #7ac4b0;
+            --pw-teal-pale: #d4f0ea;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
+        body {
+            font-family: var(--font-sans);
+            background: var(--cream);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        /* ===== NAV ===== */
+        .nav {
+            position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
+            background: var(--cream);
+            border-bottom: 1px solid rgba(196,113,74,0.12);
+            padding: 0 32px;
+            display: flex; align-items: center; justify-content: space-between;
+            height: 64px;
+            transition: box-shadow 0.3s;
+        }
+        .nav.scrolled { box-shadow: var(--shadow-soft); }
+        .nav-logo {
+            font-family: var(--font-serif);
+            font-size: 22px; font-weight: 700;
+            color: var(--terracotta);
+            letter-spacing: 2px;
+            cursor: pointer;
+        }
+        .nav-logo span { color: var(--text-mid); font-weight: 300; font-size: 13px; margin-left: 8px; }
+        .nav-links { display: flex; gap: 4px; }
+        .nav-links button {
+            background: var(--cream); border: none;
+            font-family: var(--font-sans); font-size: 14px;
+            color: var(--text-dark); padding: 8px 14px; border-radius: 10px;
+            cursor: pointer; transition: all 0.2s;
+            display: flex; align-items: center; gap: 6px;
+        }
+        .nav-links button:hover { background: var(--cream2); color: var(--terracotta); }
+        .nav-links button.active { background: var(--terracotta); color: white; }
+
+        /* ===== PAGE SYSTEM ===== */
+        .page { display: block; padding-top: 64px; min-height: 100vh; }
+
+        /* ===== BUTTONS ===== */
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 12px 24px; border-radius: 40px;
+            font-family: var(--font-sans); font-size: 15px; font-weight: 500;
+            cursor: pointer; border: none; transition: all 0.25s;
+            text-decoration: none;
+        }
+        .btn-primary { background: var(--terracotta); color: white; }
+        .btn-primary:hover { background: #965f2a; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,113,74,0.35); }
+        .btn-outline { background: transparent; color: var(--terracotta); border: 2px solid var(--terracotta-light); }
+        .btn-outline:hover { background: var(--terracotta-pale); }
+
+        /* ===== CARDS ===== */
+        .card {
+            background: white; border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            padding: 24px;
+        }
+
+        /* ===== BADGE ===== */
+        .badge {
+            display: inline-flex; align-items: center; gap: 6px;
+            padding: 4px 12px; border-radius: 20px;
+            font-size: 12px; font-weight: 500;
+        }
+        .badge-spirit { background: var(--terracotta-pale); color: var(--terracotta); }
+        .badge-digital { background: var(--dw-blue-pale); color: var(--dw-blue); }
+        .badge-physical { background: var(--pw-teal-pale); color: var(--pw-teal); }
+
+        /* ===== SECTION HEADER ===== */
+        .section-header { text-align: center; margin-bottom: 56px; }
+        .section-eyebrow { font-size: 13px; color: var(--terracotta); letter-spacing: 3px; text-transform: uppercase; margin-bottom: 12px; }
+        .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }
+        .section-subtitle { font-size: 15px; color: var(--text-mid); max-width: 500px; margin: 0 auto; line-height: 1.8; }
+
+        /* ===== BRIEF PAGE ===== */
+        .brief-page {
+            padding: 80px;
+        }
+
+        .brief-header {
+            margin-bottom: 48px;
+        }
+
+        /* Search Box */
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+        .search-input {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1.5px solid var(--cream2);
+            border-radius: var(--radius);
+            font-family: var(--font-sans);
+            font-size: 14px;
+            background: white;
+            box-shadow: var(--shadow-card);
+            transition: all 0.2s;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: var(--terracotta);
+            box-shadow: 0 0 0 3px rgba(196,113,74,0.1);
+        }
+        .search-btn {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: var(--terracotta);
+            color: white;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 10px 20px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .search-btn:hover {
+            background: #965f2a;
+            transform: translateY(-50%) translateY(-2px);
+        }
+
+        /* Category Filter */
+        .category-filter {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .category-btn {
+            background: white;
+            border: 1px solid var(--cream2);
+            border-radius: 24px;
+            padding: 8px 20px;
+            font-family: var(--font-sans);
+            font-size: 14px;
+            color: var(--text-mid);
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        .category-btn:hover {
+            background: var(--cream2);
+            color: var(--terracotta);
+        }
+        .category-btn.active {
+            background: var(--terracotta);
+            color: white;
+            border-color: var(--terracotta);
+        }
+
+        /* Brief List */
+        .brief-list {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+            gap: 24px;
+        }
+        .brief-card {
+            background: white;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow-card);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .brief-card:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 20px 48px rgba(44,36,32,0.12);
+        }
+        .brief-card-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+        .brief-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .brief-content {
+            padding: 20px;
+        }
+        .brief-date {
+            font-size: 12px;
+            color: var(--text-light);
+            margin-bottom: 12px;
+        }
+        .brief-title {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 12px;
+            line-height: 1.4;
+        }
+        .brief-desc {
+            font-size: 14px;
+            color: var(--text-mid);
+            line-height: 1.6;
+            margin-bottom: 16px;
+        }
+        .brief-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 16px;
+            border-top: 1px solid var(--cream2);
+        }
+        .brief-source {
+            font-size: 12px;
+            color: var(--text-light);
+        }
+        .brief-category {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 4px 12px;
+            border-radius: 16px;
+            font-size: 11px;
+            font-weight: 500;
+            background: var(--terracotta-pale);
+            color: var(--terracotta);
+        }
+
+        /* ===== SITE FOOTER ===== */
+        .site-footer {
+            background: var(--text-dark); color: white;
+            padding: 40px 80px; text-align: center; font-size: 13px; opacity: 0.9;
+            margin-top: 80px;
+        }
+        .site-footer .footer-logo { font-family: var(--font-serif); font-size: 24px; color: var(--terracotta-light); margin-bottom: 12px; }
+        .site-footer p { opacity: 0.5; }
+        .footer-links { display: flex; gap: 24px; justify-content: center; margin: 16px 0; }
+        .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; }
+        .footer-links a:hover { color: var(--terracotta-light); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 1100px) {
+            .brief-page { padding: 60px 40px; }
+            .brief-list { grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); }
+        }
+        @media (max-width: 768px) {
+            .nav-links button span { display: none; }
+            .brief-page { padding: 40px 20px; }
+            .section-title { font-size: 28px; }
+            .brief-list { grid-template-columns: 1fr; }
+        }
+
+        /* Animations */
+        .fade-in { animation: fadeIn 0.5s ease both; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav-logo" onclick="window.location.href='xinyu_complete .html'">心语 <span>智能情感陪护系统</span></div>
+  <div class="nav-links">
+    <button onclick="window.location.href='xinyu_complete .html'" id="nav-home">首页</button>
+    <button onclick="window.location.href='brief.html'" id="nav-brief" class="active">📰 简讯中心</button>
+  </div>
+</nav>
+
+<div class="page active brief-page fade-in">
+    <div class="section-header brief-header">
+        <div class="section-eyebrow">简讯中心</div>
+        <h2 class="section-title">最新简讯</h2>
+        <p class="section-subtitle">及时了解最新动态、健康资讯和活动通知</p>
+    </div>
+
+    <!-- Search Box -->
+    <div class="search-box">
+        <input type="text" class="search-input" placeholder="搜索简讯...">
+        <button class="search-btn">搜索</button>
+    </div>
+
+    <!-- Category Filter -->
+    <div class="category-filter">
+        <button class="category-btn active">全部</button>
+        <button class="category-btn">健康简讯</button>
+        <button class="category-btn">活动通知</button>
+        <button class="category-btn">政策简讯</button>
+        <button class="category-btn">社区动态</button>
+    </div>
+
+    <!-- Brief List -->
+    <div class="brief-list">
+        <!-- 简讯 1 -->
+        <a href="https://sd.ifeng.com/c/8rpsZKTtUuw" class="brief-card-link">
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1506126613408-eca07ce68773?w=600&h=300&fit=crop&crop=center" alt="健康讲座" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-03-15</div>
+                <h3 class="brief-title">3月健康讲座：老年人春季养生之道</h3>
+                <p class="brief-desc">颐和缘将于3月20日举办春季养生讲座，邀请知名中医专家讲解老年人春季养生知识，包括饮食调理、运动保健等内容。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：颐和缘健康中心</span>
+                    <span class="brief-category">活动通知</span>
+                </div>
+            </div>
+        </div>
+        </a>
+
+        <!-- 简讯 2 -->
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1560518883-ce09059eeffa?w=600&h=300&fit=crop&crop=center" alt="养老金调整" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-03-10</div>
+                <h3 class="brief-title">养老金调整方案公布，4月起实施</h3>
+                <p class="brief-desc">最新养老金调整方案已公布，从4月1日起实施，惠及全市老年人。调整后，基础养老金将提高5%，高龄补贴标准也将相应提高。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：市民政局</span>
+                    <span class="brief-category">政策简讯</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 简讯 3 -->
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1551650975-87deedd944c3?w=600&h=300&fit=crop&crop=center" alt="智能养老服务点" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-03-08</div>
+                <h3 class="brief-title">社区智能养老服务点正式启用</h3>
+                <p class="brief-desc">我市首个社区智能养老服务点正式启用，配备了智能健康监测设备、数字人陪护系统等先进设施，为社区老年人提供便捷的养老服务。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：社区服务中心</span>
+                    <span class="brief-category">社区动态</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 简讯 4 -->
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1534430480872-3498386e7856?w=600&h=300&fit=crop&crop=center" alt="疾病预防" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-03-05</div>
+                <h3 class="brief-title">春季常见疾病预防指南</h3>
+                <p class="brief-desc">春季是呼吸道疾病高发季节，老年人应注意保暖、勤通风、适当锻炼，预防感冒、肺炎等疾病。如有不适，及时就医。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：市卫生健康委员会</span>
+                    <span class="brief-category">健康简讯</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 简讯 5 -->
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=300&fit=crop&crop=center" alt="数字人陪护系统" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-03-01</div>
+                <h3 class="brief-title">颐和缘数字人陪护系统升级通知</h3>
+                <p class="brief-desc">颐和缘数字人陪护系统将于3月5日进行升级，新增语音识别、情感陪护等功能，为老年人提供更加智能、贴心的服务。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：颐和缘技术部</span>
+                    <span class="brief-category">活动通知</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- 简讯 6 -->
+        <div class="brief-card">
+            <img src="https://images.unsplash.com/photo-1579621970563-ebec7560ff3e?w=600&h=300&fit=crop&crop=center" alt="健康体检" class="brief-image">
+            <div class="brief-content">
+                <div class="brief-date">2026-02-28</div>
+                <h3 class="brief-title">老年人健康体检优惠活动</h3>
+                <p class="brief-desc">为关爱老年人健康，市医院推出老年人健康体检优惠活动，3月1日至31日，60岁以上老年人可享受体检套餐8折优惠。</p>
+                <div class="brief-footer">
+                    <span class="brief-source">来源：市医院</span>
+                    <span class="brief-category">健康简讯</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<footer class="site-footer">
+    <div class="footer-logo">心语</div>
+    <p>基于具身智能的三维空间情感陪护系统</p>
+    <div class="footer-links">
+        <a href="#">关于我们</a>
+        <a href="#">使用指南</a>
+        <a href="#">隐私政策</a>
+        <a href="#">联系我们</a>
+    </div>
+    <p>© 2024 心语智能. 保留所有权利</p>
+</footer>
+
+<script>
+    // 页面加载时添加淡入效果
+    window.addEventListener('load', function() {
+        document.body.classList.add('fade-in');
+    });
+
+    // 导航栏滚动效果
+    window.addEventListener('scroll', function() {
+        const nav = document.querySelector('.nav');
+        if (window.scrollY > 10) {
+            nav.classList.add('scrolled');
+        } else {
+            nav.classList.remove('scrolled');
+        }
+    });
+
+    // 分类按钮点击效果
+    const categoryBtns = document.querySelectorAll('.category-btn');
+    categoryBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            categoryBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+        });
+    });
+</script>
+</body>
+</html>

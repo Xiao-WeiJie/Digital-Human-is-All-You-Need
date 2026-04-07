@@ -51,6 +51,17 @@ batch_pipeline_manager = None
 video_output_dir = None
 app_config: DigitalHumanConfig = None
 
+# Mock 模式相关
+mock_mode_enabled = False
+MOCK_RESPONSES = [
+    "你好呀，我是小暖，是你的心理陪护助手。就像一个愿意倾听的朋友，也懂一些心理学的知识。你可以和我聊聊你的想法和感受，我会一直在这里陪着你。最近过得怎么样呀？",
+    "听到你这样说，我明白你现在可能正被一些懊恼和自责的情绪包围着。每个人都会有状态不佳的时候，这很正常，就像天气会有阴晴圆缺一样。你愿意跟我聊聊具体发生了什么吗？有时候把心里的想法说出来，会让自己感觉轻松一些。",
+    "听到你这样说，我真的很心疼。不小心摔碎碗这样的小事，却让你感到这么难过，说明你对自己有很高的期待，也一定是个很细心的人。其实每个人都会有手滑的时候，这并不代表你没用，只是生活中的小意外罢了。\n你知道吗？心理学上有个概念叫'全有或全无思维'，就是当我们把事情看成非黑即白，一旦出现一点差错就觉得整个世界都崩塌了。但其实，生活是有很多灰色地带的，一次小失误并不会定义你的价值。\n你愿意和我聊聊，当时摔碎碗时具体是什么感觉吗？",
+    "听起来那个碗对你来说真的很特别呢。喜欢的东西突然不见了，确实会让人感到惋惜。你愿意和我聊聊它为什么那么特别吗？"
+]
+
+WEB_DIR = Path(__file__).parent / "web"
+
 
 def randN(N) -> int:
     """生成长度为 N 的随机数"""
@@ -460,6 +471,65 @@ async def get_emotion_context(request):
         )
 
 
+# ==================== Mock 模式 API ====================
+
+async def get_mock_config(request):
+    """
+    获取 Mock 模式配置
+
+    返回:
+        {
+            "code": 0,
+            "data": {
+                "enabled": true,
+                "responses": [...],
+                "videos": ["/mock_videos/1.mp4", ...]
+            }
+        }
+    """
+    global mock_mode_enabled
+
+    if not mock_mode_enabled:
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "data": {"enabled": False}}),
+        )
+
+    mock_videos = [f"/mock_videos/{i}.mp4" for i in range(1, 5)]
+
+    return web.Response(
+        content_type="application/json",
+        text=json.dumps({
+            "code": 0,
+            "data": {
+                "enabled": True,
+                "responses": MOCK_RESPONSES,
+                "videos": mock_videos
+            }
+        }),
+    )
+
+
+async def serve_mock_video(request):
+    """提供 Mock 视频文件服务"""
+    filename = request.match_info.get('filename', '')
+
+    if not filename or '..' in filename or '/' in filename or '\\' in filename:
+        return web.Response(status=400, text="Invalid filename")
+
+    mock_video_dir = PROJECT_ROOT / "output"
+    video_path = mock_video_dir / filename
+
+    if not video_path.exists():
+        return web.Response(status=404, text=f"Mock video not found: {filename}")
+
+    return web.FileResponse(video_path, headers={
+        'Content-Type': 'video/mp4',
+        'Accept-Ranges': 'bytes',
+        'Cache-Control': 'public, max-age=3600'
+    })
+
+
 # ==================== 批量视频生成 API ====================
 
 async def batch_generate(request):
@@ -632,6 +702,16 @@ async def delete_video(request):
     返回:
         {"code": 0, "msg": "ok"} 或错误信息
     """
+    global app_config
+
+    # 如果配置了保存视频，则跳过删除
+    if app_config and app_config.save_generated_videos:
+        logger.info(f"[VideoCleanup] Skipped deletion (save mode): {request.match_info.get('filename', '')}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "msg": "Video saved (deletion skipped)"}),
+        )
+
     filename = request.match_info.get('filename', '')
 
     if not filename:
@@ -689,6 +769,38 @@ async def delete_video(request):
 
 # ==================== 主函数 ====================
 
+def _serve_web_page(filename: str) -> web.FileResponse:
+    """Serve a page from the bundled web directory."""
+    page_path = WEB_DIR / filename
+    if not page_path.exists():
+        raise web.HTTPNotFound(text=f"Page not found: {filename}")
+    return web.FileResponse(page_path)
+
+
+async def serve_root(request):
+    raise web.HTTPFound("/xinyu_complete.html")
+
+
+async def serve_portal_page(request):
+    return _serve_web_page("xinyu_complete.html")
+
+
+async def serve_brief_page(request):
+    return _serve_web_page("brief.html")
+
+
+async def serve_batch_video_page(request):
+    return _serve_web_page("batch_video.html")
+
+
+async def serve_legacy_dashboard_page(request):
+    raise web.HTTPFound("/xinyu_complete.html")
+
+
+async def serve_legacy_webrtc_page(request):
+    raise web.HTTPFound("/batch_video.html")
+
+
 def load_models_and_avatar(opt):
     """加载模型和 Avatar"""
     global model, avatar
@@ -703,9 +815,19 @@ def load_models_and_avatar(opt):
     logger.info("Models and avatar loaded successfully")
 
 
+@web.middleware
+async def html_no_cache_middleware(request, handler):
+    response = await handler(request)
+    if request.path.endswith('.html') or request.path == '/':
+        response.headers['Cache-Control'] = 'no-store, no-cache, must-revalidate, max-age=0'
+        response.headers['Pragma'] = 'no-cache'
+        response.headers['Expires'] = '0'
+    return response
+
+
 def create_app(opt):
     """创建 aiohttp 应用"""
-    appasync = web.Application(client_max_size=1024**2 * 100)
+    appasync = web.Application(client_max_size=1024**2 * 100, middlewares=[html_no_cache_middleware])
     appasync.on_shutdown.append(on_shutdown)
 
     # WebRTC API 路由
@@ -726,8 +848,18 @@ def create_app(opt):
     appasync.router.add_post("/api/v1/emotion/detect", detect_emotion)
     appasync.router.add_get("/api/v1/emotion/context", get_emotion_context)
 
+    # Mock 模式 API
+    appasync.router.add_get("/api/v1/mock/config", get_mock_config)
+    appasync.router.add_get("/mock_videos/{filename}", serve_mock_video)
+
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"
+    appasync.router.add_get("/", serve_root)
+    appasync.router.add_get("/xinyu_complete.html", serve_portal_page)
+    appasync.router.add_get("/brief.html", serve_brief_page)
+    appasync.router.add_get("/batch_video.html", serve_batch_video_page)
+    appasync.router.add_get("/dashboard.html", serve_legacy_dashboard_page)
+    appasync.router.add_get("/webrtcapi.html", serve_legacy_webrtc_page)
     appasync.router.add_static('/', path=str(web_dir))
 
     # Human_Choice 目录
@@ -749,72 +881,122 @@ def create_app(opt):
     return appasync
 
 
-def run_server(host: str = "0.0.0.0", port: int = 8010, **kwargs):
-    """运行服务器"""
-    global opt, batch_pipeline_manager, video_output_dir, app_config
-
-    # 设置多进程启动方式
-    mp.set_start_method('spawn', force=True)
-
-    # 加载统一配置
-    app_config = get_default_config()
-    app_config.host = host
-    app_config.port = port
-
-    # 创建默认参数（兼容旧代码）
+def _build_runtime_opt(config: DigitalHumanConfig, port: int):
+    """构建兼容旧代码的运行参数"""
     parser = argparse.ArgumentParser()
-    parser.add_argument('--fps', type=int, default=app_config.video.fps)
+    parser.add_argument('--fps', type=int, default=config.video.fps)
     parser.add_argument('-l', type=int, default=10)
     parser.add_argument('-m', type=int, default=8)
     parser.add_argument('-r', type=int, default=10)
-    parser.add_argument('--W', type=int, default=app_config.video.width)
-    parser.add_argument('--H', type=int, default=app_config.video.height)
-    parser.add_argument('--avatar_id', type=str, default=app_config.avatar.default_avatar)
-    parser.add_argument('--batch_size', type=int, default=app_config.video.batch_size)
+    parser.add_argument('--W', type=int, default=config.video.width)
+    parser.add_argument('--H', type=int, default=config.video.height)
+    parser.add_argument('--avatar_id', type=str, default=config.avatar.default_avatar)
+    parser.add_argument('--batch_size', type=int, default=config.video.batch_size)
     parser.add_argument('--customvideo_config', type=str, default='')
-    parser.add_argument('--tts', type=str, default='gpt-sovits')  # 默认使用 GPT-SoVITS
-    parser.add_argument('--REF_FILE', type=str, default=app_config.gpt_sovits.ref_audio)
-    parser.add_argument('--REF_TEXT', type=str, default=app_config.gpt_sovits.ref_text)
-    parser.add_argument('--TTS_SERVER', type=str, default=app_config.gpt_sovits.server_url)
+    parser.add_argument('--tts', type=str, default='kokoro')
+    parser.add_argument('--REF_FILE', type=str, default=config.gpt_sovits.ref_audio)
+    parser.add_argument('--REF_TEXT', type=str, default=config.gpt_sovits.ref_text)
+    parser.add_argument('--TTS_SERVER', type=str, default=config.gpt_sovits.server_url)
     parser.add_argument('--model', type=str, default='fasterliveportrait')
     parser.add_argument('--transport', type=str, default='webrtc')
     parser.add_argument('--max_session', type=int, default=1)
     parser.add_argument('--listenport', type=int, default=port)
 
-    # 解析参数
     args = parser.parse_args([])
     args.listenport = port
-
-    # 设置 session 相关属性
     args.sessionid = 0
     args.customopt = []
+    return args
 
-    opt = args
 
-    # 加载模型和 Avatar
+def initialize_batch_runtime(
+    host: str = "0.0.0.0",
+    port: int = 8010,
+    save_videos: bool = False,
+    motion_seed: int = None,
+    mock_mode: bool = False,
+    terminal_tts_mode: bool = False,
+    terminal_tts_avatar: str = None
+):
+    """初始化批量生成运行时资源"""
+    global opt, batch_pipeline_manager, video_output_dir, app_config, mock_mode_enabled
+
+    mock_mode_enabled = mock_mode
+
+    mp.set_start_method('spawn', force=True)
+
+    app_config = get_default_config()
+    app_config.host = host
+    app_config.port = port
+    app_config.save_generated_videos = save_videos
+    app_config.terminal_tts_mode = terminal_tts_mode
+    if terminal_tts_avatar:
+        app_config.terminal_tts_avatar = terminal_tts_avatar
+    if motion_seed is not None:
+        app_config.video.motion_seed = motion_seed
+
+    opt = _build_runtime_opt(app_config, port)
+
     load_models_and_avatar(opt)
 
-    # ========== 初始化批量流水线 ==========
     logger.info("Initializing batch pipeline...")
     from batch_pipeline import batch_pipeline_manager as _batch_manager
     batch_pipeline_manager = _batch_manager
 
-    # 设置视频输出目录
     video_output_dir = app_config.output_dir
     os.makedirs(video_output_dir, exist_ok=True)
 
-    # 获取默认源图像路径
     default_avatar = app_config.avatar.get_default_avatar()
     default_source = default_avatar.get_full_source_path() if default_avatar else None
 
-    # 初始化批量流水线管理器
     batch_pipeline_manager.initialize(
         pipeline=model[0],
         joyvasa_pipeline=model[1],
-        config=app_config
+        config=app_config,
+        default_source_image=default_source
     )
 
     logger.info("Batch pipeline initialized")
+
+    # 打印视频保存配置
+    if app_config.save_generated_videos:
+        logger.info(f"[Config] 视频保存模式: 已启用，视频将保存到 {video_output_dir}")
+    else:
+        logger.info("[Config] 视频保存模式: 未启用，视频播放后自动删除")
+
+    return {
+        "default_avatar": default_avatar,
+        "default_source": default_source,
+        "video_output_dir": video_output_dir,
+        "config": app_config
+    }
+
+
+def _resolve_avatar_source_path(avatar_id: str) -> str:
+    """解析数字人源图像路径"""
+    global app_config
+
+    avatar_info = app_config.avatar.get_avatar(avatar_id) if app_config else None
+    if avatar_info is None:
+        raise RuntimeError(f"数字人形象不存在: {avatar_id}")
+
+    source_path = avatar_info.get_full_source_path()
+    if not source_path or not os.path.exists(source_path):
+        raise RuntimeError(f"数字人源图像不存在: {avatar_id}")
+
+    return source_path
+
+
+def run_server(host: str = "0.0.0.0", port: int = 8010, save_videos: bool = False, motion_seed: int = None, mock_mode: bool = False, **kwargs):
+    """运行服务器"""
+    initialize_batch_runtime(
+        host=host,
+        port=port,
+        save_videos=save_videos,
+        motion_seed=motion_seed,
+        mock_mode=mock_mode,
+        terminal_tts_mode=False
+    )
 
     # 创建应用
     appasync = create_app(opt)
@@ -826,6 +1008,94 @@ def run_server(host: str = "0.0.0.0", port: int = 8010, **kwargs):
 
     # 运行服务器
     web.run_app(appasync, host=host, port=port)
+
+
+def run_terminal_tts_mode(
+    host: str = "0.0.0.0",
+    port: int = 8010,
+    motion_seed: int = None,
+    avatar_id: str = "human_1"
+):
+    """运行终端直输 TTS 模式"""
+    global batch_pipeline_manager, video_output_dir
+
+    initialize_batch_runtime(
+        host=host,
+        port=port,
+        save_videos=True,
+        motion_seed=motion_seed,
+        mock_mode=False,
+        terminal_tts_mode=True,
+        terminal_tts_avatar=avatar_id
+    )
+
+    source_image = _resolve_avatar_source_path(avatar_id)
+
+    print("=" * 60)
+    print("  终端直输 TTS 合成模式")
+    print("  Terminal Direct-Text TTS Mode")
+    print("=" * 60)
+    print()
+    print("  当前模式不会启动 Web 服务。")
+    print(f"  默认数字人: {avatar_id}")
+    print(f"  输出目录: {video_output_dir}")
+    print(f"  运动种子: {motion_seed if motion_seed is not None else '不固定（随机）'}")
+    print()
+    print("  使用说明:")
+    print("    - 直接输入要合成的文本并回车")
+    print("    - 输入 exit / quit / q 退出")
+    print()
+    print("=" * 60)
+    print()
+
+    counter = 0
+
+    try:
+        while True:
+            try:
+                user_input = input("请输入要合成的文本（exit / quit / q 退出）：").strip()
+            except EOFError:
+                print("\n检测到输入结束，终端模式退出。")
+                break
+
+            if not user_input:
+                print("输入为空，请重新输入。")
+                continue
+
+            if user_input.lower() in {"exit", "quit", "q"}:
+                print("终端模式退出。")
+                break
+
+            counter += 1
+            session_id = f"terminal_{int(time.time() * 1000)}_{counter}"
+            print(f"[{counter}] 开始生成...")
+
+            try:
+                result = asyncio.run(
+                    batch_pipeline_manager.process_direct_text(
+                        session_id=session_id,
+                        tts_text=user_input,
+                        source_image=source_image,
+                        avatar_id=avatar_id
+                    )
+                )
+
+                if result.success:
+                    print(f"[{counter}] 生成成功")
+                    print(f"文本: {result.response_text}")
+                    print(f"视频: {result.video_path}")
+                    print(f"音频时长: {result.audio_duration:.2f}s")
+                    print(f"总耗时: {result.total_time:.2f}s")
+                else:
+                    print(f"[{counter}] 生成失败: {result.error_message}")
+            finally:
+                if batch_pipeline_manager is not None:
+                    batch_pipeline_manager.cleanup_session(session_id)
+    except KeyboardInterrupt:
+        print("\n检测到 Ctrl+C，终端模式退出。")
+    finally:
+        if batch_pipeline_manager is not None:
+            batch_pipeline_manager.cleanup_all()
 
 
 if __name__ == '__main__':

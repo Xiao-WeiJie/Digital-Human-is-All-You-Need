@@ -54,7 +54,7 @@ def load_model(cfg_path=None):
 
     # Load configuration
     if cfg_path is None:
-        cfg_path = os.path.join(fasterlp_path, "configs", "trt_infer.yaml")
+        cfg_path = os.path.join(fasterlp_path, "configs", "trt_infer_2.yaml")
 
     cfg = OmegaConf.load(cfg_path)
 

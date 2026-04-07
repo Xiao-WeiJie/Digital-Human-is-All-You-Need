@@ -284,11 +284,14 @@ class EmotionAdapter:
         logger.info(f"EmotionAdapter initialized: enabled={self.enabled}, backend={self.backend}")
 
     def _init_deepface(self):
-        """初始化 DeepFace"""
+        """初始化 DeepFace（TF 强制 CPU 模式，避免 CuDNN 版本不匹配，不影响 TensorRT）"""
         try:
+            import tensorflow as tf
+            tf.config.set_visible_devices([], "GPU")
+            logger.info("TensorFlow GPU disabled (CPU-only mode for emotion detection)")
             from deepface import DeepFace
             self._deepface = DeepFace
-            logger.info("DeepFace loaded successfully")
+            logger.info("DeepFace loaded successfully (CPU mode)")
         except ImportError:
             logger.warning("DeepFace not installed, emotion detection disabled")
             self.enabled = False
@@ -308,6 +311,15 @@ class EmotionAdapter:
             EmotionResult 或 None（检测失败时）
         """
         if not self.enabled or self._deepface is None:
+            return self._get_neutral_result()
+
+        # 验证帧的有效性
+        if frame is None or frame.size == 0:
+            logger.warning("Empty frame received")
+            return self._get_neutral_result()
+
+        if len(frame.shape) != 3 or frame.shape[2] != 3:
+            logger.warning(f"Invalid frame shape: {frame.shape if frame is not None else 'None'}")
             return self._get_neutral_result()
 
         try:
@@ -387,6 +399,18 @@ class EmotionAdapter:
             if frame is None:
                 logger.error("Failed to decode base64 image")
                 return None
+
+            # 验证图像尺寸
+            if frame.shape[0] < 10 or frame.shape[1] < 10:
+                logger.warning(f"Image too small: {frame.shape}")
+                return self._get_neutral_result()
+
+            # 检测图像是否过暗或无效（可能是空白帧）
+            gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+            mean_brightness = np.mean(gray)
+            if mean_brightness < 5:
+                logger.warning(f"Image too dark (mean={mean_brightness:.1f}), likely blank frame")
+                return self._get_neutral_result()
 
             return self.detect_from_frame(frame, session_id)
 

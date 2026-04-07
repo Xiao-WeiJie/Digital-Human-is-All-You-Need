@@ -431,7 +431,7 @@ class MotionPostProcessor:
         """
         应用头部动作
 
-        根据动��类型修改 pitch/yaw/roll 角度
+        根据动作类型修改 pitch/yaw/roll 角度
         """
         motion_type = self.head_motion_state["type"]
         dt = 1.0 / fps

@@ -2,7 +2,7 @@
 """
 数字人批量视频生成流水线
 
-默认使用 GPT-SoVITS TTS，支持 SenseVoice ASR
+默认使用 Kokoro TTS，支持 SenseVoice ASR
 """
 
 import os
@@ -11,6 +11,9 @@ import time
 import asyncio
 import logging
 import re
+import json
+import torch
+import numpy as np
 from pathlib import Path
 from typing import Optional, Tuple, Dict, Any
 from dataclasses import dataclass
@@ -273,15 +276,48 @@ class GPTSoVITSTTS:
 
 
 class EdgeTTSFallback:
-    """EdgeTTS 备用 TTS"""
+    """EdgeTTS 语音合成（默认 TTS）"""
 
-    async def generate(self, text: str, output_path: str) -> Tuple[str, float]:
-        """使用 EdgeTTS 生成音频"""
+    # 数字人音色映射
+    DEFAULT_VOICE_MAP = {
+        "human_1": "zh-CN-XiaoxuanNeural",   # 数字人1：晓萱（温柔知性女声）
+        "human_2": "zh-CN-YunxiNeural",      # 数字人2：云希（阳光男声）
+    }
+
+    def __init__(self, avatar_id: str = "human_1"):
+        self.avatar_id = avatar_id
+        self.default_voice = "zh-CN-XiaoxuanNeural"
+        logger.info(f"[EdgeTTS] Initialized, avatar: {avatar_id}, voice: {self._get_voice()}")
+
+    def set_avatar(self, avatar_id: str):
+        """设置当前数字人"""
+        self.avatar_id = avatar_id
+        logger.info(f"[EdgeTTS] Avatar set to: {avatar_id}, voice: {self._get_voice()}")
+
+    def _get_voice(self) -> str:
+        """获取当前数字人对应的音色"""
+        voice = self.DEFAULT_VOICE_MAP.get(self.avatar_id, self.default_voice)
+        return voice
+
+    async def generate(self, text: str, output_path: str, emotion: str = "default") -> Tuple[str, float]:
+        """
+        使用 EdgeTTS 生成音频
+
+        Args:
+            text: 输入文本
+            output_path: 输出文件路径
+            emotion: 情感标签（EdgeTTS 暂不支持情感，保留参数兼容）
+
+        Returns:
+            Tuple[str, float]: (音频文件路径, 音频时长)
+        """
         import edge_tts
         import soundfile as sf
         import io
 
-        voice = "zh-CN-YunxiaNeural"
+        voice = self._get_voice()
+        logger.info(f"[EdgeTTS] Generating audio with voice: {voice}")
+
         communicate = edge_tts.Communicate(text, voice)
 
         # 收集音频数据
@@ -298,7 +334,236 @@ class EdgeTTSFallback:
         # 获取时长
         audio_data.seek(0)
         info = sf.info(audio_data)
+        logger.info(f"[EdgeTTS] Generated: {output_path}, duration: {info.duration:.2f}s")
         return output_path, info.duration
+
+
+class KokoroTTS:
+    """Kokoro-82M 本地 TTS"""
+
+    def __init__(self, avatar_id: str = "human_1"):
+        # Kokoro 模型路径
+        self.kokoro_path = os.path.join(
+            os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+            "FasterLivePortrait", "checkpoints", "Kokoro-82M"
+        )
+
+        # 默认音色
+        self.default_voice = "zf_001"
+
+        # 音色映射
+        self.voice_map = {}
+        self.avatar_id = avatar_id
+        self._load_voice_map()
+
+        # 模型延迟加载
+        self._model = None
+        self._pipeline = None
+        self._voices_loaded = False
+
+        logger.info(f"[KokoroTTS] Initialized, default voice: {self.default_voice}")
+
+    def _load_voice_map(self):
+        """从配置文件加载数字人音色映射"""
+        try:
+            config_path = os.path.join(
+                os.path.dirname(os.path.dirname(os.path.abspath(__file__))),
+                "Human_Choice", "avatar_config.json"
+            )
+            if os.path.exists(config_path):
+                with open(config_path, 'r', encoding='utf-8') as f:
+                    config = json.load(f)
+                for avatar_id, info in config.get("avatars", {}).items():
+                    kokoro_voice = info.get("kokoro_voice")
+                    if kokoro_voice:
+                        self.voice_map[avatar_id] = kokoro_voice
+                        logger.info(f"[KokoroTTS] Mapped {avatar_id} -> {kokoro_voice}")
+        except Exception as e:
+            logger.warning(f"[KokoroTTS] Failed to load voice map: {e}")
+
+    def set_avatar(self, avatar_id: str):
+        """设置当前数字人"""
+        self.avatar_id = avatar_id
+        logger.info(f"[KokoroTTS] Avatar set to: {avatar_id}")
+
+    def _get_voice(self) -> str:
+        """获取当前数字人对应的音色"""
+        voice = self.voice_map.get(self.avatar_id, self.default_voice)
+        logger.info(f"[KokoroTTS] Using voice: {voice} for avatar: {self.avatar_id}")
+        return voice
+
+    def _init_model(self) -> bool:
+        """延迟初始化 Kokoro 模型"""
+        if self._model is not None:
+            return True
+
+        try:
+            import platform
+            import subprocess
+            system = platform.system()
+
+            if system == "Windows":
+                espeak_path = r"C:\Program Files\eSpeak NG"
+                os.environ["PHONEMIZER_ESPEAK_LIBRARY"] = os.path.join(espeak_path, "libespeak-ng.dll")
+                os.environ["PHONEMIZER_ESPEAK_PATH"] = os.path.join(espeak_path, "espeak-ng.exe")
+            elif system == "Linux":
+                # Linux 上检测并设置 espeak-ng 路径
+                # 尝试多个可能的路径
+                possible_libs = [
+                    "/usr/lib/x86_64-linux-gnu/libespeak-ng.so",
+                    "/usr/lib/aarch64-linux-gnu/libespeak-ng.so",
+                    "/usr/local/lib/libespeak-ng.so",
+                    "/usr/lib/libespeak-ng.so",
+                ]
+                possible_bins = [
+                    "/usr/bin/espeak-ng",
+                    "/usr/local/bin/espeak-ng",
+                ]
+
+                for lib_path in possible_libs:
+                    if os.path.exists(lib_path):
+                        os.environ["PHONEMIZER_ESPEAK_LIBRARY"] = lib_path
+                        logger.info(f"[KokoroTTS] Found espeak library: {lib_path}")
+                        break
+
+                for bin_path in possible_bins:
+                    if os.path.exists(bin_path):
+                        os.environ["PHONEMIZER_ESPEAK_PATH"] = bin_path
+                        logger.info(f"[KokoroTTS] Found espeak binary: {bin_path}")
+                        break
+
+                # 检查 espeak-ng 是否安装
+                try:
+                    result = subprocess.run(["which", "espeak-ng"], capture_output=True, text=True)
+                    if result.returncode == 0:
+                        logger.info(f"[KokoroTTS] espeak-ng found at: {result.stdout.strip()}")
+                    else:
+                        logger.warning("[KokoroTTS] espeak-ng not found, please install: apt-get install espeak-ng")
+                except Exception as e:
+                    logger.warning(f"[KokoroTTS] Failed to check espeak-ng: {e}")
+
+            # 尝试导入 kokoro
+            try:
+                from kokoro import KPipeline, KModel
+            except ImportError as e:
+                logger.error(f"[KokoroTTS] Failed to import kokoro: {e}")
+                logger.error("[KokoroTTS] Please install: pip install kokoro>=0.3.0")
+                return False
+
+            # 检查模型文件（支持多个版本）
+            config_path = os.path.join(self.kokoro_path, "config.json")
+            # 优先尝试新版本模型
+            model_candidates = [
+                "kokoro-v1_1-zh.pth",
+                "kokoro-v1_1.pth",
+                "kokoro-v1_0.pth",
+            ]
+            model_path = None
+            for candidate in model_candidates:
+                candidate_path = os.path.join(self.kokoro_path, candidate)
+                if os.path.exists(candidate_path):
+                    model_path = candidate_path
+                    logger.info(f"[KokoroTTS] Found model: {candidate}")
+                    break
+
+            if not os.path.exists(config_path):
+                logger.error(f"[KokoroTTS] Config not found: {config_path}")
+                return False
+            if model_path is None:
+                logger.error(f"[KokoroTTS] Model not found, tried: {model_candidates}")
+                return False
+
+            with open(config_path, "r", encoding="utf-8") as f:
+                model_config = json.load(f)
+
+            self._model = KModel(config=model_config, model=model_path)
+
+            logger.info("[KokoroTTS] Model loaded successfully")
+            return True
+
+        except Exception as e:
+            logger.error(f"[KokoroTTS] Failed to load model: {e}")
+            import traceback
+            logger.error(traceback.format_exc())
+            return False
+
+    def generate(self, text: str, output_path: str) -> Tuple[str, float]:
+        """
+        生成语音
+
+        Args:
+            text: 输入文本
+            output_path: 输出文件路径
+
+        Returns:
+            (音频路径, 音频时长)
+        """
+        if not text or len(text.strip()) == 0:
+            raise ValueError("Empty text")
+
+        # 初始化模型
+        if not self._init_model():
+            raise RuntimeError("Failed to initialize Kokoro model")
+
+        try:
+            from kokoro import KPipeline
+            import soundfile as sf
+            import resampy
+
+            voice = self._get_voice()
+
+            # 创建 pipeline
+            pipeline = KPipeline(lang_code=voice[0], model=self._model)
+
+            # 加载音色
+            if not self._voices_loaded:
+                voice_dir = os.path.join(self.kokoro_path, "voices")
+                for vname in os.listdir(voice_dir):
+                    if vname.endswith(".pt"):
+                        voice_name = os.path.splitext(vname)[0]
+                        pipeline.voices[voice_name] = torch.load(
+                            os.path.join(voice_dir, vname),
+                            weights_only=True
+                        )
+                self._voices_loaded = True
+                logger.info(f"[KokoroTTS] Loaded {len(pipeline.voices)} voices")
+
+            # 生成音频
+            t_start = time.time()
+            generator = pipeline(
+                text,
+                voice=voice,
+                speed=1,
+                split_pattern=r'\n+'
+            )
+
+            # 收集所有音频片段
+            audios = []
+            for i, (gs, ps, audio) in enumerate(generator):
+                audios.append(audio)
+
+            if not audios:
+                raise RuntimeError("No audio generated")
+
+            # 合并音频
+            audio_data = np.concatenate(audios)
+            logger.info(f"[KokoroTTS] Generated audio in {time.time() - t_start:.2f}s")
+
+            # 转换采样率 (24kHz -> 16kHz)
+            audio_16k = resampy.resample(audio_data, sr_orig=24000, sr_new=16000)
+
+            # 保存文件
+            sf.write(output_path, audio_16k, 16000)
+
+            # 获取时长
+            duration = len(audio_16k) / 16000
+            logger.info(f"[KokoroTTS] Saved to {output_path}, duration: {duration:.2f}s")
+
+            return output_path, duration
+
+        except Exception as e:
+            logger.error(f"[KokoroTTS] Generation failed: {e}")
+            raise
 
 
 def preprocess_text_for_tts(text: str) -> str:
@@ -414,25 +679,32 @@ class DigitalHumanBatchPipeline:
         # 初始化 LLM
         self.psy_mind = None
         try:
+            # 添加 Psychology_Rag 到 Python 路径
+            project_root = Path(__file__).resolve().parent.parent
+            psy_rag_path = project_root / "Psychology_Rag"
+            if psy_rag_path not in sys.path:
+                sys.path.insert(0, str(psy_rag_path))
             from system import PsyMindSystem
-            self.psy_mind = PsyMindSystem(
-                api_key=dashscope_api_key or self.config.dashscope.api_key
-            )
+            self.psy_mind = PsyMindSystem()
             logger.info("[Pipeline] Psychology_Rag initialized")
         except Exception as e:
             logger.warning(f"[Pipeline] Psychology_Rag init failed: {e}, will use simple LLM")
 
-        # 初始化 TTS（默认使用 GPT-SoVITS）
+        # 初始化 TTS（默认使用 EdgeTTS）
         default_avatar_id = self.config.avatar.default_avatar
-        self.tts = GPTSoVITSTTS(self.config.gpt_sovits, avatar_id=default_avatar_id)
-        self.tts_fallback = EdgeTTSFallback()
+        self.tts = EdgeTTSFallback(avatar_id=default_avatar_id)
+        self.tts_gptsovits = GPTSoVITSTTS(self.config.gpt_sovits, avatar_id=default_avatar_id)
+        self.tts_kokoro = None  # Kokoro 延迟加载（需要时才初始化）
+        self.current_avatar_id = default_avatar_id
+        logger.info(f"[Pipeline] TTS initialized: EdgeTTS (primary) -> GPT-SoVITS (fallback)")
 
         # 初始化视频生成器
         self.video_generator = BatchVideoGeneratorSimple(
             pipeline=pipeline,
             joyvasa_pipeline=joyvasa_pipeline,
             output_dir=str(self.output_dir),
-            emotion_config=self.config.emotion  # 传递情感配置
+            emotion_config=self.config.emotion,  # 传递情感配置
+            motion_seed=self.config.video.motion_seed  # 传递运动随机种子
         )
 
         # 默认源图像
@@ -443,6 +715,104 @@ class DigitalHumanBatchPipeline:
         self.last_response_text = ""
 
         logger.info(f"[Pipeline] Initialized, output: {self.output_dir}")
+
+    def _set_avatar_for_tts(self, avatar_id: str = None):
+        """更新当前 TTS 所使用的数字人"""
+        if avatar_id:
+            self.current_avatar_id = avatar_id
+            self.tts.set_avatar(avatar_id)
+            self.tts_gptsovits.set_avatar(avatar_id)
+
+    async def _generate_from_response_text(
+        self,
+        response_text: str,
+        user_text: str,
+        source_image: str = None,
+        session_id: str = None,
+        avatar_id: str = None,
+        emotion: str = "default",
+        video_emotion: str = "default",
+        start_time: float = None,
+        metrics: Dict[str, Any] = None
+    ) -> PipelineResult:
+        """
+        使用既定文本直接执行 TTS 与视频生成
+
+        Args:
+            response_text: 要送入 TTS 的文本
+            user_text: 对外记录的输入文本
+            source_image: 源图像路径
+            session_id: 会话 ID
+            avatar_id: 数字人 ID
+            emotion: 情感标签
+            video_emotion: 视频驱动情感标签
+            start_time: 流程起始时间
+            metrics: 累计指标
+        """
+        start_time = start_time or time.time()
+        metrics = {} if metrics is None else metrics
+        source_image = source_image or self.default_source_image
+
+        if not source_image:
+            raise RuntimeError("No source image configured")
+
+        self._set_avatar_for_tts(avatar_id)
+
+        self.last_user_text = user_text
+        self.last_response_text = response_text
+
+        # ========== Step 3: TTS 生成音频 ==========
+        t3 = time.time()
+        logger.info("[Pipeline] Step 3: TTS generating audio...")
+        audio_path, audio_duration = await self._tts_generate(response_text, emotion)
+        metrics['tts_time'] = time.time() - t3
+        logger.info(f"[Pipeline] TTS: {metrics['tts_time']:.2f}s, audio duration: {audio_duration:.2f}s")
+
+        # ========== Step 4: 生成视频 ==========
+        t4 = time.time()
+        logger.info("[Pipeline] Step 4: Generating video...")
+        video_result = self.video_generator.generate(
+            audio_path=audio_path,
+            source_image_path=source_image,
+            session_id=session_id,
+            emotion=video_emotion
+        )
+        metrics['video_time'] = video_result.total_time
+        metrics['joyvasa_time'] = video_result.metrics.get('joyvasa_time', 0)
+        metrics['render_time'] = video_result.metrics.get('render_time', 0)
+        metrics['ffmpeg_time'] = video_result.metrics.get('ffmpeg_time', 0)
+        metrics['motion_post_time'] = video_result.metrics.get('motion_post_time', 0)
+        metrics['generate_video_wall_time'] = time.time() - t4
+        logger.info(f"[Pipeline] Video: {metrics['video_time']:.2f}s")
+
+        # ========== 清理临时音频 ==========
+        try:
+            if audio_path and os.path.exists(audio_path):
+                os.remove(audio_path)
+        except Exception:
+            pass
+
+        total_time = time.time() - start_time
+        metrics['total_time'] = total_time
+
+        if total_time > 30:
+            logger.warning(f"[Pipeline] Generation timeout: {total_time:.2f}s > 30s")
+
+        video_filename = os.path.basename(video_result.video_path)
+        video_url = f"/videos/{video_filename}"
+
+        logger.info(f"[Pipeline] Completed in {total_time:.2f}s")
+
+        return PipelineResult(
+            video_path=video_result.video_path,
+            video_url=video_url,
+            response_text=response_text,
+            user_text=user_text,
+            total_time=total_time,
+            metrics=metrics,
+            audio_duration=audio_duration,
+            success=True
+        )
 
     async def process_input(
         self,
@@ -469,9 +839,7 @@ class DigitalHumanBatchPipeline:
         source_image = source_image or self.default_source_image
         metrics = {}
 
-        # 如果指定了 avatar_id，更新 TTS 的 avatar
-        if avatar_id:
-            self.tts.set_avatar(avatar_id)
+        self._set_avatar_for_tts(avatar_id)
 
         try:
             # ========== Step 1: ASR 识别（如果是语音输入） ==========
@@ -493,76 +861,48 @@ class DigitalHumanBatchPipeline:
 
             self.last_user_text = user_text
 
-            # ========== Step 2: LLM 生成回复 ==========
+            # ========== Step 2: LLM 生成回复（带情绪上下文） ==========
             t2 = time.time()
             logger.info("[Pipeline] Step 2: LLM generating response...")
 
             emotion = "default"  # 默认情感
+            emotion_context = ""  # 情绪上下文
+
+            # 获取融合情绪上下文
+            try:
+                from digital_human.emotion_fusion import get_emotion_fusion
+                fusion = get_emotion_fusion()
+                fused = fusion.fuse(user_text, session_id or "default")
+                emotion_context = fused.prompt_context
+                if emotion_context:
+                    logger.info(f"[Pipeline] Emotion context detected: {fused.primary_emotion}, intensity={fused.intensity:.2f}")
+            except Exception as e:
+                logger.warning(f"[Pipeline] Failed to get emotion context: {e}")
 
             if self.psy_mind:
-                result = await self.psy_mind.process_message(user_text, session_id or "default")
+                result = await self.psy_mind.process_message(
+                    user_text,
+                    session_id or "default",
+                    emotion_context  # 传递情绪上下文
+                )
                 response_text = result.get("response", "")
                 emotion = result.get("emotion", "default")
             else:
                 response_text = await self._simple_llm_response(user_text)
 
-            self.last_response_text = response_text
             metrics['llm_time'] = time.time() - t2
             logger.info(f"[Pipeline] LLM: {metrics['llm_time']:.2f}s, emotion: {emotion}, response length: {len(response_text)}")
 
-            # ========== Step 3: TTS 生成音频（默认使用 GPT-SoVITS） ==========
-            t3 = time.time()
-            logger.info("[Pipeline] Step 3: TTS generating audio (GPT-SoVITS)...")
-            audio_path, audio_duration = await self._tts_generate(response_text, emotion)
-            metrics['tts_time'] = time.time() - t3
-            logger.info(f"[Pipeline] TTS: {metrics['tts_time']:.2f}s, audio duration: {audio_duration:.2f}s")
-
-            # ========== Step 4: 生成视频 ==========
-            t4 = time.time()
-            logger.info("[Pipeline] Step 4: Generating video...")
-            video_result = self.video_generator.generate(
-                audio_path=audio_path,
-                source_image_path=source_image,
-                session_id=session_id,
-                emotion=emotion  # 传递情感标签
-            )
-            metrics['video_time'] = video_result.total_time
-            metrics['joyvasa_time'] = video_result.metrics.get('joyvasa_time', 0)
-            metrics['render_time'] = video_result.metrics.get('render_time', 0)
-            metrics['ffmpeg_time'] = video_result.metrics.get('ffmpeg_time', 0)
-            metrics['motion_post_time'] = video_result.metrics.get('motion_post_time', 0)  # 新增
-            logger.info(f"[Pipeline] Video: {metrics['video_time']:.2f}s")
-
-            # ========== 清理临时音频 ==========
-            try:
-                if audio_path and os.path.exists(audio_path):
-                    os.remove(audio_path)
-            except:
-                pass
-
-            # 计算总耗时
-            total_time = time.time() - start_time
-            metrics['total_time'] = total_time
-
-            # 检查是否超时
-            if total_time > 30:
-                logger.warning(f"[Pipeline] Generation timeout: {total_time:.2f}s > 30s")
-
-            # 生成视频 URL
-            video_filename = os.path.basename(video_result.video_path)
-            video_url = f"/videos/{video_filename}"
-
-            logger.info(f"[Pipeline] Completed in {total_time:.2f}s")
-
-            return PipelineResult(
-                video_path=video_result.video_path,
-                video_url=video_url,
+            return await self._generate_from_response_text(
                 response_text=response_text,
                 user_text=user_text,
-                total_time=total_time,
-                metrics=metrics,
-                audio_duration=audio_duration,
-                success=True
+                source_image=source_image,
+                session_id=session_id,
+                avatar_id=avatar_id,
+                emotion=emotion,
+                video_emotion="default",
+                start_time=start_time,
+                metrics=metrics
             )
 
         except Exception as e:
@@ -570,6 +910,60 @@ class DigitalHumanBatchPipeline:
             return PipelineResult(
                 video_path="", video_url="",
                 response_text="", user_text=user_text or "",
+                total_time=time.time() - start_time,
+                metrics=metrics, audio_duration=0,
+                success=False, error_message=str(e)
+            )
+
+    async def process_direct_text(
+        self,
+        tts_text: str,
+        source_image: str = None,
+        session_id: str = None,
+        avatar_id: str = None
+    ) -> PipelineResult:
+        """
+        直接将输入文本送入 TTS，并继续生成视频
+
+        Args:
+            tts_text: 直接用于 TTS 的文本
+            source_image: 源图像路径
+            session_id: 会话 ID
+            avatar_id: 数字人 ID
+        """
+        start_time = time.time()
+        metrics = {}
+        source_image = source_image or self.default_source_image
+        self._set_avatar_for_tts(avatar_id)
+
+        try:
+            if not tts_text or not tts_text.strip():
+                return PipelineResult(
+                    video_path="", video_url="",
+                    response_text="", user_text="",
+                    total_time=0, metrics=metrics,
+                    audio_duration=0, success=False,
+                    error_message="No TTS text provided"
+                )
+
+            logger.info("[Pipeline] Terminal direct-text mode: skipping ASR and LLM")
+
+            return await self._generate_from_response_text(
+                response_text=tts_text.strip(),
+                user_text=tts_text.strip(),
+                source_image=source_image,
+                session_id=session_id,
+                avatar_id=avatar_id,
+                emotion="default",
+                video_emotion="default",
+                start_time=start_time,
+                metrics=metrics
+            )
+        except Exception as e:
+            logger.exception(f"[Pipeline] Direct text error: {e}")
+            return PipelineResult(
+                video_path="", video_url="",
+                response_text="", user_text=tts_text or "",
                 total_time=time.time() - start_time,
                 metrics=metrics, audio_duration=0,
                 success=False, error_message=str(e)
@@ -610,7 +1004,9 @@ class DigitalHumanBatchPipeline:
 
     async def _tts_generate(self, text: str, emotion: str = "default") -> Tuple[str, float]:
         """
-        TTS 生成音频（默认使用 GPT-SoVITS）
+        TTS 生成音频（默认使用 EdgeTTS）
+
+        优先级: EdgeTTS -> GPT-SoVITS
 
         Args:
             text: 要合成的文本
@@ -635,17 +1031,12 @@ class DigitalHumanBatchPipeline:
             processed_text = text
             logger.info(f"[TTS] Falling back to original text: {processed_text}")
 
-        logger.info(f"[TTS] GPT-SoVITS server: {self.tts.server_url}")
-        logger.info(f"[TTS] Emotion: {emotion}")
+        logger.info(f"[TTS] Emotion: {emotion}, Avatar: {self.current_avatar_id}")
 
-        # 优先使用 GPT-SoVITS
+        # 优先使用 EdgeTTS
         try:
-            loop = asyncio.get_event_loop()
-            result = await loop.run_in_executor(
-                None,
-                lambda: self.tts.generate(processed_text, audio_path, emotion=emotion)
-            )
-            logger.info(f"[TTS] GPT-SoVITS success: path={result[0]}, duration={result[1]:.2f}s")
+            result = await self.tts.generate(processed_text, audio_path, emotion=emotion)
+            logger.info(f"[TTS] EdgeTTS success: path={result[0]}, duration={result[1]:.2f}s")
 
             # 验证生成的音频文件有效
             if result[1] < 0.1:
@@ -653,13 +1044,19 @@ class DigitalHumanBatchPipeline:
 
             return result
         except Exception as e:
-            logger.warning(f"[TTS] GPT-SoVITS failed: {e}, using EdgeTTS fallback")
+            logger.warning(f"[TTS] EdgeTTS failed: {e}, trying GPT-SoVITS")
+
+            # 回退到 GPT-SoVITS
             try:
-                result = await self.tts_fallback.generate(processed_text, audio_path)
-                logger.info(f"[TTS] EdgeTTS success: path={result[0]}, duration={result[1]:.2f}s")
+                loop = asyncio.get_event_loop()
+                result = await loop.run_in_executor(
+                    None,
+                    lambda: self.tts_gptsovits.generate(processed_text, audio_path, emotion=emotion)
+                )
+                logger.info(f"[TTS] GPT-SoVITS success: path={result[0]}, duration={result[1]:.2f}s")
                 return result
             except Exception as e2:
-                logger.error(f"[TTS] EdgeTTS also failed: {e2}")
+                logger.error(f"[TTS] GPT-SoVITS also failed: {e2}")
                 raise RuntimeError("All TTS methods failed")
 
     def cleanup(self):
@@ -763,6 +1160,22 @@ class BatchPipelineManager:
         return await pipeline.process_input(
             user_text=user_text,
             user_audio_path=user_audio_path,
+            source_image=source_image,
+            session_id=session_id,
+            avatar_id=avatar_id
+        )
+
+    async def process_direct_text(
+        self,
+        session_id: str,
+        tts_text: str,
+        source_image: str = None,
+        avatar_id: str = None
+    ) -> 'PipelineResult':
+        """直接将文本送入 TTS 并生成视频"""
+        pipeline = self.get_or_create_pipeline(session_id)
+        return await pipeline.process_direct_text(
+            tts_text=tts_text,
             source_image=source_image,
             session_id=session_id,
             avatar_id=avatar_id

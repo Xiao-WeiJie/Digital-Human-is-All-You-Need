@@ -9,7 +9,7 @@ import os
 import json
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -265,11 +265,20 @@ class VideoConfig:
     output_format: str = "mp4"
     video_codec: str = "libx264"
     audio_codec: str = "aac"
+    motion_seed: Optional[int] = 10  # JoyVASA 运动生成随机种子，None 表示不固定
 
     def __post_init__(self):
         # 从 avatar_config.json 的 settings 覆盖
         self.fps = _AVATAR_CONFIG.get("settings", {}).get("frame_rate", self.fps)
         self.batch_size = _AVATAR_CONFIG.get("settings", {}).get("batch_size", self.batch_size)
+
+        # 环境变量覆盖
+        env_seed = os.getenv("MOTION_SEED")
+        if env_seed:
+            try:
+                self.motion_seed = int(env_seed)
+            except ValueError:
+                pass
 
 
 @dataclass
@@ -307,6 +316,13 @@ class DigitalHumanConfig:
 
     # 功能开关
     use_asr: bool = True  # 启用 ASR 语音识别
+    save_generated_videos: bool = False  # 保存生成的视频（默认不保存）
+    terminal_tts_mode: bool = False  # 启用终端直输 TTS 模式
+    terminal_tts_avatar: str = "human_1"  # 终端直输模式默认数字人
+    mock_mode_sequence_videos: List[str] = field(default_factory=lambda: ["1.mp4", "2.mp4", "3.mp4", "4.mp4"])
+    mock_mode_first_emotion_video: str = "5.mp4"
+    mock_mode_first_emotion_enabled: bool = True
+    mock_mode_first_emotion_delay_ms: int = 2000
 
     # 输出目录
     output_dir: str = field(default_factory=lambda: DEFAULT_PATHS["output"])
@@ -314,6 +330,19 @@ class DigitalHumanConfig:
     def __post_init__(self):
         # 确保输出目录存在
         Path(self.output_dir).mkdir(parents=True, exist_ok=True)
+
+        # 环境变量覆盖
+        env_save = os.getenv("SAVE_GENERATED_VIDEOS")
+        if env_save:
+            self.save_generated_videos = env_save.lower() in ("true", "1", "yes")
+
+        env_terminal_mode = os.getenv("TERMINAL_TTS_MODE")
+        if env_terminal_mode:
+            self.terminal_tts_mode = env_terminal_mode.lower() in ("true", "1", "yes")
+
+        env_terminal_avatar = os.getenv("TERMINAL_TTS_AVATAR")
+        if env_terminal_avatar:
+            self.terminal_tts_avatar = env_terminal_avatar
 
 
 def get_default_config() -> DigitalHumanConfig:

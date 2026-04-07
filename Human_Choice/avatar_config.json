@@ -5,6 +5,7 @@
             "source_image": "Human_1/qys.png",
             "idle_video": "Human_1/qys.mp4",
             "description": "默认数字人形象",
+            "kokoro_voice": "zf_001",
             "tts": {
                 "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_1",
                 "default_ref": {
@@ -25,6 +26,7 @@
             "source_image": "Human_2/wzx.png",
             "idle_video": "Human_2/wzx.mp4",
             "description": "备用数字人形象",
+            "kokoro_voice": "zm_009",
             "tts": {
                 "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_2",
                 "default_ref": {

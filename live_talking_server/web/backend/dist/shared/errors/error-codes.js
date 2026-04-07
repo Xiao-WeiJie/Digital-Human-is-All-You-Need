@@ -1,0 +1,21 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.ErrorCode = void 0;
+var ErrorCode;
+(function (ErrorCode) {
+    ErrorCode["INVALID_INTENT"] = "INVALID_INTENT";
+    ErrorCode["SLOT_MISSING"] = "SLOT_MISSING";
+    ErrorCode["SLOT_AMBIGUOUS"] = "SLOT_AMBIGUOUS";
+    ErrorCode["TASK_NOT_FOUND"] = "TASK_NOT_FOUND";
+    ErrorCode["TASK_STATUS_INVALID"] = "TASK_STATUS_INVALID";
+    ErrorCode["TASK_ALREADY_TERMINAL"] = "TASK_ALREADY_TERMINAL";
+    ErrorCode["IDEMPOTENCY_CONFLICT"] = "IDEMPOTENCY_CONFLICT";
+    ErrorCode["BROWSER_TIMEOUT"] = "BROWSER_TIMEOUT";
+    ErrorCode["SELECTOR_NOT_FOUND"] = "SELECTOR_NOT_FOUND";
+    ErrorCode["PAGE_UNEXPECTED"] = "PAGE_UNEXPECTED";
+    ErrorCode["LOGIN_REQUIRED"] = "LOGIN_REQUIRED";
+    ErrorCode["HUMAN_ACTION_REQUIRED"] = "HUMAN_ACTION_REQUIRED";
+    ErrorCode["NO_TRAIN_MATCHED"] = "NO_TRAIN_MATCHED";
+    ErrorCode["ORDER_SUBMIT_FAILED"] = "ORDER_SUBMIT_FAILED";
+    ErrorCode["INTERNAL_ERROR"] = "INTERNAL_ERROR";
+})(ErrorCode || (exports.ErrorCode = ErrorCode = {}));

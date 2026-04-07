@@ -1,0 +1,61 @@
+retry: 3000
+: connected
+
+: keep-alive
+
+: keep-alive
+
+id: 4
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":4,"timestamp":"2026-04-03T17:39:01.747Z","type":"intent_confirmed","status":"queued","checkpointId":null,"message":"用户已确认订票意图，任务进入排队状态","requiresAck":false,"payload":{"confirmed":true}}
+
+id: 5
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":5,"timestamp":"2026-04-03T17:39:01.748Z","type":"search_started","status":"searching","checkpointId":null,"message":"任务已启动浏览器查询流程","requiresAck":false,"payload":{}}
+
+: keep-alive
+
+id: 6
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":6,"timestamp":"2026-04-03T17:39:07.781Z","type":"search_results_ready","status":"search_results_ready","checkpointId":null,"message":"浏览器查询完成，返回 3 条候选车次","requiresAck":false,"payload":{"candidateCount":3}}
+
+: keep-alive
+
+: keep-alive
+
+: keep-alive
+
+id: 7
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":7,"timestamp":"2026-04-03T17:40:00.068Z","type":"search_results_ready","status":"awaiting_candidate_confirmation","checkpointId":null,"message":"用户开始确认候选车次","requiresAck":true,"payload":{"candidateTrainNo":"G101"}}
+
+id: 8
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":8,"timestamp":"2026-04-03T17:40:00.068Z","type":"candidate_confirmed","status":"selecting_train","checkpointId":null,"message":"已确认车次 G101，开始尝试选座","requiresAck":false,"payload":{"candidateTrainNo":"G101","seatType":"二等座","allowWaitlist":true}}
+
+: keep-alive
+
+id: 9
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":9,"timestamp":"2026-04-03T17:40:05.521Z","type":"login_required","status":"login_required","checkpointId":null,"message":"浏览器流程检测到需要登录","requiresAck":false,"payload":{"openedUrl":"https://kyfw.12306.cn/otn/leftTicket/init","candidateTrainNo":"G101","seatType":"二等座","navigationSucceeded":true}}
+
+id: 10
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":10,"timestamp":"2026-04-03T17:40:05.521Z","type":"human_verification_required","status":"awaiting_human_verification","checkpointId":"cp_task_a17dcf04-2158-483d-af45-29530dfab8a4_human_verification","message":"请扫码登录后点击“人工步骤完成”继续","requiresAck":true,"payload":{"openedUrl":"https://kyfw.12306.cn/otn/leftTicket/init","candidateTrainNo":"G101","seatType":"二等座","navigationSucceeded":true,"checkpointId":"cp_task_a17dcf04-2158-483d-af45-29530dfab8a4_human_verification"}}
+
+: keep-alive
+
+id: 11
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":11,"timestamp":"2026-04-03T17:40:28.370Z","type":"human_step_completed","status":"selecting_train","checkpointId":null,"message":"人工验证已完成，恢复选座流程","requiresAck":false,"payload":{"checkpointId":"cp_task_a17dcf04-2158-483d-af45-29530dfab8a4_human_verification","actionType":"complete_qr_login"}}
+
+: keep-alive
+
+id: 12
+event: task_event
+data: {"taskId":"task_a17dcf04-2158-483d-af45-29530dfab8a4","sequenceId":12,"timestamp":"2026-04-03T17:40:33.082Z","type":"human_step_completed","status":"awaiting_final_submit_confirmation","checkpointId":"cp_task_a17dcf04-2158-483d-af45-29530dfab8a4_final_submit","message":"选座成功，等待最终提交确认","requiresAck":true,"payload":{"openedUrl":"https://kyfw.12306.cn/otn/leftTicket/init","candidateTrainNo":"G101","seatType":"二等座","navigationSucceeded":true,"checkpointId":"cp_task_a17dcf04-2158-483d-af45-29530dfab8a4_final_submit"}}
+
+: keep-alive
+
+: keep-alive
+

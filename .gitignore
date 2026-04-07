@@ -15,3 +15,4 @@ chroma_data/
 *.pt
 Psychology_Rag/datasets/openstax_psychology/Psychology2e_WEB.pdf
 Psychology_Rag/datasets/psyqa/train.json
+output/

@@ -21,3 +21,4 @@ scripts/
 _export/
 .ipynb_checkpoints/
 Dockerfile
+logs/

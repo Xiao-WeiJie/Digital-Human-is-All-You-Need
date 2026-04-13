@@ -1,0 +1,11 @@
+logs/
+results/
+tests/
+val/
+scripts/
+output/
+.git/
+.ipynb_checkpoints/
+.pytest_cache/
+.autodl/
+

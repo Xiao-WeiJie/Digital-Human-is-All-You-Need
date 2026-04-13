@@ -1235,6 +1235,7 @@
             animationFrameId: null,
             activeIdleVideo: 1,
             idleVideoUrl: '',
+            isListening: false,
             idleCrossfadeAlpha: 1.0,
             isIdleCrossfading: false,
             lastIdleFrame: null,
@@ -1919,6 +1920,37 @@
             }
         }
 
+        function switchToListeningVideo() {
+            const avatar = state.avatars[state.currentAvatar];
+            if (!avatar || !avatar.listening_video || state.isListening) return;
+            state.isListening = true;
+            // Switch both idle videos to listening video
+            const listeningUrl = avatar.listening_video;
+            elements.idleVideo.src = listeningUrl;
+            elements.idleVideo.load();
+            elements.idleVideo.play().catch(() => {});
+            setTimeout(() => {
+                elements.idleVideo2.src = listeningUrl;
+                elements.idleVideo2.load();
+            }, 100);
+        }
+
+        function switchBackFromListening() {
+            if (!state.isListening) return;
+            state.isListening = false;
+            // Restore idle video
+            const avatar = state.avatars[state.currentAvatar];
+            if (avatar && avatar.idle_video) {
+                elements.idleVideo.src = avatar.idle_video;
+                elements.idleVideo.load();
+                elements.idleVideo.play().catch(() => {});
+                setTimeout(() => {
+                    elements.idleVideo2.src = avatar.idle_video;
+                    elements.idleVideo2.load();
+                }, 100);
+            }
+        }
+
         function initTabs() {
             document.querySelectorAll('.input-tab').forEach(tab => {
                 tab.onclick = () => {
@@ -2367,6 +2399,7 @@
                 };
                 state.mediaRecorder.start();
                 state.isRecording = true;
+                switchToListeningVideo();
                 if (mode === 'manual') {
                     elements.recordBtn.classList.add('recording');
                     elements.recordHint.textContent = '点击停止录音';
@@ -2393,6 +2426,7 @@
 
             const mode = state.recordingMode;
             state.isRecording = false;
+            switchBackFromListening();
 
             if (mode === 'manual') {
                 elements.recordBtn.classList.remove('recording');

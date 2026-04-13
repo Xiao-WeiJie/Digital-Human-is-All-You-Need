@@ -271,6 +271,8 @@ async def list_avatars(request):
             }
             if avatar_info.idle_video:
                 avatar_data["idle_video"] = avatar_info.get_idle_video_url()
+            if avatar_info.listening_video:
+                avatar_data["listening_video"] = avatar_info.get_listening_video_url()
             avatars.append(avatar_data)
 
         return web.Response(

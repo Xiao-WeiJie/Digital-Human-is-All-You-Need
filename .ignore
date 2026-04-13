@@ -16,3 +16,8 @@ train.js
 Psychology2e_WEB.pdf
 LiveTalking/
 output/
+tests/
+scripts/
+_export/
+.ipynb_checkpoints/
+Dockerfile

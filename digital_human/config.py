@@ -9,7 +9,7 @@ import os
 import json
 from pathlib import Path
 from dataclasses import dataclass, field
-from typing import Optional, Dict, Any, List
+from typing import Optional, Dict, Any
 
 # 项目根目录
 PROJECT_ROOT = Path(__file__).parent.parent
@@ -152,6 +152,7 @@ class AvatarInfo:
     name: str
     source_image: str
     idle_video: Optional[str] = None
+    listening_video: Optional[str] = None
     description: str = ""
     # TTS 参考音频配置
     tts_config: Dict[str, Any] = field(default_factory=dict)
@@ -172,6 +173,12 @@ class AvatarInfo:
         if not self.idle_video:
             return None
         return f"/human_choice/{self.idle_video}"
+
+    def get_listening_video_url(self) -> Optional[str]:
+        """获取聆听视频URL"""
+        if not self.listening_video:
+            return None
+        return f"/human_choice/{self.listening_video}"
 
     def get_source_image_url(self) -> str:
         """获取源图像URL"""
@@ -234,6 +241,7 @@ class AvatarConfig:
                 name=info.get("name", avatar_id),
                 source_image=info.get("source_image", ""),
                 idle_video=info.get("idle_video"),
+                listening_video=info.get("listening_video"),
                 description=info.get("description", ""),
                 tts_config=info.get("tts", {})
             )
@@ -265,7 +273,7 @@ class VideoConfig:
     output_format: str = "mp4"
     video_codec: str = "libx264"
     audio_codec: str = "aac"
-    motion_seed: Optional[int] = 10  # JoyVASA 运动生成随机种子，None 表示不固定
+    motion_seed: Optional[int] = 7  # JoyVASA 运动生成随机种子，None 表示不固定
 
     def __post_init__(self):
         # 从 avatar_config.json 的 settings 覆盖
@@ -319,10 +327,6 @@ class DigitalHumanConfig:
     save_generated_videos: bool = False  # 保存生成的视频（默认不保存）
     terminal_tts_mode: bool = False  # 启用终端直输 TTS 模式
     terminal_tts_avatar: str = "human_1"  # 终端直输模式默认数字人
-    mock_mode_sequence_videos: List[str] = field(default_factory=lambda: ["1.mp4", "2.mp4", "3.mp4", "4.mp4"])
-    mock_mode_first_emotion_video: str = "5.mp4"
-    mock_mode_first_emotion_enabled: bool = True
-    mock_mode_first_emotion_delay_ms: int = 2000
 
     # 输出目录
     output_dir: str = field(default_factory=lambda: DEFAULT_PATHS["output"])

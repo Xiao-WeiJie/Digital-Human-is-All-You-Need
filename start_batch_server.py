@@ -9,6 +9,8 @@
     python start_batch_server.py --host 0.0.0.0 --port 8010
 
 访问地址:
+    - 门户首页: http://localhost:8010/
+    - 颐和缘页面: http://localhost:8010/yiheyuan.html
     - 批量视频模式: http://localhost:8010/batch_video.html
     - WebRTC实时模式: http://localhost:8010/webrtcapi.html
 """
@@ -64,6 +66,8 @@ def main():
             print(f"  Mock 模式: 已启用")
         print()
         print("  访问地址:")
+        print(f"    - 门户首页: http://localhost:{args.port}/")
+        print(f"    - 颐和缘页面: http://localhost:{args.port}/yiheyuan.html")
         print(f"    - 批量视频模式: http://localhost:{args.port}/batch_video.html")
         print(f"    - WebRTC实时模式: http://localhost:{args.port}/webrtcapi.html")
         print()

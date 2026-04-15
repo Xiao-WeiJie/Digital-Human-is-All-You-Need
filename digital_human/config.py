@@ -82,6 +82,35 @@ class EmotionFusionConfig:
 
 
 @dataclass
+class FirstEmotionReactionConfig:
+    """首次表情捕获后的固定反馈配置"""
+    enabled: bool = True
+    delay_min_ms: int = 2000
+    delay_max_ms: int = 3000
+    happy_reply: str = "你今天看起来心情不错哦，是有什么开心的事吗？你愿意和我分享一下喜悦吗？"
+    sad_reply: str = "你今天面色看起来不太好，是有什么心事吗？你愿意跟我聊聊发生了什么吗？有时候把心里的想法说出来，会让自己感觉轻松一些。"
+
+    def __post_init__(self):
+        env_enabled = os.getenv("FIRST_EMOTION_REACTION_ENABLED")
+        if env_enabled:
+            self.enabled = env_enabled.lower() in ("true", "1", "yes")
+
+        env_min_delay = os.getenv("FIRST_EMOTION_REACTION_DELAY_MIN_MS")
+        if env_min_delay:
+            try:
+                self.delay_min_ms = int(env_min_delay)
+            except ValueError:
+                pass
+
+        env_max_delay = os.getenv("FIRST_EMOTION_REACTION_DELAY_MAX_MS")
+        if env_max_delay:
+            try:
+                self.delay_max_ms = int(env_max_delay)
+            except ValueError:
+                pass
+
+
+@dataclass
 class GPTSoVITSConfig:
     """GPT-SoVITS TTS 配置"""
     server_url: str = "http://127.0.0.1:9880"
@@ -156,6 +185,8 @@ class AvatarInfo:
     description: str = ""
     # TTS 参考音频配置
     tts_config: Dict[str, Any] = field(default_factory=dict)
+    # 首次情绪捕获固定反馈视频配置
+    emotion_reaction_videos: Dict[str, str] = field(default_factory=dict)
 
     def get_full_source_path(self) -> str:
         """获取源图像完整路径"""
@@ -183,6 +214,13 @@ class AvatarInfo:
     def get_source_image_url(self) -> str:
         """获取源图像URL"""
         return f"/human_choice/{self.source_image}"
+
+    def get_emotion_reaction_video_url(self, emotion: str) -> Optional[str]:
+        """获取首次情绪捕获固定反馈视频 URL"""
+        video_file = self.emotion_reaction_videos.get(emotion)
+        if not video_file:
+            return None
+        return f"/human_choice/{video_file}"
 
     def get_tts_ref(self, emotion: str = "default") -> tuple:
         """
@@ -243,7 +281,8 @@ class AvatarConfig:
                 idle_video=info.get("idle_video"),
                 listening_video=info.get("listening_video"),
                 description=info.get("description", ""),
-                tts_config=info.get("tts", {})
+                tts_config=info.get("tts", {}),
+                emotion_reaction_videos=info.get("emotion_reaction_videos", {})
             )
 
     def get_avatar(self, avatar_id: str) -> Optional[AvatarInfo]:
@@ -318,6 +357,9 @@ class DigitalHumanConfig:
     # 情绪融合配置（新增）
     emotion_fusion: EmotionFusionConfig = field(default_factory=EmotionFusionConfig)
 
+    # 首次表情捕获固定反馈配置
+    first_emotion_reaction: FirstEmotionReactionConfig = field(default_factory=FirstEmotionReactionConfig)
+
     # 服务配置
     host: str = "0.0.0.0"
     port: int = 8010
@@ -391,4 +433,6 @@ __all__ = [
     "EmotionDetectionConfig",
     # 情绪融合配置
     "EmotionFusionConfig",
+    # 首次表情捕获固定反馈配置
+    "FirstEmotionReactionConfig",
 ]

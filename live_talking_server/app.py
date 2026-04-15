@@ -23,6 +23,18 @@ sys.path.insert(0, str(Path(__file__).parent))
 import torch.multiprocessing as mp
 from aiohttp import web
 import aiohttp
+
+if not hasattr(web, "AppKey"):
+    class _CompatAppKey(str):
+        def __new__(cls, name, *_args, **_kwargs):
+            return str.__new__(cls, name)
+
+        @classmethod
+        def __class_getitem__(cls, _item):
+            return cls
+
+    web.AppKey = _CompatAppKey
+
 import aiohttp_cors
 from aiortc import RTCPeerConnection, RTCSessionDescription, RTCIceServer, RTCConfiguration
 from aiortc.rtcrtpsender import RTCRtpSender
@@ -53,6 +65,7 @@ app_config: DigitalHumanConfig = None
 
 # Mock 模式相关
 mock_mode_enabled = False
+skip_digital_human_runtime = False
 MOCK_RESPONSES = [
     "你好呀，我是小暖，是你的心理陪护助手。就像一个愿意倾听的朋友，也懂一些心理学的知识。你可以和我聊聊你的想法和感受，我会一直在这里陪着你。最近过得怎么样呀？",
     "听到你这样说，我明白你现在可能正被一些懊恼和自责的情绪包围着。每个人都会有状态不佳的时候，这很正常，就像天气会有阴晴圆缺一样。你愿意跟我聊聊具体发生了什么吗？有时候把心里的想法说出来，会让自己感觉轻松一些。",
@@ -273,7 +286,16 @@ async def list_avatars(request):
                 avatar_data["idle_video"] = avatar_info.get_idle_video_url()
             if avatar_info.listening_video:
                 avatar_data["listening_video"] = avatar_info.get_listening_video_url()
+            emotion_reaction_videos = {}
+            for emotion in ("happy", "sad"):
+                video_url = avatar_info.get_emotion_reaction_video_url(emotion)
+                if video_url:
+                    emotion_reaction_videos[emotion] = video_url
+            if emotion_reaction_videos:
+                avatar_data["emotion_reaction_videos"] = emotion_reaction_videos
             avatars.append(avatar_data)
+
+        emotion_reaction = app_config.first_emotion_reaction
 
         return web.Response(
             content_type="application/json",
@@ -281,7 +303,14 @@ async def list_avatars(request):
                 "code": 0,
                 "data": {
                     "avatars": avatars,
-                    "default": app_config.avatar.default_avatar
+                    "default": app_config.avatar.default_avatar,
+                    "emotion_reaction": {
+                        "enabled": emotion_reaction.enabled,
+                        "delay_min_ms": emotion_reaction.delay_min_ms,
+                        "delay_max_ms": emotion_reaction.delay_max_ms,
+                        "happy_reply": emotion_reaction.happy_reply,
+                        "sad_reply": emotion_reaction.sad_reply,
+                    }
                 }
             }),
         )
@@ -420,6 +449,52 @@ async def detect_emotion(request):
         return web.Response(
             content_type="application/json",
             text=json.dumps({"code": -1, "msg": str(e)}),
+        )
+
+
+# ==================== 舌诊识别 API ====================
+
+async def detect_tongue(request):
+    """
+    单帧舌诊检测
+
+    请求方式: POST (application/json)
+    参数:
+        - image: Base64 编码的图像（支持 data:image/xxx;base64, 前缀）
+        - session_id: 会话 ID（可选，默认 "default"）
+    """
+    from digital_human import TongueDetectionError, get_tongue_adapter
+
+    try:
+        params = await request.json()
+        base64_image = params.get("image", "")
+        session_id = params.get("session_id", "default")
+
+        if not base64_image:
+            return web.Response(
+                content_type="application/json",
+                text=json.dumps({"code": -1, "msg": "image parameter is required"}, ensure_ascii=False),
+            )
+
+        adapter = get_tongue_adapter()
+        result = adapter.detect_from_base64(base64_image, session_id=session_id)
+
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": 0, "data": result.to_dict()}, ensure_ascii=False),
+        )
+
+    except TongueDetectionError as e:
+        logger.warning(f"[TongueDetect] Business error: {e.message}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": e.code, "msg": e.message}, ensure_ascii=False),
+        )
+    except Exception as e:
+        logger.exception(f"[TongueDetect] Error: {e}")
+        return web.Response(
+            content_type="application/json",
+            text=json.dumps({"code": -5, "msg": "tongue detection failed"}, ensure_ascii=False),
         )
 
 
@@ -780,11 +855,15 @@ def _serve_web_page(filename: str) -> web.FileResponse:
 
 
 async def serve_root(request):
-    raise web.HTTPFound("/xinyu_complete.html")
+    return _serve_web_page("yiheyuan.html")
 
 
 async def serve_portal_page(request):
-    return _serve_web_page("xinyu_complete.html")
+    return _serve_web_page("yiheyuan.html")
+
+
+async def serve_legacy_portal_page(request):
+    raise web.HTTPFound("/yiheyuan.html")
 
 
 async def serve_brief_page(request):
@@ -796,7 +875,7 @@ async def serve_batch_video_page(request):
 
 
 async def serve_legacy_dashboard_page(request):
-    raise web.HTTPFound("/xinyu_complete.html")
+    raise web.HTTPFound("/yiheyuan.html")
 
 
 async def serve_legacy_webrtc_page(request):
@@ -849,6 +928,7 @@ def create_app(opt):
     # 情绪识别 API
     appasync.router.add_post("/api/v1/emotion/detect", detect_emotion)
     appasync.router.add_get("/api/v1/emotion/context", get_emotion_context)
+    appasync.router.add_post("/api/v1/tongue/detect", detect_tongue)
 
     # Mock 模式 API
     appasync.router.add_get("/api/v1/mock/config", get_mock_config)
@@ -857,7 +937,8 @@ def create_app(opt):
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"
     appasync.router.add_get("/", serve_root)
-    appasync.router.add_get("/xinyu_complete.html", serve_portal_page)
+    appasync.router.add_get("/yiheyuan.html", serve_portal_page)
+    appasync.router.add_get("/xinyu_complete.html", serve_legacy_portal_page)
     appasync.router.add_get("/brief.html", serve_brief_page)
     appasync.router.add_get("/batch_video.html", serve_batch_video_page)
     appasync.router.add_get("/dashboard.html", serve_legacy_dashboard_page)
@@ -921,9 +1002,10 @@ def initialize_batch_runtime(
     terminal_tts_avatar: str = None
 ):
     """初始化批量生成运行时资源"""
-    global opt, batch_pipeline_manager, video_output_dir, app_config, mock_mode_enabled
+    global opt, batch_pipeline_manager, video_output_dir, app_config, mock_mode_enabled, skip_digital_human_runtime
 
     mock_mode_enabled = mock_mode
+    skip_digital_human_runtime = os.getenv("DIGITAL_HUMAN_SKIP_MODEL_LOAD", "").lower() in ("1", "true", "yes")
 
     mp.set_start_method('spawn', force=True)
 
@@ -939,26 +1021,30 @@ def initialize_batch_runtime(
 
     opt = _build_runtime_opt(app_config, port)
 
-    load_models_and_avatar(opt)
-
-    logger.info("Initializing batch pipeline...")
-    from batch_pipeline import batch_pipeline_manager as _batch_manager
-    batch_pipeline_manager = _batch_manager
-
     video_output_dir = app_config.output_dir
     os.makedirs(video_output_dir, exist_ok=True)
 
     default_avatar = app_config.avatar.get_default_avatar()
     default_source = default_avatar.get_full_source_path() if default_avatar else None
 
-    batch_pipeline_manager.initialize(
-        pipeline=model[0],
-        joyvasa_pipeline=model[1],
-        config=app_config,
-        default_source_image=default_source
-    )
+    if skip_digital_human_runtime:
+        batch_pipeline_manager = None
+        logger.warning("Skipping digital human runtime initialization (DIGITAL_HUMAN_SKIP_MODEL_LOAD=1)")
+    else:
+        load_models_and_avatar(opt)
 
-    logger.info("Batch pipeline initialized")
+        logger.info("Initializing batch pipeline...")
+        from batch_pipeline import batch_pipeline_manager as _batch_manager
+        batch_pipeline_manager = _batch_manager
+
+        batch_pipeline_manager.initialize(
+            pipeline=model[0],
+            joyvasa_pipeline=model[1],
+            config=app_config,
+            default_source_image=default_source
+        )
+
+        logger.info("Batch pipeline initialized")
 
     # 打印视频保存配置
     if app_config.save_generated_videos:
@@ -1004,9 +1090,10 @@ def run_server(host: str = "0.0.0.0", port: int = 8010, save_videos: bool = Fals
     appasync = create_app(opt)
 
     logger.info(f'Starting server at http://{host}:{port}/')
-    logger.info(f'WebRTC 实时模式: http://{host}:{port}/webrtcapi.html')
-    logger.info(f'批量视频模式: http://{host}:{port}/batch_video.html')
-    logger.info(f'Dashboard: http://{host}:{port}/dashboard.html')
+    logger.info(f'门户首页: http://{host}:{port}/')
+    logger.info(f'颐和缘页面: http://{host}:{port}/yiheyuan.html')
+    logger.info(f'数字人陪伴对话: http://{host}:{port}/batch_video.html')
+    logger.info(f'兼容旧地址: http://{host}:{port}/webrtcapi.html')
 
     # 运行服务器
     web.run_app(appasync, host=host, port=port)

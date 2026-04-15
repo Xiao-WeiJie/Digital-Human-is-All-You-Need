@@ -6,6 +6,10 @@
             "idle_video": "Human_1/qys.mp4",
             "listening_video": "listening1.mp4",
             "description": "默认数字人形象",
+            "emotion_reaction_videos": {
+                "happy": "happy1.mp4",
+                "sad": "sad1.mp4"
+            },
             "kokoro_voice": "zf_001",
             "tts": {
                 "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_1",
@@ -28,6 +32,10 @@
             "idle_video": "Human_2/wzx.mp4",
             "listening_video": "listening2.mp4",
             "description": "备用数字人形象",
+            "emotion_reaction_videos": {
+                "happy": "happy2.mp4",
+                "sad": "sad2.mp4"
+            },
             "kokoro_voice": "zm_009",
             "tts": {
                 "ref_audio_dir": "/root/autodl-tmp/ref_audio/human_2",

@@ -93,7 +93,7 @@ infer_params:
   flag_eye_retargeting: False
   flag_lip_retargeting: False
   flag_stitching: True
-  flag_relative_motion: False
+  flag_relative_motion: True
   flag_pasteback: True
   flag_do_crop: True
   flag_do_rot: True
@@ -105,7 +105,7 @@ infer_params:
   anchor_frame: 0 # TO IMPLEMENT
   mask_crop_path: "/root/autodl-tmp/FasterLivePortrait/assets/mask_template.png"
   driving_multiplier: 0.85
-  animation_region: "exp"
+  animation_region: "all"
 
   cfg_mode: "incremental"
   cfg_scale: 1.2

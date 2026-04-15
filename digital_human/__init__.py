@@ -28,6 +28,13 @@ from .emotion_adapter import (
     get_emotion_adapter,
 )
 
+from .tongue_adapter import (
+    TongueAdapter,
+    TongueDetectionError,
+    TongueResult,
+    get_tongue_adapter,
+)
+
 from .text_emotion_analyzer import (
     TextEmotionAnalyzer,
     TextEmotionResult,
@@ -58,6 +65,11 @@ __all__ = [
     "EmotionAdapter",
     "EmotionResult",
     "get_emotion_adapter",
+    # 舌诊识别
+    "TongueAdapter",
+    "TongueDetectionError",
+    "TongueResult",
+    "get_tongue_adapter",
     # 情绪融合
     "EmotionFusionConfig",
     "TextEmotionAnalyzer",

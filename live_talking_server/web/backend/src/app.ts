@@ -32,6 +32,10 @@ export function buildApp(): FastifyInstance {
     void reply.code(statusCode).send(response);
   });
 
+  app.get("/health", async (_request, reply) => {
+    return reply.status(200).send({ status: "ok", service: "agent-backend" });
+  });
+
   app.register(assistantRoutes, { prefix: "/api/assistant" });
   app.register(taskRoutes, { prefix: "/api/tasks" });
   app.register(sseRoutes, { prefix: "/api/tasks" });

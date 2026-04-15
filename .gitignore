@@ -20,4 +20,12 @@ LiveTalking/
 logs/
 scripts/
 .ipynb_checkpoints/
+*.mp4
+*.db-shm
+*.db-wal
+__pycache__/
+*.pyc
+*.log
+livetalking.log
+*.tar.xz
 

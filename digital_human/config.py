@@ -169,7 +169,7 @@ class DashScopeConfig:
     """阿里云 DashScope 配置"""
     api_key: str = "sk-5fcb24ad41b54421bb5ac93feea21cf6"
     base_url: str = "https://dashscope.aliyuncs.com/compatible-mode/v1"
-    model_name: str = "qwen-plus"
+    model_name: str = "qwen-turbo"
     max_tokens: int = 500
     temperature: float = 0.7
 

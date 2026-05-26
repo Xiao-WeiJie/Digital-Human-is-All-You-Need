@@ -47,6 +47,21 @@ const API_BASE = 'https://yiharmony.top'
 - POST `/api/v1/emotion/detect`
 - GET `/api/v1/emotion/context`
 - POST `/api/v1/tongue/detect`
+- POST `/api/auth/register`
+- POST `/api/auth/login`
+- POST `/api/auth/logout`
+- GET `/api/auth/me`
+- POST `/api/auth/password/reset/request`
+- POST `/api/auth/password/reset/confirm`
+- PUT `/api/user/preferences`
+- GET `/api/agent/ride/suggest-pickup`
+- GET `/api/agent/ride/search-destination`
+- POST `/api/agent/ride/estimate`
+- POST `/api/agent/ride/create-preview`
+- POST `/api/agent/ticket/tasks`
+- GET `/api/agent/ticket/tasks/{taskId}`
+- GET `/api/agent/ticket/tasks/{taskId}/events`
+- POST `/api/agent/ticket/tasks/{taskId}/actions/{action}`
 
 ### 3.2 不建议小程序直接使用的接口
 
@@ -1130,9 +1145,311 @@ SSE 数据体结构:
 - `failed`
 - `cancelled`
 
-## 10. 前端联调注意事项
+## 10. 二期新增接口契约
 
-### 9.1 关于视频 URL
+本节对应 2026 年 5 月 26 日小程序二期前端当前实现，包含模式切换、认证、打车 Agent、订票 Agent 所需的新接口契约。
+
+### 10.1 用户偏好
+
+小程序本地设置对象新增:
+
+```json
+{
+  "alertPush": true,
+  "healthDigest": true,
+  "quietMode": false,
+  "mode": "family"
+}
+```
+
+字段说明:
+
+- `mode`: 取值为 `family` 或 `senior`
+- `family`: 家属模式，保留完整说明和辅助提示
+- `senior`: 老年模式，隐藏悬浮提示、放大字号、压缩次要文案
+
+服务端推荐数据结构:
+
+```json
+{
+  "preferences": {
+    "alertPush": true,
+    "healthDigest": true,
+    "quietMode": false,
+    "mode": "senior"
+  }
+}
+```
+
+### 10.2 认证接口
+
+#### 10.2.1 注册
+
+- 方法: POST
+- 路径: `/api/auth/register`
+
+请求体:
+
+```json
+{
+  "phone": "13800138000",
+  "username": "hefengxiyu",
+  "password": "123456"
+}
+```
+
+#### 10.2.2 登录
+
+- 方法: POST
+- 路径: `/api/auth/login`
+
+请求体:
+
+```json
+{
+  "account": "13800138000",
+  "password": "123456"
+}
+```
+
+说明:
+
+- `account` 同时支持手机号或用户名
+
+#### 10.2.3 当前登录态
+
+- 方法: GET
+- 路径: `/api/auth/me`
+- Header: `Authorization: Bearer <token>`
+
+#### 10.2.4 退出登录
+
+- 方法: POST
+- 路径: `/api/auth/logout`
+
+#### 10.2.5 开发态忘记密码
+
+- 方法: POST
+- 路径: `/api/auth/password/reset/request`
+
+请求体:
+
+```json
+{
+  "account": "13800138000"
+}
+```
+
+开发联调阶段建议返回:
+
+```json
+{
+  "code": 0,
+  "data": {
+    "resetCode": "834251"
+  }
+}
+```
+
+确认重置:
+
+- 方法: POST
+- 路径: `/api/auth/password/reset/confirm`
+
+请求体:
+
+```json
+{
+  "account": "13800138000",
+  "resetCode": "834251",
+  "password": "new-password"
+}
+```
+
+#### 10.2.6 更新偏好
+
+- 方法: PUT
+- 路径: `/api/user/preferences`
+
+请求体:
+
+```json
+{
+  "alertPush": true,
+  "healthDigest": true,
+  "quietMode": false,
+  "mode": "senior"
+}
+```
+
+### 10.3 打车 Agent 接口
+
+#### 10.3.1 推荐上车点
+
+- 方法: GET
+- 路径: `/api/agent/ride/suggest-pickup`
+
+请求参数:
+
+- `keyword`: 当前需求文本，可选
+
+建议返回:
+
+```json
+{
+  "code": 0,
+  "data": {
+    "items": [
+      {
+        "id": "pickup-1",
+        "name": "颐和苑北门",
+        "address": "小区北门靠近主路",
+        "lat": 31.2304,
+        "lng": 121.4737
+      }
+    ]
+  }
+}
+```
+
+#### 10.3.2 搜索目的地
+
+- 方法: GET
+- 路径: `/api/agent/ride/search-destination`
+
+请求参数:
+
+- `keyword`: 目的地关键词
+
+#### 10.3.3 费用和路线估算
+
+- 方法: POST
+- 路径: `/api/agent/ride/estimate`
+
+请求体:
+
+```json
+{
+  "pickup": {
+    "id": "pickup-1",
+    "name": "颐和苑北门"
+  },
+  "destination": {
+    "id": "dest-1",
+    "name": "市人民医院门诊楼"
+  },
+  "demand": "帮我叫车去医院门诊"
+}
+```
+
+建议返回字段:
+
+- `distanceText`
+- `durationText`
+- `priceText`
+- `vehicleText`
+
+#### 10.3.4 拟真呼叫结果
+
+- 方法: POST
+- 路径: `/api/agent/ride/create-preview`
+
+建议返回字段:
+
+- `summary`
+- `driverText`
+- `arrivalText`
+
+### 10.4 订票 Agent 接口
+
+#### 10.4.1 创建任务
+
+- 方法: POST
+- 路径: `/api/agent/ticket/tasks`
+
+请求体:
+
+```json
+{
+  "demand": "帮我查明天上午去医院的高铁票"
+}
+```
+
+建议返回:
+
+```json
+{
+  "code": 0,
+  "data": {
+    "taskId": "ticket-task-001",
+    "candidates": [
+      {
+        "id": "G1234",
+        "trainNo": "G1234",
+        "from_station_name": "上海",
+        "to_station_name": "杭州东",
+        "start_time": "08:20",
+        "arrive_time": "09:32",
+        "priceText": "二等座 73 元"
+      }
+    ]
+  }
+}
+```
+
+#### 10.4.2 查询任务
+
+- 方法: GET
+- 路径: `/api/agent/ticket/tasks/{taskId}`
+
+建议返回:
+
+- `status`
+- `statusText`
+- `candidates`
+
+#### 10.4.3 查询事件流
+
+- 方法: GET
+- 路径: `/api/agent/ticket/tasks/{taskId}/events`
+
+建议返回:
+
+```json
+{
+  "code": 0,
+  "data": {
+    "events": [
+      {
+        "title": "任务创建完成",
+        "desc": "已开始查询候选车次",
+        "time": "2026-05-26 14:30:00"
+      }
+    ]
+  }
+}
+```
+
+#### 10.4.4 任务动作
+
+小程序当前使用以下动作名:
+
+- `confirm-candidate`
+- `submit-preview`
+- `cancel`
+
+调用方式:
+
+- 方法: POST
+- 路径: `/api/agent/ticket/tasks/{taskId}/actions/{action}`
+
+### 10.5 点外卖前端说明
+
+点外卖当前为纯前端拟真流程，不调用真实平台接口，也不依赖新增服务端路由。
+
+## 11. 前端联调注意事项
+
+### 11.1 关于视频 URL
 
 服务端返回的是相对路径，不是完整域名。例如:
 
@@ -1148,15 +1465,15 @@ SSE 数据体结构:
 https://yiharmony.top/videos/batch_xxx.mp4
 ```
 
-### 9.2 关于文本模式
+### 11.2 关于文本模式
 
 已支持使用 JSON 直接调 `/api/v1/generate`，这就是给 uniapp / 小程序准备的推荐接法。
 
-### 9.3 关于音频模式
+### 11.3 关于音频模式
 
 推荐上传标准 WAV 音频，避免服务端 ASR 因容器格式不一致导致识别失败。
 
-### 9.4 关于会话 ID
+### 11.4 关于会话 ID
 
 建议前端自己生成并稳定传递 `session_id`，例如:
 
@@ -1166,12 +1483,29 @@ https://yiharmony.top/videos/batch_xxx.mp4
 
 这样情绪识别和上下文接口可以更准确地串联同一用户会话。
 
-### 9.5 关于 Agent 模式
+### 11.5 关于 Agent 模式
 
 如果你的小程序只做数字人问答、情绪识别、舌诊识别，那么当前 `https://yiharmony.top` 已够用。
 
-如果你还要接订票 Agent 流程，下一步需要:
+如果你还要接认证、打车和订票 Agent 流程，下一步需要:
 
 1. 单独部署 `live_talking_server/web/backend`。
 2. 给它配置 HTTPS 域名或 Nginx/Caddy 反代路径。
 3. 小程序优先用轮询接口，不要直接依赖 SSE。
+
+### 11.6 2026-05-26 联调现状
+
+以下状态基于 2026 年 5 月 26 日直接请求 `https://yiharmony.top` 的结果:
+
+- `GET /api/v1/health`: `200`
+- `GET /api/v1/avatars`: `200`
+- `GET /api/auth/me`: `404`
+- `GET /api/agent/ride/suggest-pickup`: `404`
+- `GET /api/agent/ride/search-destination`: `404`
+- `POST /api/agent/ticket/tasks`: `405`
+
+说明:
+
+- 当前线上域名已挂数字人基础服务。
+- 认证与打车接口尚未对外暴露，或反代规则尚未配置到 Fastify backend。
+- 订票路径已经被上游识别到，但当前方法或路由挂载状态仍与前端约定不一致，需要服务端复核。

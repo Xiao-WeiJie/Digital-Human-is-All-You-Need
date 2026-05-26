@@ -23,7 +23,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 import torch.multiprocessing as mp
 from aiohttp import web
 import aiohttp
-from miniapp_gateway import register_miniapp_gateway_routes
 
 if not hasattr(web, "AppKey"):
     class _CompatAppKey(str):
@@ -269,28 +268,6 @@ async def is_speaking(request):
             text=json.dumps({"code": -1, "msg": str(e)}),
         )
 
-
-
-
-async def service_health(request):
-    """Provide a lightweight health endpoint for the mini program."""
-    global app_config, mock_mode_enabled
-
-    avatar_default = ""
-    if app_config and getattr(app_config, "avatar", None):
-        avatar_default = app_config.avatar.default_avatar
-
-    return web.Response(
-        content_type="application/json",
-        text=json.dumps({
-            "code": 0,
-            "data": {
-                "status": "ok",
-                "default_avatar": avatar_default,
-                "mock_mode": bool(mock_mode_enabled),
-            }
-        }),
-    )
 
 async def list_avatars(request):
     """列出所有可用的数字人形象"""
@@ -668,35 +645,29 @@ async def batch_generate(request):
     start_time = time.time()
 
     try:
-        # ½âÎöÇëÇó£º¼æÈÝ JSON ÎÄ±¾ÇëÇóºÍ multipart ÉÏ´«
+        # 解析请求
+        reader = await request.multipart()
+
         text = None
         audio_path = None
         source_image_id = app_config.avatar.default_avatar
         session_id = f"batch_{int(time.time() * 1000)}"
 
-        content_type = (request.content_type or '').lower()
-        if content_type.startswith('application/json'):
-            params = await request.json()
-            text = params.get('text')
-            source_image_id = params.get('source_image') or params.get('avatar_id') or source_image_id
-            session_id = params.get('session_id') or session_id
-        else:
-            reader = await request.multipart()
+        async for field in reader:
+            if field.name == "text":
+                text = (await field.read()).decode('utf-8')
+            elif field.name == "audio":
+                # 保存音频文件
+                audio_data = await field.read()
+                audio_path = tempfile.mktemp(suffix='.wav')
+                with open(audio_path, 'wb') as f:
+                    f.write(audio_data)
+            elif field.name == "source_image":
+                source_image_id = (await field.read()).decode('utf-8')
+            elif field.name == "session_id":
+                session_id = (await field.read()).decode('utf-8')
 
-            async for field in reader:
-                if field.name == "text":
-                    text = (await field.read()).decode('utf-8')
-                elif field.name == "audio":
-                    # ±£´æÒôÆµÎÄ¼þ
-                    audio_data = await field.read()
-                    audio_path = tempfile.mktemp(suffix='.wav')
-                    with open(audio_path, 'wb') as f:
-                        f.write(audio_data)
-                elif field.name in ("source_image", "avatar_id"):
-                    source_image_id = (await field.read()).decode('utf-8')
-                elif field.name == "session_id":
-                    session_id = (await field.read()).decode('utf-8')
-
+        # 验证输入
         if not text and not audio_path:
             return web.Response(
                 content_type="application/json",
@@ -947,9 +918,6 @@ def create_app(opt):
     appasync.router.add_post("/interrupt_talk", interrupt_talk)
     appasync.router.add_post("/is_speaking", is_speaking)
     appasync.router.add_post("/list_avatars", list_avatars)
-    appasync.router.add_get("/api/v1/health", service_health)
-    appasync.router.add_get("/api/v1/avatars", list_avatars)
-    appasync.router.add_post("/api/v1/avatars", list_avatars)
     appasync.router.add_post("/switch_avatar", switch_avatar)
 
     # 批量视频生成 API（方案B）
@@ -965,8 +933,6 @@ def create_app(opt):
     # Mock 模式 API
     appasync.router.add_get("/api/v1/mock/config", get_mock_config)
     appasync.router.add_get("/mock_videos/{filename}", serve_mock_video)
-
-    register_miniapp_gateway_routes(appasync)
 
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"

@@ -72,6 +72,134 @@ type ResolvedStation = {
 };
 
 const NOOP_PROGRESS_REPORTER: BrowserProgressReporter = () => undefined;
+type StationCatalogEntry = {
+  stationName: string;
+  stationCode: string;
+  pinyin: string;
+  shortPinyin: string;
+};
+
+let stationCatalogCache: StationCatalogEntry[] | null = null;
+let stationCatalogPromise: Promise<StationCatalogEntry[]> | null = null;
+
+function parseStationCatalog(source: string): StationCatalogEntry[] {
+  const matched = source.match(/station_names\s*=\s*'([^']+)'/u);
+  const stationNames = matched?.[1] ?? source;
+
+  return stationNames
+    .split("@")
+    .filter(Boolean)
+    .map((entry) => {
+      const fields = entry.split("|");
+      return {
+        stationName: (fields[1] ?? "").replace(/\s+/g, ""),
+        stationCode: (fields[2] ?? "").trim(),
+        pinyin: (fields[3] ?? "").replace(/\s+/g, "").toLowerCase(),
+        shortPinyin: (fields[4] ?? "").replace(/\s+/g, "").toLowerCase()
+      };
+    })
+    .filter((entry) => entry.stationName && entry.stationCode);
+}
+
+function pickResolvedStation(
+  entries: StationCatalogEntry[],
+  targetCities: string[]
+): ResolvedStation | null {
+  const normalizedTargets = targetCities.map((city) => city.replace(/\s+/g, "").toLowerCase());
+  const exactMatches: Array<{ stationName: string; stationCode: string; matchedTarget: string }> = [];
+  const fuzzyMatches: Array<{
+    stationName: string;
+    stationCode: string;
+    matchedTarget: string;
+    score: number;
+  }> = [];
+
+  for (const entry of entries) {
+    for (const normalizedTarget of normalizedTargets) {
+      if (
+        entry.stationName.toLowerCase() === normalizedTarget ||
+        entry.pinyin === normalizedTarget ||
+        entry.shortPinyin === normalizedTarget
+      ) {
+        exactMatches.push({
+          stationName: entry.stationName,
+          stationCode: entry.stationCode,
+          matchedTarget: normalizedTarget
+        });
+        continue;
+      }
+
+      if (entry.stationName.toLowerCase().startsWith(normalizedTarget)) {
+        const suffixLength = entry.stationName.length - normalizedTarget.length;
+        fuzzyMatches.push({
+          stationName: entry.stationName,
+          stationCode: entry.stationCode,
+          matchedTarget: normalizedTarget,
+          score: 500 - suffixLength
+        });
+        continue;
+      }
+
+      if (entry.stationName.toLowerCase().includes(normalizedTarget)) {
+        fuzzyMatches.push({
+          stationName: entry.stationName,
+          stationCode: entry.stationCode,
+          matchedTarget: normalizedTarget,
+          score: 300 - entry.stationName.length
+        });
+      }
+    }
+  }
+
+  if (exactMatches.length > 0) {
+    const bestExact = exactMatches.sort((left, right) => left.stationName.length - right.stationName.length)[0];
+    return {
+      stationName: bestExact.stationName,
+      stationCode: bestExact.stationCode,
+      matchedTarget: bestExact.matchedTarget
+    };
+  }
+
+  if (fuzzyMatches.length > 0) {
+    const bestFuzzy = fuzzyMatches.sort((left, right) => right.score - left.score)[0];
+    return {
+      stationName: bestFuzzy.stationName,
+      stationCode: bestFuzzy.stationCode,
+      matchedTarget: bestFuzzy.matchedTarget
+    };
+  }
+
+  return null;
+}
+
+async function loadStationCatalog(): Promise<StationCatalogEntry[]> {
+  if (stationCatalogCache) {
+    return stationCatalogCache;
+  }
+
+  if (!stationCatalogPromise) {
+    stationCatalogPromise = fetch("https://kyfw.12306.cn/otn/resources/js/framework/station_name.js")
+      .then(async (response) => {
+        if (!response.ok) {
+          throw new Error(`station_name.js request failed: ${response.status}`);
+        }
+
+        const source = await response.text();
+        const entries = parseStationCatalog(source);
+        stationCatalogCache = entries;
+        return entries;
+      })
+      .catch(() => {
+        stationCatalogCache = [];
+        return [];
+      })
+      .finally(() => {
+        stationCatalogPromise = null;
+      });
+  }
+
+  return stationCatalogPromise;
+}
 
 function getErrorMessage(error: unknown): string {
   if (error instanceof Error) {
@@ -257,7 +385,7 @@ function calculateCandidateScore(candidate: ParsedTrainCandidate, index: number)
 
 async function createBrowserPage(): Promise<BrowserPageSession> {
   const browser = await chromium.launch({
-    headless: false
+    headless: true
   });
 
   const context = await browser.newContext({
@@ -382,91 +510,23 @@ async function clickCitySuggestion(page: Page, targetCities: string[]): Promise<
 }
 
 async function resolveStation(page: Page, targetCities: string[]): Promise<ResolvedStation | null> {
-  return page.evaluate((cities) => {
-    const stationNames = (globalThis as { station_names?: string }).station_names;
-    if (typeof stationNames !== "string" || !stationNames) {
-      return null;
-    }
+  const pageStationSource = await page
+    .evaluate(() => {
+      const stationNames = (globalThis as { station_names?: string }).station_names;
+      return typeof stationNames === "string" ? stationNames : "";
+    })
+    .catch(() => "");
 
-    const normalizedTargets = cities.map((city) => city.replace(/\s+/g, "").toLowerCase());
-    const entries = stationNames.split("@").filter(Boolean);
-    const exactMatches: Array<{ stationName: string; stationCode: string; matchedTarget: string }> = [];
-    const fuzzyMatches: Array<{
-      stationName: string;
-      stationCode: string;
-      matchedTarget: string;
-      score: number;
-    }> = [];
+  const pageResolved = pageStationSource
+    ? pickResolvedStation(parseStationCatalog(pageStationSource), targetCities)
+    : null;
+  if (pageResolved) {
+    return pageResolved;
+  }
 
-    for (const entry of entries) {
-      const fields = entry.split("|");
-      const stationName = (fields[1] ?? "").replace(/\s+/g, "");
-      const stationCode = (fields[2] ?? "").trim();
-      const pinyin = (fields[3] ?? "").replace(/\s+/g, "").toLowerCase();
-      const shortPinyin = (fields[4] ?? "").replace(/\s+/g, "").toLowerCase();
-
-      if (!stationName || !stationCode) {
-        continue;
-      }
-
-      for (const normalizedTarget of normalizedTargets) {
-        if (
-          stationName.toLowerCase() === normalizedTarget ||
-          pinyin === normalizedTarget ||
-          shortPinyin === normalizedTarget
-        ) {
-          exactMatches.push({
-            stationName,
-            stationCode,
-            matchedTarget: normalizedTarget
-          });
-          continue;
-        }
-
-        if (stationName.toLowerCase().startsWith(normalizedTarget)) {
-          const suffixLength = stationName.length - normalizedTarget.length;
-          fuzzyMatches.push({
-            stationName,
-            stationCode,
-            matchedTarget: normalizedTarget,
-            score: 500 - suffixLength
-          });
-          continue;
-        }
-
-        if (stationName.toLowerCase().includes(normalizedTarget)) {
-          fuzzyMatches.push({
-            stationName,
-            stationCode,
-            matchedTarget: normalizedTarget,
-            score: 300 - stationName.length
-          });
-        }
-      }
-    }
-
-    if (exactMatches.length > 0) {
-      const bestExact = exactMatches.sort((left, right) => left.stationName.length - right.stationName.length)[0];
-      return {
-        stationName: bestExact.stationName,
-        stationCode: bestExact.stationCode,
-        matchedTarget: bestExact.matchedTarget
-      };
-    }
-
-    if (fuzzyMatches.length > 0) {
-      const bestFuzzy = fuzzyMatches.sort((left, right) => right.score - left.score)[0];
-      return {
-        stationName: bestFuzzy.stationName,
-        stationCode: bestFuzzy.stationCode,
-        matchedTarget: bestFuzzy.matchedTarget
-      };
-    }
-
-    return null;
-  }, targetCities);
+  const catalog = await loadStationCatalog();
+  return pickResolvedStation(catalog, targetCities);
 }
-
 async function applyStationFallback(
   page: Page,
   inputSelector: string,
@@ -569,10 +629,14 @@ async function fillStationField(
       hiddenCode = normalizeText(
         await page.locator(hiddenCodeSelector).first().inputValue().catch(() => null)
       );
+
+      if (!hiddenCode || !visibleValue) {
+        return true;
+      }
     }
   }
 
-  return Boolean(hiddenCode) && Boolean(visibleValue);
+  return Boolean(visibleValue);
 }
 
 async function fillTravelDate(page: Page, travelDate: string | null): Promise<boolean> {

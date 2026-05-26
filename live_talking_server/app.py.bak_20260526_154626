@@ -23,7 +23,6 @@ sys.path.insert(0, str(Path(__file__).parent))
 import torch.multiprocessing as mp
 from aiohttp import web
 import aiohttp
-from miniapp_gateway import register_miniapp_gateway_routes
 
 if not hasattr(web, "AppKey"):
     class _CompatAppKey(str):
@@ -965,8 +964,6 @@ def create_app(opt):
     # Mock 模式 API
     appasync.router.add_get("/api/v1/mock/config", get_mock_config)
     appasync.router.add_get("/mock_videos/{filename}", serve_mock_video)
-
-    register_miniapp_gateway_routes(appasync)
 
     # 静态文件服务
     web_dir = Path(__file__).parent / "web"

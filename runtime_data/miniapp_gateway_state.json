@@ -1,0 +1,27 @@
+{
+  "users": [
+    {
+      "id": "usr_ed61e61cd2eb403c",
+      "phone": "13879781841",
+      "username": "codex_1779781841",
+      "nickname": "codex_1779781841",
+      "passwordHash": "pbkdf2_sha256$120000$3fb31c7b209a829ad3d36987ccb732e6$c825fe11a06903ce26284ebe433ce6ca8bf0c817122b5c17224ca4ae949f19ed",
+      "preferences": {
+        "alertPush": true,
+        "healthDigest": true,
+        "quietMode": true,
+        "mode": "senior"
+      },
+      "createdAt": 1779781842,
+      "updatedAt": 1779781843
+    }
+  ],
+  "sessions": {
+    "tok_4hXTDFFrwGxHzc9gyD4cJmU8jWrYBGlQ": {
+      "userId": "usr_ed61e61cd2eb403c",
+      "issuedAt": 1779781842,
+      "expiresAt": 1782373842
+    }
+  },
+  "reset_codes": {}
+}

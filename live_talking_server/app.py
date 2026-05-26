@@ -1171,7 +1171,7 @@ def run_terminal_tts_mode(
 
                 if result.success:
                     print(f"[{counter}] 生成成功")
-                    print(f"文本: {result.response_text}")
+                    print(f"文本长度: {len(result.response_text)}")
                     print(f"视频: {result.video_path}")
                     print(f"音频时长: {result.audio_duration:.2f}s")
                     print(f"总耗时: {result.total_time:.2f}s")

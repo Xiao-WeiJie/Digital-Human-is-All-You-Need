@@ -12,27 +12,27 @@
         }
 
         :root {
-            --cream: #f8fafc;
-            --cream-2: #f0f9ff;
-            --cream-3: #e0f2fe;
-            --terracotta: #06b6d4;
-            --terracotta-light: #38bdf8;
-            --terracotta-pale: #e0f2fe;
-            --sage: #0891b2;
-            --sage-pale: #cffafe;
-            --lavender: #7dd3fc;
-            --text-dark: #0f172a;
-            --text-mid: #334155;
-            --text-light: #64748b;
+            --cream: #faf6f1;
+            --cream-2: #f3ece2;
+            --cream-3: #f5e0d4;
+            --terracotta: #c4714a;
+            --terracotta-light: #e8a07a;
+            --terracotta-pale: #f5e0d4;
+            --sage: #7a9e87;
+            --sage-pale: #deeee3;
+            --lavender: #9b8bb4;
+            --text-dark: #2c2420;
+            --text-mid: #6b5b52;
+            --text-light: #a09080;
             --panel-bg: rgba(255, 255, 255, 0.86);
-            --border: rgba(6, 182, 212, 0.14);
+            --border: rgba(196, 113, 74, 0.14);
             --primary: var(--terracotta);
-            --primary-2: #38bdf8;
-            --success: #0891b2;
-            --warning: #38bdf8;
-            --danger: #06b6d4;
-            --shadow-soft: 0 18px 48px rgba(6, 182, 212, 0.12);
-            --shadow-card: 0 10px 30px rgba(6, 182, 212, 0.1);
+            --primary-2: #e8a07a;
+            --success: #7a9e87;
+            --warning: #e8a07a;
+            --danger: #c4714a;
+            --shadow-soft: 0 18px 48px rgba(44, 36, 32, 0.08);
+            --shadow-card: 0 10px 30px rgba(44, 36, 32, 0.06);
         }
 
         html {
@@ -42,9 +42,9 @@
         body {
             font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(6, 182, 212, 0.22), transparent 34%),
-                radial-gradient(circle at top right, rgba(125, 211, 252, 0.16), transparent 30%),
-                linear-gradient(180deg, #f8fafc 0%, #f0f9ff 100%);
+                radial-gradient(circle at top left, rgba(196, 113, 74, 0.22), transparent 34%),
+                radial-gradient(circle at top right, rgba(155, 139, 180, 0.16), transparent 30%),
+                linear-gradient(180deg, #faf6f1 0%, #f3ece2 100%);
             min-height: 100vh;
             color: var(--text-dark);
             padding: 16px;
@@ -70,7 +70,7 @@
             position: absolute;
             inset: 0 0 auto 0;
             height: 180px;
-            background: linear-gradient(135deg, rgba(6, 182, 212, 0.16), rgba(8, 145, 178, 0.08) 56%, rgba(125, 211, 252, 0.1));
+            background: linear-gradient(135deg, rgba(196, 113, 74, 0.16), rgba(122, 158, 135, 0.08) 56%, rgba(155, 139, 180, 0.1));
             pointer-events: none;
         }
 
@@ -92,7 +92,7 @@
             height: 4px;
             margin: 12px auto 0;
             border-radius: 999px;
-            background: linear-gradient(90deg, rgba(6, 182, 212, 0.12), var(--terracotta), rgba(8, 145, 178, 0.22));
+            background: linear-gradient(90deg, rgba(196, 113, 74, 0.12), var(--terracotta), rgba(122, 158, 135, 0.22));
         }
 
         .main-layout {
@@ -1862,7 +1862,7 @@
             display: flex; align-items: center; justify-content: center;
             font-size: 11px; font-weight: 700; flex-shrink: 0;
         }
-        .step-done { background: rgba(122,158,142,.15); color: var(--sage); }
+        .step-done { background: rgba(122,158,135,.15); color: var(--sage); }
         .step-run { background: rgba(196,113,94,.15); color: var(--terracotta); animation: stepPulse 1s infinite; }
         .step-pending { background: var(--cream-2); color: var(--text-light); }
         @keyframes stepPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
@@ -1876,17 +1876,17 @@
             background:
                 radial-gradient(circle at top right, rgba(122,198,123,.08), transparent 28%),
                 linear-gradient(180deg, #07120f, #0a1713 48%, #0d1d18);
-            border: 1px solid rgba(112, 219, 171, .14);
+            border: 1px solid rgba(122, 158, 135, .14);
             border-radius: 10px;
             padding: 12px 14px;
             font-family: 'Courier New', monospace;
             font-size: 11px;
-            color: rgba(208,255,226,.78);
+            color: rgba(222,238,227,.78);
             line-height: 1.7;
-            box-shadow: inset 0 0 0 1px rgba(112, 219, 171, .05);
+            box-shadow: inset 0 0 0 1px rgba(122, 158, 135, .05);
         }
         .log-line { display: flex; gap: 8px; align-items: flex-start; }
-        .log-time { color: rgba(174,255,214,.52); flex-shrink: 0; }
+        .log-time { color: rgba(168,196,176,.52); flex-shrink: 0; }
         .log-badge {
             min-width: 46px;
             display: inline-flex; justify-content: center;
@@ -1894,20 +1894,20 @@
             border: 1px solid currentColor;
             font-size: 10px; line-height: 1.4; letter-spacing: .04em;
         }
-        .log-text { flex: 1; color: rgba(220,255,234,.92); word-break: break-word; }
-        .log-ok { color: #7BC67B; }
+        .log-text { flex: 1; color: rgba(222,238,227,.92); word-break: break-word; }
+        .log-ok { color: #7a9e87; }
         .log-run-badge { color: #F4C6AE; }
-        .log-dom { color: #98F7BF; }
+        .log-dom { color: #a8c4b0; }
         .log-data { color: #FFD777; }
-        .log-hit { color: #E7A3FF; }
+        .log-hit { color: #9b8bb4; }
 
         .exec-badge.status-run {
-            background: rgba(250,204,21,0.2);
-            color: #facc15;
+            background: rgba(232,160,122,0.2);
+            color: #e8a07a;
         }
         .exec-badge.status-done {
-            background: rgba(74,222,128,0.2);
-            color: #4ade80;
+            background: rgba(122,158,135,0.2);
+            color: #a8c4b0;
         }
 
         .exec-card-success {
@@ -2024,6 +2024,8 @@
             cursor: pointer;
             transition: all 0.2s ease;
             box-shadow: none;
+            white-space: nowrap; /* 确保文字不换行 */
+            min-width: 100px; /* 设置最小宽度，确保文字有足够空间 */
         }
 
         .mode-btn:hover {
@@ -2423,28 +2425,28 @@
                         <div class="emotion-score-item">
                             <span class="emotion-score-name">开心</span>
                             <div class="emotion-score-bar">
-                                <div class="emotion-score-fill" style="width: 0%; background: #4CAF50;"></div>
+                                <div class="emotion-score-fill" style="width: 0%; background: #7a9e87;"></div>
                             </div>
                             <span class="emotion-score-value">0%</span>
                         </div>
                         <div class="emotion-score-item">
                             <span class="emotion-score-name">悲伤</span>
                             <div class="emotion-score-bar">
-                                <div class="emotion-score-fill" style="width: 0%; background: #2196F3;"></div>
+                                <div class="emotion-score-fill" style="width: 0%; background: #4a7ec4;"></div>
                             </div>
                             <span class="emotion-score-value">0%</span>
                         </div>
                         <div class="emotion-score-item">
                             <span class="emotion-score-name">愤怒</span>
                             <div class="emotion-score-bar">
-                                <div class="emotion-score-fill" style="width: 0%; background: #f44336;"></div>
+                                <div class="emotion-score-fill" style="width: 0%; background: #c4714a;"></div>
                             </div>
                             <span class="emotion-score-value">0%</span>
                         </div>
                         <div class="emotion-score-item">
                             <span class="emotion-score-name">平静</span>
                             <div class="emotion-score-bar">
-                                <div class="emotion-score-fill" style="width: 0%; background: #9E9E9E;"></div>
+                                <div class="emotion-score-fill" style="width: 0%; background: #a09080;"></div>
                             </div>
                             <span class="emotion-score-value">0%</span>
                         </div>
@@ -2483,6 +2485,11 @@
     <script src="emotion-capture.js"></script>
 
     <script>
+        const AVATAR_DISPLAY_NAMES = {
+            human_1: '小暖',
+            human_2: '小安'
+        };
+
         const state = {
             currentAvatar: 'human_1',
             avatars: {},
@@ -2570,6 +2577,7 @@
             agentTaskStatus: null,
             agentTaskIntent: null,
             agentCheckpointId: null,
+            agentPendingHumanAction: null,
             agentSelectedCandidate: { trainNo: null, seatType: null }
         };
 
@@ -2638,13 +2646,13 @@
                 neutral: '😐'
             },
             colors: {
-                happy: '#4CAF50',
-                sad: '#2196F3',
-                angry: '#f44336',
-                fear: '#9C27B0',
-                surprise: '#FF9800',
+                happy: '#7a9e87',
+                sad: '#4a7ec4',
+                angry: '#c4714a',
+                fear: '#9b8bb4',
+                surprise: '#e8a07a',
                 disgust: '#795548',
-                neutral: '#9E9E9E'
+                neutral: '#a09080'
             },
             names: {
                 happy: '开心',
@@ -3606,15 +3614,17 @@
                     state.emotionFirstReaction.sadReply = emotionReactionConfig.sad_reply || '';
                     elements.avatarList.innerHTML = '';
                     result.data.avatars.forEach(avatar => {
-                        state.avatars[avatar.id] = avatar;
+                        const displayName = AVATAR_DISPLAY_NAMES[avatar.id] || avatar.name;
+                        const normalizedAvatar = { ...avatar, name: displayName };
+                        state.avatars[avatar.id] = normalizedAvatar;
                         const item = document.createElement('div');
-                        item.className = 'avatar-item' + (avatar.id === result.data.default ? ' active' : '');
-                        item.dataset.avatarId = avatar.id;
+                        item.className = 'avatar-item' + (normalizedAvatar.id === result.data.default ? ' active' : '');
+                        item.dataset.avatarId = normalizedAvatar.id;
                         item.innerHTML = `
-                            <img class="avatar-preview" src="${avatar.source_image}" alt="${avatar.name}">
-                            <div class="avatar-name">${avatar.name}</div>
+                            <img class="avatar-preview" src="${normalizedAvatar.source_image}" alt="${normalizedAvatar.name}">
+                            <div class="avatar-name">${normalizedAvatar.name}</div>
                         `;
-                        item.onclick = () => selectAvatar(avatar.id);
+                        item.onclick = () => selectAvatar(normalizedAvatar.id);
                         elements.avatarList.appendChild(item);
                     });
                     state.currentAvatar = result.data.default;
@@ -5286,10 +5296,10 @@
                 container.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;';
                 document.body.appendChild(container);
             }
-            const colorMap = { info: '#06b6d4', warning: '#38bdf8', error: '#06b6d4', success: '#0891b2' };
+            const colorMap = { info: '#c4714a', warning: '#e8a07a', error: '#c4714a', success: '#7a9e87' };
             const color = colorMap[type] || colorMap.info;
             const toast = document.createElement('div');
-            toast.style.cssText = `padding:10px 16px;border-radius:10px;max-width:360px;background:rgba(248,250,252,0.97);color:${color};border-left:3px solid ${color};font-size:13px;line-height:1.5;box-shadow:0 4px 16px rgba(6,182,212,0.14);animation:slideIn 0.2s ease;white-space:pre-wrap;`;
+            toast.style.cssText = `padding:10px 16px;border-radius:10px;max-width:360px;background:rgba(250,246,241,0.97);color:${color};border-left:3px solid ${color};font-size:13px;line-height:1.5;box-shadow:0 4px 16px rgba(196,113,74,0.14);animation:slideIn 0.2s ease;white-space:pre-wrap;`;
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(() => {
@@ -5380,6 +5390,16 @@
             }
         }
 
+        function syncAgentSnapshotState(snapshot) {
+            if (!snapshot || typeof snapshot !== 'object') return;
+            if (snapshot.task?.status) state.agentTaskStatus = snapshot.task.status;
+            if (snapshot.task?.intent) state.agentTaskIntent = snapshot.task.intent;
+            state.agentPendingHumanAction = snapshot.pendingHumanAction || null;
+            if (snapshot.pendingHumanAction?.checkpointId) {
+                state.agentCheckpointId = snapshot.pendingHumanAction.checkpointId;
+            }
+        }
+
         function subscribeAgentSSE(taskId) {
             const url = `${state.agentBackendUrl}/api/tasks/${taskId}/stream`;
             const source = new EventSource(url);
@@ -5390,8 +5410,8 @@
             // SSE 建立前后端可能已发布事件，立即拉取快照补全状态
             fetchAgentSnapshot(taskId).then(snapshot => {
                 if (!snapshot?.task) return;
+                syncAgentSnapshotState(snapshot);
                 const currentStatus = snapshot.task.status;
-                state.agentTaskStatus = currentStatus;
                 // 补渲已错过的事件消息
                 (snapshot.recentEvents || []).forEach(ev => {
                     if (seenSequences.has(ev.sequenceId)) return;
@@ -5428,6 +5448,9 @@
             // 保存最新 checkpointId 供动作按钮使用
             if (checkpointId) state.agentCheckpointId = checkpointId;
             state.agentTaskStatus = status;
+            if (['login_required', 'awaiting_human_verification', 'awaiting_final_submit_confirmation', 'awaiting_payment'].includes(status) && state.agentCurrentTaskId) {
+                void fetchAgentSnapshot(state.agentCurrentTaskId);
+            }
 
             // 选择消息图标
             const icon = type === 'task_completed'   ? '✅' :
@@ -5461,6 +5484,7 @@
                 state.agentCurrentTaskId = null;
                 state.agentCheckpointId  = null;
                 state.agentTaskStatus    = null;
+                state.agentPendingHumanAction = null;
                 state.isProcessing = false;
                 refreshGenerateButtonState();
             }
@@ -5485,18 +5509,29 @@
             try {
                 const res = await fetch(`${state.agentBackendUrl}/api/tasks/${taskId}`);
                 const payload = await res.json().catch(() => null);
-                if (res.ok && payload?.success) return payload.data;
+                if (res.ok && payload?.success) {
+                    syncAgentSnapshotState(payload.data);
+                    return payload.data;
+                }
             } catch {}
             return null;
         }
 
-        function agentApiCall(path, body) {
+        async function agentApiCall(path, body) {
             const idempotencyKey = `action-${Date.now()}-${Math.random().toString(16).slice(2)}`;
-            return fetch(`${state.agentBackendUrl}${path}`, {
+            const res = await fetch(`${state.agentBackendUrl}${path}`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ ...body, idempotencyKey })
-            }).then(r => r.json());
+            });
+            const payload = await res.json().catch(() => null);
+            if (!res.ok || !payload || !payload.success) {
+                throw new Error(payload?.error?.message || `请求失败：${res.status}`);
+            }
+            if (payload.data?.status) {
+                state.agentTaskStatus = payload.data.status;
+            }
+            return payload.data;
         }
 
         async function updateAgentActionPanel(status) {
@@ -5582,23 +5617,29 @@
 
                 case 'login_required':
                 case 'awaiting_human_verification': {
-                    const isLogin = status === 'login_required';
+                    const snapshot = await fetchAgentSnapshot(taskId);
+                    const pendingHumanAction = snapshot?.pendingHumanAction || state.agentPendingHumanAction;
+                    const effectiveStatus = snapshot?.task?.status || status;
+                    const actionType = pendingHumanAction?.type || (effectiveStatus === 'awaiting_human_verification' ? 'complete_qr_login' : 'complete_qr_login');
+                    const isLogin = actionType === 'complete_qr_login';
                     showAgentActionPanel(`
                         <div class="agent-action-title">${isLogin ? '🔐 需要扫码登录' : '🔍 需要人工验证'}</div>
-                        <div class="agent-action-note">${isLogin
+                        <div class="agent-action-note">${pendingHumanAction?.prompt || (isLogin
                             ? '12306 自动化浏览器已打开，请切换到该浏览器窗口完成扫码登录，完成后点击下方按钮继续。'
-                            : '需要完成验证码或短信验证，请在弹出的浏览器窗口操作，完成后点击下方按钮。'}</div>
+                            : '需要完成验证码或短信验证，请在弹出的浏览器窗口操作，完成后点击下方按钮。')}</div>
                         <div class="agent-action-btns">
-                            <button class="btn-primary" onclick="agentHumanStepDone('${isLogin ? 'complete_qr_login' : 'complete_captcha'}')">已完成${isLogin ? '扫码' : '验证'}</button>
+                            <button class="btn-primary" onclick="agentHumanStepDone('${actionType}')">已完成${isLogin ? '扫码' : '验证'}</button>
                             <button class="btn-secondary" onclick="agentCancelTask()">取消</button>
                         </div>`);
                     break;
                 }
 
                 case 'awaiting_final_submit_confirmation': {
+                    const snapshot = await fetchAgentSnapshot(taskId);
+                    const pendingHumanAction = snapshot?.pendingHumanAction || state.agentPendingHumanAction;
                     showAgentActionPanel(`
                         <div class="agent-action-title">📋 确认提交订单</div>
-                        <div class="agent-action-note">Agent 已填写完订单信息，请确认是否立即提交。提交后将进入支付环节。</div>
+                        <div class="agent-action-note">${pendingHumanAction?.prompt || 'Agent 已填写完订单信息，请确认是否立即提交。提交后将进入支付环节。'}</div>
                         <div class="agent-action-btns">
                             <button class="btn-primary" onclick="agentConfirmSubmit(true)">确认提交</button>
                             <button class="btn-secondary" onclick="agentConfirmSubmit(false)">放弃</button>
@@ -5607,9 +5648,11 @@
                 }
 
                 case 'awaiting_payment': {
+                    const snapshot = await fetchAgentSnapshot(taskId);
+                    const pendingHumanAction = snapshot?.pendingHumanAction || state.agentPendingHumanAction;
                     showAgentActionPanel(`
                         <div class="agent-action-title">💳 等待支付</div>
-                        <div class="agent-action-note">请在弹出的 12306 浏览器窗口完成支付，完成后点击下方按钮。</div>
+                        <div class="agent-action-note">${pendingHumanAction?.prompt || '请在弹出的 12306 浏览器窗口完成支付，完成后点击下方按钮。'}</div>
                         <div class="agent-action-btns">
                             <button class="btn-primary" onclick="agentCompletePayment()">已完成支付</button>
                             <button class="btn-secondary" onclick="agentCancelTask()">取消</button>
@@ -5670,13 +5713,15 @@
 
         async function agentHumanStepDone(actionType) {
             const taskId = state.agentCurrentTaskId;
-            const checkpointId = state.agentCheckpointId;
-            if (!taskId || !checkpointId) return;
+            if (!taskId) return;
+            const snapshot = await fetchAgentSnapshot(taskId);
+            const checkpointId = snapshot?.pendingHumanAction?.checkpointId || state.agentCheckpointId || `cp_${taskId}_human_verification`;
+            const resolvedActionType = snapshot?.pendingHumanAction?.type || state.agentPendingHumanAction?.type || actionType;
             hideAgentActionPanel();
             try {
                 await agentApiCall(`/api/tasks/${taskId}/human-step-done`, {
                     checkpointId,
-                    actionType
+                    actionType: resolvedActionType
                 });
                 addMessage('agent-step', '✅ 已通知 Agent 继续执行...');
             } catch (e) {
@@ -5686,8 +5731,9 @@
 
         async function agentConfirmSubmit(confirmed) {
             const taskId = state.agentCurrentTaskId;
-            const checkpointId = state.agentCheckpointId;
-            if (!taskId || !checkpointId) return;
+            if (!taskId) return;
+            const snapshot = await fetchAgentSnapshot(taskId);
+            const checkpointId = snapshot?.pendingHumanAction?.checkpointId || state.agentCheckpointId || `cp_${taskId}_final_submit`;
             hideAgentActionPanel();
             try {
                 await agentApiCall(`/api/tasks/${taskId}/confirm-submit`, { checkpointId, confirmed });
@@ -5699,8 +5745,9 @@
 
         async function agentCompletePayment() {
             const taskId = state.agentCurrentTaskId;
-            const checkpointId = state.agentCheckpointId;
-            if (!taskId || !checkpointId) return;
+            if (!taskId) return;
+            const snapshot = await fetchAgentSnapshot(taskId);
+            const checkpointId = snapshot?.pendingHumanAction?.checkpointId || state.agentCheckpointId || `cp_${taskId}_payment`;
             hideAgentActionPanel();
             try {
                 await agentApiCall(`/api/tasks/${taskId}/complete-payment`, { checkpointId });

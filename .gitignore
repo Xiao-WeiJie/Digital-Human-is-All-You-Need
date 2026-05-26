@@ -28,4 +28,7 @@ __pycache__/
 *.log
 livetalking.log
 *.tar.xz
+*.pth
+
+
 

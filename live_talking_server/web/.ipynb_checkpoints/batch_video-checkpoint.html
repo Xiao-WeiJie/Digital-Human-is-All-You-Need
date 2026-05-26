@@ -12,27 +12,27 @@
         }
 
         :root {
-            --cream: #faf6f1;
-            --cream-2: #f3ece2;
-            --cream-3: #eadfd2;
-            --terracotta: #c4714a;
-            --terracotta-light: #e8a07a;
-            --terracotta-pale: #f2d5c5;
-            --sage: #7a9e87;
-            --sage-pale: #deeee3;
-            --lavender: #9b8bb4;
-            --text-dark: #2c2420;
-            --text-mid: #6b5b52;
-            --text-light: #a09080;
+            --cream: #f8fafc;
+            --cream-2: #f0f9ff;
+            --cream-3: #e0f2fe;
+            --terracotta: #06b6d4;
+            --terracotta-light: #38bdf8;
+            --terracotta-pale: #e0f2fe;
+            --sage: #0891b2;
+            --sage-pale: #cffafe;
+            --lavender: #7dd3fc;
+            --text-dark: #0f172a;
+            --text-mid: #334155;
+            --text-light: #64748b;
             --panel-bg: rgba(255, 255, 255, 0.86);
-            --border: rgba(196, 113, 74, 0.14);
+            --border: rgba(6, 182, 212, 0.14);
             --primary: var(--terracotta);
-            --primary-2: #de8f67;
-            --success: #6f977b;
-            --warning: #d59a3a;
-            --danger: #d66b5e;
-            --shadow-soft: 0 18px 48px rgba(44, 36, 32, 0.12);
-            --shadow-card: 0 10px 30px rgba(44, 36, 32, 0.1);
+            --primary-2: #38bdf8;
+            --success: #0891b2;
+            --warning: #38bdf8;
+            --danger: #06b6d4;
+            --shadow-soft: 0 18px 48px rgba(6, 182, 212, 0.12);
+            --shadow-card: 0 10px 30px rgba(6, 182, 212, 0.1);
         }
 
         html {
@@ -42,9 +42,9 @@
         body {
             font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
             background:
-                radial-gradient(circle at top left, rgba(232, 160, 122, 0.22), transparent 34%),
-                radial-gradient(circle at top right, rgba(155, 139, 180, 0.16), transparent 30%),
-                linear-gradient(180deg, #fcf8f3 0%, #f6ede3 100%);
+                radial-gradient(circle at top left, rgba(6, 182, 212, 0.22), transparent 34%),
+                radial-gradient(circle at top right, rgba(125, 211, 252, 0.16), transparent 30%),
+                linear-gradient(180deg, #f8fafc 0%, #f0f9ff 100%);
             min-height: 100vh;
             color: var(--text-dark);
             padding: 16px;
@@ -70,7 +70,7 @@
             position: absolute;
             inset: 0 0 auto 0;
             height: 180px;
-            background: linear-gradient(135deg, rgba(232, 160, 122, 0.16), rgba(122, 158, 135, 0.08) 56%, rgba(155, 139, 180, 0.1));
+            background: linear-gradient(135deg, rgba(6, 182, 212, 0.16), rgba(8, 145, 178, 0.08) 56%, rgba(125, 211, 252, 0.1));
             pointer-events: none;
         }
 
@@ -92,7 +92,7 @@
             height: 4px;
             margin: 12px auto 0;
             border-radius: 999px;
-            background: linear-gradient(90deg, rgba(196, 113, 74, 0.12), var(--terracotta), rgba(122, 158, 135, 0.22));
+            background: linear-gradient(90deg, rgba(6, 182, 212, 0.12), var(--terracotta), rgba(8, 145, 178, 0.22));
         }
 
         .main-layout {
@@ -454,6 +454,204 @@
             display: block;
         }
 
+        #tongue-input.active {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            align-items: stretch;
+        }
+
+        #tongue-input.active .tongue-camera-section {
+            order: 1;
+            width: 100%;
+            max-width: none;
+            aspect-ratio: 16 / 9;
+            min-height: clamp(260px, 34vh, 420px);
+            margin: 0;
+        }
+
+        #tongue-input.active .tongue-result {
+            order: 2;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        #tongue-input.active .tongue-guide {
+            order: 3;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        #tongue-input.active .tongue-status {
+            order: 4;
+            width: 100%;
+            margin-bottom: 0;
+        }
+
+        #tongue-camera {
+            width: 100%;
+            height: 100%;
+            display: block;
+            position: relative;
+            z-index: 1;
+            object-fit: cover;
+            background: #201c19;
+            transform: scaleX(-1);
+        }
+
+        .tongue-guide,
+        .tongue-status,
+        .tongue-result {
+            padding: 12px 14px;
+            background: linear-gradient(180deg, #ffffff, var(--cream-2));
+            border: 1px solid rgba(196, 113, 74, 0.08);
+            border-radius: 16px;
+        }
+
+        .tongue-guide {
+            color: var(--text-dark);
+            font-size: 13px;
+            line-height: 1.65;
+            min-height: 72px;
+        }
+
+        .tongue-status {
+            color: var(--text-mid);
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .tongue-status.error {
+            color: #c95e56;
+        }
+
+        .tongue-result {
+            display: block;
+        }
+
+        .tongue-result.hidden {
+            display: none;
+        }
+
+        .tongue-result-grid {
+            display: grid;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
+            gap: 10px;
+        }
+
+        .tongue-result-item {
+            padding: 12px;
+            border-radius: 14px;
+            background: rgba(255, 255, 255, 0.72);
+            border: 1px solid rgba(196, 113, 74, 0.08);
+        }
+
+        .tongue-result-label {
+            color: var(--text-light);
+            font-size: 12px;
+            margin-bottom: 6px;
+        }
+
+        .tongue-result-value {
+            color: var(--text-dark);
+            font-size: 18px;
+            font-weight: 700;
+        }
+
+        .tongue-result-tip {
+            margin-top: 12px;
+            padding-top: 10px;
+            border-top: 1px dashed rgba(196, 113, 74, 0.18);
+            color: var(--text-mid);
+            font-size: 12px;
+            line-height: 1.6;
+        }
+
+        .tongue-action-group {
+            display: none;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tongue-action-group:not(.hidden) {
+            display: flex;
+        }
+
+        .tongue-action-group .hidden {
+            display: none;
+        }
+
+        .right-panel.tongue-mode {
+            gap: 10px;
+        }
+
+        .right-panel.tongue-mode .status-bar {
+            padding: 12px 14px;
+            border-radius: 16px;
+        }
+
+        .right-panel.tongue-mode .chat-section {
+            flex: 0 0 auto;
+            min-height: 0;
+            padding-top: 8px;
+        }
+
+        .right-panel.tongue-mode .chat-history {
+            display: none;
+        }
+
+        .right-panel.tongue-mode .chat-header {
+            display: none;
+        }
+
+        .right-panel.tongue-mode .chat-count {
+            display: none;
+        }
+
+        .right-panel.tongue-mode .input-tabs {
+            margin-bottom: 10px;
+        }
+
+        .right-panel.tongue-mode #tongue-input.active {
+            margin-top: 0;
+        }
+
+        .right-panel.tongue-mode .camera-overlay {
+            font-size: 13px;
+        }
+
+        .right-panel.tongue-mode .camera-overlay .icon {
+            font-size: 24px;
+            margin-bottom: 6px;
+        }
+
+        .right-panel.tongue-mode .camera-label {
+            bottom: 8px;
+            left: 10px;
+            padding: 3px 8px;
+            font-size: 11px;
+        }
+
+        .right-panel.tongue-mode .tongue-guide,
+        .right-panel.tongue-mode .tongue-status,
+        .right-panel.tongue-mode .tongue-result {
+            padding: 10px 12px;
+        }
+
+        .right-panel.tongue-mode .tongue-guide,
+        .right-panel.tongue-mode .tongue-status,
+        .right-panel.tongue-mode .tongue-result-tip {
+            font-size: 12px;
+        }
+
+        .right-panel.tongue-mode .tongue-result-label {
+            font-size: 11px;
+        }
+
+        .right-panel.tongue-mode .tongue-result-value {
+            font-size: 16px;
+        }
+
         .hold-to-talk-btn {
             width: 100%;
             padding: 14px 18px;
@@ -734,7 +932,8 @@
         }
 
         .button-group.hidden,
-        .emotion-action-group.hidden {
+        .emotion-action-group.hidden,
+        .tongue-action-group.hidden {
             display: none;
         }
 
@@ -1791,6 +1990,18 @@
                 grid-column: 1;
                 grid-row: auto;
             }
+            #tongue-input.active {
+                gap: 10px;
+            }
+            #tongue-input.active .tongue-camera-section,
+            #tongue-input.active .tongue-guide,
+            #tongue-input.active .tongue-status,
+            #tongue-input.active .tongue-result {
+                width: 100%;
+            }
+            .tongue-result-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* ===== 双模式切换 ===== */
@@ -2129,12 +2340,49 @@
                         <!-- Agent 动作面板：根据任务状态动态渲染，放在滚动区内避免遮挡输入框 -->
                         <div id="agentActionPanel" class="agent-action-panel" style="display:none;"></div>
                     </div>
+
+                    <div class="input-tab-content" id="tongue-input">
+                        <div class="camera-section tongue-camera-section">
+                            <video id="tongue-camera" autoplay playsinline muted></video>
+                            <div class="camera-label">舌诊预览</div>
+                            <div class="camera-overlay" id="tongue-camera-overlay">
+                                <div class="icon">👅</div>
+                                <div>点击“开始诊断”后显示预览</div>
+                            </div>
+                        </div>
+
+                        <div class="tongue-guide" id="tongue-guide">请伸出舌头对准摄像头，确认后请点击“进行诊断”</div>
+                        <div class="tongue-status" id="tongue-status">未开始</div>
+
+                        <div class="tongue-result hidden" id="tongue-result">
+                            <div class="tongue-result-grid">
+                                <div class="tongue-result-item">
+                                    <div class="tongue-result-label">舌色</div>
+                                    <div class="tongue-result-value" id="tongue-color-value">--</div>
+                                </div>
+                                <div class="tongue-result-item">
+                                    <div class="tongue-result-label">苔色</div>
+                                    <div class="tongue-result-value" id="tongue-coat-value">--</div>
+                                </div>
+                                <div class="tongue-result-item">
+                                    <div class="tongue-result-label">厚薄</div>
+                                    <div class="tongue-result-value" id="tongue-thickness-value">--</div>
+                                </div>
+                                <div class="tongue-result-item">
+                                    <div class="tongue-result-label">腻腐</div>
+                                    <div class="tongue-result-value" id="tongue-greasiness-value">--</div>
+                                </div>
+                            </div>
+                            <div class="tongue-result-tip" id="tongue-result-tip">本次结果仅供辅助参考</div>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="input-tabs">
                     <div class="input-tab active" data-tab="text">文字输入</div>
                     <div class="input-tab" data-tab="voice">语音输入</div>
                     <div class="input-tab" data-tab="emotion">情绪感知</div>
+                    <div class="input-tab" data-tab="tongue">舌诊</div>
                 </div>
 
                 <div class="input-tab-content active" id="text-input">
@@ -2220,6 +2468,13 @@
                 <div class="emotion-action-group hidden" id="emotion-action-group">
                     <button class="hold-to-talk-btn" id="emotion-talk-btn" type="button">按住并说话</button>
                 </div>
+
+                <div class="tongue-action-group hidden" id="tongue-action-group">
+                    <button class="btn-primary" id="tongue-start-btn" type="button">开始诊断</button>
+                    <button class="btn-primary hidden" id="tongue-confirm-btn" type="button">进行诊断</button>
+                    <button class="btn-secondary hidden" id="tongue-redo-btn" type="button">再次诊断</button>
+                    <button class="btn-secondary hidden" id="tongue-stop-btn" type="button">关闭摄像头</button>
+                </div>
             </section>
         </div>
     </div>
@@ -2295,6 +2550,15 @@
             emotionHoldActive: false,
             emotionHoldShouldStop: false,
             emotionHoldStartPromise: null,
+            tongueDiagnosis: {
+                phase: 'idle',
+                stream: null,
+                lastCapturedImage: null,
+                lastResult: null,
+                requestPending: false,
+                keepPreviewAlive: true,
+                requestId: 0
+            },
             // ===== 双模式控制 =====
             mode: 'chat',
             agentBackendUrl: 'http://localhost:3010',
@@ -2343,7 +2607,23 @@
             emotionText: document.getElementById('emotion-text'),
             emotionScores: document.getElementById('emotion-scores'),
             emotionEnabled: document.getElementById('emotion-enabled'),
-            emotionStatus: document.getElementById('emotion-status')
+            emotionStatus: document.getElementById('emotion-status'),
+            // 舌诊相关元素
+            tongueActionGroup: document.getElementById('tongue-action-group'),
+            tongueCamera: document.getElementById('tongue-camera'),
+            tongueCameraOverlay: document.getElementById('tongue-camera-overlay'),
+            tongueGuide: document.getElementById('tongue-guide'),
+            tongueStatus: document.getElementById('tongue-status'),
+            tongueResult: document.getElementById('tongue-result'),
+            tongueColorValue: document.getElementById('tongue-color-value'),
+            tongueCoatValue: document.getElementById('tongue-coat-value'),
+            tongueThicknessValue: document.getElementById('tongue-thickness-value'),
+            tongueGreasinessValue: document.getElementById('tongue-greasiness-value'),
+            tongueResultTip: document.getElementById('tongue-result-tip'),
+            tongueStartBtn: document.getElementById('tongue-start-btn'),
+            tongueConfirmBtn: document.getElementById('tongue-confirm-btn'),
+            tongueRedoBtn: document.getElementById('tongue-redo-btn'),
+            tongueStopBtn: document.getElementById('tongue-stop-btn')
         };
 
         // 情绪配置
@@ -2697,6 +2977,7 @@
             initVideoEvents();
             initTextareaAutoResize();
             initEmotionCapture();
+            initTongueDiagnosis();
             initPanelMenu();
             renderChatHistory();
             initHistoryManager();
@@ -2798,6 +3079,14 @@
             const disabled = state.isProcessing || (state.mockMode.enabled && state.responsePlayback.busy);
             elements.generateBtn.disabled = disabled;
             elements.emotionTalkBtn.disabled = disabled;
+            if (elements.tongueStartBtn) {
+                const tongueDisabled = disabled || state.tongueDiagnosis.requestPending;
+                elements.tongueStartBtn.disabled = tongueDisabled;
+                elements.tongueConfirmBtn.disabled = tongueDisabled;
+                elements.tongueRedoBtn.disabled = tongueDisabled;
+                elements.tongueStopBtn.disabled = tongueDisabled;
+                updateTongueActionArea();
+            }
         }
 
         function getActiveTabName() {
@@ -2806,14 +3095,298 @@
 
         function updateActionArea(activeTab = getActiveTabName()) {
             const isEmotionTab = activeTab === 'emotion';
-            elements.defaultActionGroup.classList.toggle('hidden', isEmotionTab);
+            const isTongueTab = activeTab === 'tongue';
+            elements.defaultActionGroup.classList.toggle('hidden', isEmotionTab || isTongueTab);
             elements.emotionActionGroup.classList.toggle('hidden', !isEmotionTab);
+            elements.tongueActionGroup.classList.toggle('hidden', !isTongueTab);
             elements.rightPanel?.classList.toggle('emotion-mode', isEmotionTab);
+            elements.rightPanel?.classList.toggle('tongue-mode', isTongueTab);
+            if (isTongueTab) {
+                updateTongueActionArea();
+            }
         }
 
         function setEmotionTalkButtonState({ recording = false, text = '按住并说话' } = {}) {
             elements.emotionTalkBtn.classList.toggle('recording', recording);
             elements.emotionTalkBtn.textContent = text;
+        }
+
+        const TONGUE_GUIDE_TEXT = '请伸出舌头对准摄像头，确认后请点击“进行诊断”';
+
+        function setTongueStatus(text, isError = false) {
+            if (!elements.tongueStatus) return;
+            elements.tongueStatus.textContent = text;
+            elements.tongueStatus.classList.toggle('error', isError);
+        }
+
+        function clearTongueDiagnosisResult() {
+            state.tongueDiagnosis.lastResult = null;
+            if (!elements.tongueResult) return;
+            elements.tongueColorValue.textContent = '--';
+            elements.tongueCoatValue.textContent = '--';
+            elements.tongueThicknessValue.textContent = '--';
+            elements.tongueGreasinessValue.textContent = '--';
+            elements.tongueResultTip.textContent = '本次结果仅供辅助参考';
+            elements.tongueResult.classList.add('hidden');
+        }
+
+        function getTongueGuideText(phase = state.tongueDiagnosis.phase) {
+            switch (phase) {
+                case 'preview':
+                    return TONGUE_GUIDE_TEXT;
+                case 'diagnosing':
+                    return '正在分析当前画面，请稍候...';
+                case 'done':
+                    return '诊断完成，如需重新分析请点击“再次诊断”。';
+                case 'error':
+                    return '请调整取景后重试，或关闭摄像头。';
+                case 'idle':
+                default:
+                    return '点击“开始诊断”后显示预览。';
+            }
+        }
+
+        function renderTongueDiagnosisState() {
+            if (!elements.tongueGuide) return;
+
+            elements.tongueGuide.textContent = getTongueGuideText();
+            elements.tongueCameraOverlay.style.display = state.tongueDiagnosis.stream ? 'none' : 'flex';
+            elements.tongueResult.classList.toggle(
+                'hidden',
+                !(state.tongueDiagnosis.phase === 'done' && state.tongueDiagnosis.lastResult)
+            );
+            updateTongueActionArea();
+        }
+
+        function updateTongueActionArea() {
+            if (!elements.tongueStartBtn) return;
+
+            const { phase, stream, requestPending } = state.tongueDiagnosis;
+            const busy = state.isProcessing || (state.mockMode.enabled && state.responsePlayback.busy) || requestPending;
+            const hasStream = !!stream;
+
+            elements.tongueConfirmBtn.textContent = phase === 'diagnosing' ? '诊断中...' : '进行诊断';
+
+            elements.tongueStartBtn.classList.toggle('hidden', phase !== 'idle');
+            elements.tongueConfirmBtn.classList.toggle('hidden', !['preview', 'diagnosing'].includes(phase));
+            elements.tongueRedoBtn.classList.toggle('hidden', !['done', 'error'].includes(phase));
+            elements.tongueStopBtn.classList.toggle('hidden', !hasStream || !['preview', 'done', 'error', 'diagnosing'].includes(phase));
+
+            elements.tongueStartBtn.disabled = busy;
+            elements.tongueConfirmBtn.disabled = busy || phase !== 'preview';
+            elements.tongueRedoBtn.disabled = busy;
+            elements.tongueStopBtn.disabled = busy || phase === 'diagnosing';
+        }
+
+        function stopEmotionCameraForTabSwitch() {
+            if (state.mockMode.enabled) {
+                if (state.emotionTrigger.cameraStream) {
+                    stopMockEmotionCapture();
+                }
+            } else if (emotionCapture && emotionCapture.isRunning) {
+                emotionCapture.stop();
+            }
+
+            if (elements.emotionEnabled.checked) {
+                elements.emotionEnabled.checked = false;
+            }
+        }
+
+        function resetTongueDiagnosisState({ keepStream = false, phase = 'idle', statusText = '未开始' } = {}) {
+            state.tongueDiagnosis.requestPending = false;
+            state.tongueDiagnosis.lastCapturedImage = null;
+            state.tongueDiagnosis.requestId += 1;
+
+            if (!keepStream && state.tongueDiagnosis.stream) {
+                state.tongueDiagnosis.stream.getTracks().forEach(track => track.stop());
+                state.tongueDiagnosis.stream = null;
+            }
+
+            if (!keepStream && elements.tongueCamera) {
+                elements.tongueCamera.srcObject = null;
+            }
+
+            state.tongueDiagnosis.phase = phase;
+            clearTongueDiagnosisResult();
+            setTongueStatus(statusText);
+            renderTongueDiagnosisState();
+        }
+
+        function initTongueDiagnosis() {
+            if (!elements.tongueCamera || !elements.tongueStartBtn) return;
+
+            clearTongueDiagnosisResult();
+            state.tongueDiagnosis.phase = 'idle';
+            setTongueStatus('未开始');
+            renderTongueDiagnosisState();
+
+            elements.tongueStartBtn.addEventListener('click', startTonguePreview);
+            elements.tongueConfirmBtn.addEventListener('click', performTongueDiagnosis);
+            elements.tongueRedoBtn.addEventListener('click', () => {
+                if (state.tongueDiagnosis.stream) {
+                    resetTongueDiagnosisForRedo();
+                } else {
+                    startTonguePreview();
+                }
+            });
+            elements.tongueStopBtn.addEventListener('click', () => stopTonguePreview());
+        }
+
+        async function startTonguePreview() {
+            if (state.tongueDiagnosis.requestPending) return;
+            if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                state.tongueDiagnosis.phase = 'error';
+                clearTongueDiagnosisResult();
+                setTongueStatus('浏览器不支持摄像头访问', true);
+                renderTongueDiagnosisState();
+                return;
+            }
+
+            try {
+                stopEmotionCameraForTabSwitch();
+
+                if (!state.tongueDiagnosis.stream) {
+                    const stream = await navigator.mediaDevices.getUserMedia({
+                        video: {
+                            width: { ideal: 640 },
+                            height: { ideal: 480 },
+                            facingMode: 'user'
+                        },
+                        audio: false
+                    });
+
+                    state.tongueDiagnosis.stream = stream;
+                    elements.tongueCamera.srcObject = stream;
+                    await elements.tongueCamera.play();
+                }
+
+                clearTongueDiagnosisResult();
+                state.tongueDiagnosis.phase = 'preview';
+                setTongueStatus('摄像头已开启，请确认取景');
+                renderTongueDiagnosisState();
+            } catch (error) {
+                console.error('[Tongue] Failed to start preview:', error);
+                state.tongueDiagnosis.phase = 'error';
+                clearTongueDiagnosisResult();
+
+                if (error.name === 'NotAllowedError' || error.name === 'PermissionDeniedError') {
+                    setTongueStatus('无法访问摄像头，请在浏览器设置中允许摄像头权限', true);
+                } else {
+                    setTongueStatus('摄像头启动失败，请检查设备是否被占用', true);
+                }
+
+                renderTongueDiagnosisState();
+            }
+        }
+
+        function captureTongueFrame() {
+            const video = elements.tongueCamera;
+            if (!video || !state.tongueDiagnosis.stream) {
+                throw new Error('摄像头尚未开启');
+            }
+            if (video.readyState < 2 || !video.videoWidth || !video.videoHeight) {
+                throw new Error('摄像头画面尚未准备好');
+            }
+
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            const context = canvas.getContext('2d');
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+            return canvas.toDataURL('image/jpeg', 0.92);
+        }
+
+        async function requestTongueDiagnosis(base64Image) {
+            const response = await fetch('/api/v1/tongue/detect', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    image: base64Image,
+                    session_id: state.currentSessionId || 'default'
+                })
+            });
+
+            let payload = null;
+            try {
+                payload = await response.json();
+            } catch (error) {
+                throw new Error('舌诊服务返回了无效响应');
+            }
+
+            if (!response.ok) {
+                throw new Error(payload?.msg || `舌诊请求失败（${response.status}）`);
+            }
+            if (!payload || payload.code !== 0 || !payload.data) {
+                throw new Error(payload?.msg || '舌诊失败');
+            }
+
+            return payload.data;
+        }
+
+        function renderTongueDiagnosisResult(result) {
+            state.tongueDiagnosis.lastResult = result;
+            elements.tongueColorValue.textContent = result.tongue_color || '--';
+            elements.tongueCoatValue.textContent = result.coat_color || '--';
+            elements.tongueThicknessValue.textContent = result.thickness || '--';
+            elements.tongueGreasinessValue.textContent = result.greasiness || '--';
+            elements.tongueResultTip.textContent = result.advice || '本次结果仅供辅助参考';
+            elements.tongueResult.classList.remove('hidden');
+        }
+
+        async function performTongueDiagnosis() {
+            if (state.tongueDiagnosis.phase !== 'preview' || state.tongueDiagnosis.requestPending) return;
+
+            let base64Image = '';
+            try {
+                base64Image = captureTongueFrame();
+            } catch (error) {
+                state.tongueDiagnosis.phase = 'error';
+                clearTongueDiagnosisResult();
+                setTongueStatus(error.message || '无法读取摄像头画面', true);
+                renderTongueDiagnosisState();
+                return;
+            }
+
+            state.tongueDiagnosis.requestPending = true;
+            state.tongueDiagnosis.lastCapturedImage = base64Image;
+            state.tongueDiagnosis.phase = 'diagnosing';
+            const requestId = state.tongueDiagnosis.requestId + 1;
+            state.tongueDiagnosis.requestId = requestId;
+            setTongueStatus('诊断中...', false);
+            renderTongueDiagnosisState();
+
+            try {
+                const result = await requestTongueDiagnosis(base64Image);
+                if (requestId !== state.tongueDiagnosis.requestId) return;
+
+                renderTongueDiagnosisResult(result);
+                state.tongueDiagnosis.phase = 'done';
+                setTongueStatus('诊断完成');
+            } catch (error) {
+                if (requestId !== state.tongueDiagnosis.requestId) return;
+
+                clearTongueDiagnosisResult();
+                state.tongueDiagnosis.phase = 'error';
+                setTongueStatus(error.message || '舌诊服务暂时不可用，请稍后重试', true);
+            } finally {
+                if (requestId === state.tongueDiagnosis.requestId) {
+                    state.tongueDiagnosis.requestPending = false;
+                    renderTongueDiagnosisState();
+                }
+            }
+        }
+
+        function resetTongueDiagnosisForRedo() {
+            state.tongueDiagnosis.requestPending = false;
+            state.tongueDiagnosis.lastCapturedImage = null;
+            clearTongueDiagnosisResult();
+            state.tongueDiagnosis.phase = state.tongueDiagnosis.stream ? 'preview' : 'idle';
+            setTongueStatus(state.tongueDiagnosis.stream ? '请确认取景后进行诊断' : '未开始');
+            renderTongueDiagnosisState();
+        }
+
+        function stopTonguePreview() {
+            resetTongueDiagnosisState({ keepStream: false, phase: 'idle', statusText: '未开始' });
         }
 
         function clearRecordedAudioPreview() {
@@ -3118,11 +3691,27 @@
         function initTabs() {
             document.querySelectorAll('.input-tab').forEach(tab => {
                 tab.onclick = () => {
+                    const previousTab = getActiveTabName();
+                    const nextTab = tab.dataset.tab;
+
+                    if (previousTab === nextTab) {
+                        updateActionArea(nextTab);
+                        return;
+                    }
+
+                    if (previousTab === 'emotion' && nextTab !== 'emotion') {
+                        stopEmotionCameraForTabSwitch();
+                    }
+
+                    if (previousTab === 'tongue' && nextTab !== 'tongue') {
+                        stopTonguePreview();
+                    }
+
                     document.querySelectorAll('.input-tab').forEach(t => t.classList.remove('active'));
                     document.querySelectorAll('.input-tab-content').forEach(c => c.classList.remove('active'));
                     tab.classList.add('active');
-                    document.getElementById(tab.dataset.tab + '-input').classList.add('active');
-                    updateActionArea(tab.dataset.tab);
+                    document.getElementById(nextTab + '-input').classList.add('active');
+                    updateActionArea(nextTab);
                 };
             });
             updateActionArea();
@@ -4054,10 +4643,10 @@
                 return;
             }
             if (!target || target === 'home') {
-                window.location.href = 'xinyu_complete .html';
+                window.location.href = 'yiheyuan.html';
                 return;
             }
-            window.location.href = 'xinyu_complete .html#' + target;
+            window.location.href = 'yiheyuan.html#' + target;
         }
 
         function clearAll() {
@@ -4083,6 +4672,7 @@
             state.emotionHoldActive = false;
             state.emotionHoldShouldStop = false;
             state.emotionHoldStartPromise = null;
+            stopTonguePreview();
             if (state.mockMode.enabled && state.emotionTrigger.cameraStream) {
                 stopMockEmotionCapture();
                 elements.emotionEnabled.checked = false;
@@ -4696,10 +5286,10 @@
                 container.style.cssText = 'position:fixed;top:20px;right:20px;z-index:9999;display:flex;flex-direction:column;gap:8px;';
                 document.body.appendChild(container);
             }
-            const colorMap = { info: '#c4714a', warning: '#d59a3a', error: '#d66b5e', success: '#6f977b' };
+            const colorMap = { info: '#06b6d4', warning: '#38bdf8', error: '#06b6d4', success: '#0891b2' };
             const color = colorMap[type] || colorMap.info;
             const toast = document.createElement('div');
-            toast.style.cssText = `padding:10px 16px;border-radius:10px;max-width:360px;background:rgba(250,246,241,0.97);color:${color};border-left:3px solid ${color};font-size:13px;line-height:1.5;box-shadow:0 4px 16px rgba(44,36,32,0.14);animation:slideIn 0.2s ease;white-space:pre-wrap;`;
+            toast.style.cssText = `padding:10px 16px;border-radius:10px;max-width:360px;background:rgba(248,250,252,0.97);color:${color};border-left:3px solid ${color};font-size:13px;line-height:1.5;box-shadow:0 4px 16px rgba(6,182,212,0.14);animation:slideIn 0.2s ease;white-space:pre-wrap;`;
             toast.textContent = message;
             container.appendChild(toast);
             setTimeout(() => {

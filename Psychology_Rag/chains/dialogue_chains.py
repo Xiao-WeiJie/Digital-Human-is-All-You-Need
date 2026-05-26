@@ -15,7 +15,7 @@ LCEL 对话链工厂 (Chain Factory)
 from dataclasses import dataclass
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.runnables import Runnable
+from langchain_core.runnables import Runnable, RunnableLambda
 from langchain_openai import ChatOpenAI
 
 from prompts.templates import (
@@ -62,7 +62,23 @@ class ChainFactory:
             MessagesPlaceholder(variable_name="history"),
             ("human", "{input}"),
         ])
-        return prompt | llm | StrOutputParser()
+
+        def with_defaults(params: dict) -> dict:
+            defaults = {
+                "assistant_name": "小暖",
+                "emotion_context": "",
+                "history": [],
+                "user_name": "",
+                "input": "",
+                "intent_mode": "日常交流",
+                "empathy_examples": "",
+                "factual_context": "",
+                "guardrail_context": "",
+                "crisis_info": "",
+            }
+            return {**defaults, **params}
+
+        return RunnableLambda(with_defaults) | prompt | llm | StrOutputParser()
 
     @classmethod
     def build_all(cls, llm: ChatOpenAI) -> DialogueChains:

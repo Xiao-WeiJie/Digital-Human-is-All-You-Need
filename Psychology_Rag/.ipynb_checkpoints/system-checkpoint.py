@@ -81,6 +81,25 @@ def _parse_emotion(response: str) -> Tuple[str, str]:
     return response.strip(), "default"
 
 
+def _resolve_assistant_name(avatar_id: str = "human_1") -> str:
+    """Resolve the speaking assistant name from the current digital-human avatar."""
+    avatar_id = avatar_id or "human_1"
+    fallback_names = {
+        "human_1": "小暖",
+        "human_2": "小安",
+    }
+
+    try:
+        from digital_human.config import get_default_config
+        avatar_info = get_default_config().avatar.get_avatar(avatar_id)
+        if avatar_info and avatar_info.name:
+            return avatar_info.name
+    except Exception:
+        pass
+
+    return fallback_names.get(avatar_id, fallback_names["human_1"])
+
+
 def _init_llm(temperature: float = LLM_TEMPERATURE) -> ChatOpenAI:
     return ChatOpenAI(
         model=LLM_MODEL_NAME,
@@ -159,9 +178,21 @@ class PsyMindSystem:
     # 核心处理流程
     # ────────────────────────────────────────────
 
-    async def process_message(self, user_input: str, session_id: str) -> dict:
+    async def process_message(
+        self,
+        user_input: str,
+        session_id: str,
+        emotion_context: str = "",
+        avatar_id: str = "human_1",
+    ) -> dict:
         """
         处理一条用户消息的完整流程。
+
+        Args:
+            user_input: 用户输入
+            session_id: 会话 ID
+            emotion_context: 情绪上下文（可选，由情绪融合模块生成）
+            avatar_id: 当前数字人 ID，用于同步 LLM 人格身份
 
         Returns:
             dict: {"response": str, "emotion": str}
@@ -177,10 +208,11 @@ class PsyMindSystem:
         # ── Step 2: 构建上下文历史（从 SQLite 读取） ──
         history_messages = self.memory.get_history_messages(session_id)
         user_name = self.memory.get_user_name(session_id)
+        assistant_name = _resolve_assistant_name(avatar_id)
 
         # ── Step 3: 路由 → 检索 + 生成 ──
         raw_response = await self._route_and_generate(
-            intent, user_input, history_messages, user_name
+            intent, user_input, history_messages, user_name, emotion_context, assistant_name
         )
 
         # ── Step 4: 解析情感标签 ──
@@ -192,16 +224,21 @@ class PsyMindSystem:
         self.memory.add_ai_message(session_id, response)
 
         # ── Step 6: 自动摘要 ──
-        await self.memory.maybe_summarize(session_id)
+        await self.memory.maybe_summarize(session_id, assistant_name=assistant_name)
 
         # ── Step 7: 用户名识别 ──
         self.memory.try_extract_name(session_id, user_input)
 
         return {"response": response, "emotion": emotion}
 
-    async def process_message_simple(self, user_input: str, session_id: str) -> str:
+    async def process_message_simple(
+        self,
+        user_input: str,
+        session_id: str,
+        avatar_id: str = "human_1",
+    ) -> str:
         """兼容旧接口，只返回回复文本。"""
-        result = await self.process_message(user_input, session_id)
+        result = await self.process_message(user_input, session_id, avatar_id=avatar_id)
         return result["response"]
 
     async def _route_and_generate(
@@ -210,12 +247,16 @@ class PsyMindSystem:
         user_input: str,
         history_messages: list,
         user_name: str,
+        emotion_context: str = "",
+        assistant_name: str = "小暖",
     ) -> str:
         """根据意图路由到对应的链路，执行检索与生成。"""
         base_params = {
             "input": user_input,
             "history": history_messages,
             "user_name": user_name,
+            "assistant_name": assistant_name,
+            "emotion_context": emotion_context,  # 新增：情绪上下文
         }
 
         if intent == "emotional":

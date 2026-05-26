@@ -113,7 +113,7 @@ class ConversationMemoryManager:
                     self.store.set_user_name(session_id, name)
                     return
 
-    async def maybe_summarize(self, session_id: str):
+    async def maybe_summarize(self, session_id: str, assistant_name: str = "小暖"):
         """
         检查是否需要对话摘要。
 
@@ -138,7 +138,7 @@ class ConversationMemoryManager:
         # 拼接对话文本
         old_summary = self.store.get_summary(session_id)
         conversation_text = "\n".join(
-            f"{'用户' if isinstance(m, HumanMessage) else '小暖'}: {m.content}"
+            f"{'用户' if isinstance(m, HumanMessage) else assistant_name}: {m.content}"
             for m in msgs_to_summarize
         )
 

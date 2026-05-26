@@ -1,0 +1,10 @@
+serverAddr = "47.239.128.254"
+serverPort = 7000
+auth.token = "yiharmony"
+
+[[proxies]]
+name = "web-tcp"
+type = "tcp"
+localIP = "127.0.0.1"
+localPort = 8010
+remotePort = 8080

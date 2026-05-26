@@ -3,39 +3,39 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>颐和缘——开拓立体式agent的数字人老年陪护方案</title>
+<title>银龄通——基于具身智能的三维空间情感陪护系统</title>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.8/dist/chart.umd.min.js"></script>
 <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@300;400;600;700&family=Noto+Sans+SC:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
   :root {
-    --cream: #f8fafc;
-    --cream2: #f0f9ff;
-    --cream3: #e0f2fe;
-    --terracotta: #06b6d4;
-    --terracotta-light: #38bdf8;
-    --terracotta-pale: #e0f2fe;
-    --sage: #0891b2;
-    --sage-light: #22d3ee;
-    --sage-pale: #cffafe;
-    --sage-lt: #67e8f9;
-    --lavender: #7dd3fc;
-    --lavender-pale: #e0f2fe;
-    --mauve: #38bdf8;
-    --text-dark: #0f172a;
-    --text-mid: #334155;
-    --text-light: #64748b;
-    --ink: #0f172a;
-    --ink2: #1e293b;
-    --ink3: #475569;
-    --ink4: #94a3b8;
-    --warm: #06b6d4;
-    --warm-lt: #38bdf8;
-    --warm-dk: #0891b2;
+    --cream: #faf6f1;
+    --cream2: #f3ece2;
+    --cream3: #f5e0d4;
+    --terracotta: #c4714a;
+    --terracotta-light: #e8a07a;
+    --terracotta-pale: #f5e0d4;
+    --sage: #7a9e87;
+    --sage-light: #a8c4b0;
+    --sage-pale: #deeee3;
+    --sage-lt: #a8c4b0;
+    --lavender: #9b8bb4;
+    --lavender-pale: #ede8f5;
+    --mauve: #e8a07a;
+    --text-dark: #2c2420;
+    --text-mid: #6b5b52;
+    --text-light: #a09080;
+    --ink: #2c2420;
+    --ink2: #5a4a44;
+    --ink3: #6b5b52;
+    --ink4: #a09080;
+    --warm: #c4714a;
+    --warm-lt: #e8a07a;
+    --warm-dk: #7a9e87;
     --white: #ffffff;
-    --shadow-soft: 0 4px 24px rgba(6,182,212,0.10);
-    --shadow-card: 0 2px 12px rgba(6,182,212,0.08);
-    --shadow: 0 8px 24px rgba(6,182,212,0.10);
-    --shadow-md: 0 16px 40px rgba(6,182,212,0.14);
+    --shadow-soft: 0 4px 24px rgba(44,36,32,0.08);
+    --shadow-card: 0 2px 12px rgba(44,36,32,0.06);
+    --shadow: 0 8px 24px rgba(44,36,32,0.08);
+    --shadow-md: 0 16px 40px rgba(44,36,32,0.12);
     --radius: 20px;
     --radius-sm: 12px;
     --r-sm: 10px;
@@ -47,19 +47,19 @@
     --font-sans: 'Noto Sans SC', sans-serif;
 
     /* Digital World colors */
-    --dw-blue: #0ea5e9;
-    --dw-blue-light: #38bdf8;
-    --dw-blue-pale: #e0f2fe;
+    --dw-blue: #4a7ec4;
+    --dw-blue-light: #7aaae0;
+    --dw-blue-pale: #e0ecfa;
 
     /* Physical World colors */
-    --pw-teal: #06b6d4;
-    --pw-teal-light: #22d3ee;
-    --pw-teal-pale: #cffafe;
+    --pw-teal: #4a9e8a;
+    --pw-teal-light: #7ac4b0;
+    --pw-teal-pale: #d4f0ea;
 
     /* New gradient colors */
-    --gradient-primary: linear-gradient(135deg, #06b6d4, #38bdf8);
-    --gradient-secondary: linear-gradient(135deg, #0891b2, #22d3ee);
-    --gradient-accent: linear-gradient(135deg, #0ea5e9, #7dd3fc);
+    --gradient-primary: linear-gradient(135deg, #c4714a, #e8a07a);
+    --gradient-secondary: linear-gradient(135deg, #7a9e87, #a8c4b0);
+    --gradient-accent: linear-gradient(135deg, #4a7ec4, #9b8bb4);
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -74,20 +74,20 @@
   /* ===== NAV ===== */
   .nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
-    background: rgba(248,250,252,0.85);
+    background: rgba(250,246,241,0.85);
     backdrop-filter: blur(20px) saturate(180%);
     -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border-bottom: 1px solid rgba(6,182,212,0.12);
+    border-bottom: 1px solid rgba(196,113,74,0.12);
     padding: 0 32px;
     display: flex; align-items: center; justify-content: space-between;
     height: 64px;
     transition: box-shadow 0.3s, background 0.3s;
   }
-  .nav.scrolled { box-shadow: 0 4px 24px rgba(6,182,212,0.10), 0 1px 0 rgba(6,182,212,0.08); }
+  .nav.scrolled { box-shadow: 0 4px 24px rgba(196,113,74,0.10), 0 1px 0 rgba(196,113,74,0.08); }
   .nav-logo {
     font-family: var(--font-serif);
     font-size: 22px; font-weight: 700;
-    background: linear-gradient(135deg, #06b6d4, #0ea5e9);
+    background: linear-gradient(135deg, #c4714a, #4a7ec4);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -108,15 +108,15 @@
   }
   .nav-links button::before {
     content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.08), transparent);
+    background: linear-gradient(90deg, transparent, rgba(196,113,74,0.08), transparent);
     transition: left 0.4s;
   }
   .nav-links button:hover::before { left: 100%; }
-  .nav-links button:hover { background: rgba(6,182,212,0.08); color: var(--terracotta); transform: translateY(-1px); }
+  .nav-links button:hover { background: rgba(196,113,74,0.08); color: var(--terracotta); transform: translateY(-1px); }
   .nav-links button.active {
-    background: linear-gradient(135deg, #06b6d4, #38bdf8);
+    background: linear-gradient(135deg, #c4714a, #e8a07a);
     color: white;
-    box-shadow: 0 4px 16px rgba(6,182,212,0.35);
+    box-shadow: 0 4px 16px rgba(196,113,74,0.35);
   }
   .nav-links button.active::after {
     content: ''; position: absolute; bottom: -1px; left: 50%; transform: translateX(-50%);
@@ -153,38 +153,38 @@
   .btn:hover::before { left: 100%; }
 
   .btn-primary {
-    background: linear-gradient(135deg, #06b6d4, #38bdf8);
+    background: linear-gradient(135deg, #c4714a, #e8a07a);
     color: white;
-    box-shadow: 0 4px 16px rgba(6,182,212,0.3);
+    box-shadow: 0 4px 16px rgba(196,113,74,0.3);
   }
   .btn-primary:hover {
-    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    background: linear-gradient(135deg, #7a9e87, #c4714a);
     transform: translateY(-2px);
-    box-shadow: 0 8px 28px rgba(6,182,212,0.45);
+    box-shadow: 0 8px 28px rgba(196,113,74,0.45);
   }
-  .btn-primary:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(6,182,212,0.3); }
+  .btn-primary:active { transform: translateY(0); box-shadow: 0 2px 8px rgba(196,113,74,0.3); }
   .btn-outline {
     background: transparent; color: var(--terracotta);
     border: 1.5px solid var(--terracotta);
   }
   .btn-outline:hover {
-    background: rgba(6,182,212,0.06);
+    background: rgba(196,113,74,0.06);
     border-color: var(--sage-light);
-    box-shadow: 0 4px 16px rgba(6,182,212,0.15);
+    box-shadow: 0 4px 16px rgba(196,113,74,0.15);
     transform: translateY(-2px);
   }
   .btn-dw {
-    background: linear-gradient(135deg, #0ea5e9, #38bdf8);
+    background: linear-gradient(135deg, #4a7ec4, #e8a07a);
     color: white;
-    box-shadow: 0 4px 16px rgba(14,165,233,0.3);
+    box-shadow: 0 4px 16px rgba(74,126,196,0.3);
   }
-  .btn-dw:hover { background: linear-gradient(135deg, #0284c7, #0ea5e9); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(14,165,233,0.4); }
+  .btn-dw:hover { background: linear-gradient(135deg, #4a7ec4, #4a7ec4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(74,126,196,0.4); }
   .btn-pw {
-    background: linear-gradient(135deg, #06b6d4, #22d3ee);
+    background: linear-gradient(135deg, #c4714a, #a8c4b0);
     color: white;
-    box-shadow: 0 4px 16px rgba(6,182,212,0.3);
+    box-shadow: 0 4px 16px rgba(196,113,74,0.3);
   }
-  .btn-pw:hover { background: linear-gradient(135deg, #0891b2, #06b6d4); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(6,182,212,0.4); }
+  .btn-pw:hover { background: linear-gradient(135deg, #7a9e87, #c4714a); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(196,113,74,0.4); }
 
   /* ===== LARGE COMPANION BUTTON ===== */
   .btn-companion {
@@ -193,36 +193,36 @@
     font-family: var(--font-sans); font-size: 18px; font-weight: 600;
     cursor: pointer; border: none; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none; position: relative; overflow: hidden;
-    background: linear-gradient(135deg, #06b6d4, #38bdf8);
+    background: linear-gradient(135deg, #c4714a, #e8a07a);
     color: white;
-    box-shadow: 0 8px 32px rgba(6,182,212,0.4);
+    box-shadow: 0 8px 32px rgba(196,113,74,0.4);
     min-width: 300px;
     justify-content: center;
   }
   .btn-companion::before {
     content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.25), transparent);
+    background: linear-gradient(90deg, transparent, rgba(245,224,212,0.35), transparent);
     transition: left 0.5s;
   }
   .btn-companion:hover::before { left: 100%; }
   .btn-companion:hover {
-    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    background: linear-gradient(135deg, #965f2a, #c4714a);
     transform: translateY(-4px);
-    box-shadow: 0 12px 48px rgba(6,182,212,0.6);
+    box-shadow: 0 12px 48px rgba(196,113,74,0.6);
   }
-  .btn-companion:active { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(6,182,212,0.4); }
+  .btn-companion:active { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(196,113,74,0.4); }
 
   /* ===== CARDS ===== */
   .card {
     background: white; border-radius: var(--radius);
-    border: 1px solid rgba(6,182,212,0.1);
-    box-shadow: 0 2px 12px rgba(6,182,212,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid rgba(196,113,74,0.1);
+    box-shadow: 0 2px 12px rgba(196,113,74,0.06), 0 1px 3px rgba(0,0,0,0.04);
     padding: 24px; transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
   }
   .card:hover {
     transform: translateY(-3px);
-    border-color: rgba(6,182,212,0.22);
-    box-shadow: 0 12px 32px rgba(6,182,212,0.12), 0 4px 8px rgba(0,0,0,0.04);
+    border-color: rgba(196,113,74,0.22);
+    box-shadow: 0 12px 32px rgba(196,113,74,0.12), 0 4px 8px rgba(0,0,0,0.04);
   }
 
   /* ===== BADGE ===== */
@@ -253,15 +253,15 @@
   .search-input {
     width: 100%;
     padding: 16px 60px 16px 20px;
-    border: 1px solid rgba(6,182,212,0.1);
+    border: 1px solid rgba(196,113,74,0.1);
     border-radius: 25px;
     font-size: 14px;
     transition: all 0.2s;
   }
   .search-input:focus {
     outline: none;
-    border-color: #06b6d4;
-    box-shadow: 0 0 0 3px rgba(6,182,212,0.1);
+    border-color: #c4714a;
+    box-shadow: 0 0 0 3px rgba(196,113,74,0.1);
   }
   .search-btn {
     position: absolute;
@@ -271,14 +271,14 @@
     padding: 12px 20px;
     border: none;
     border-radius: 20px;
-    background: linear-gradient(135deg, #06b6d4, #38bdf8);
+    background: linear-gradient(135deg, #c4714a, #e8a07a);
     color: white;
     font-size: 14px;
     cursor: pointer;
     transition: all 0.3s;
   }
   .search-btn:hover {
-    background: linear-gradient(135deg, #0891b2, #06b6d4);
+    background: linear-gradient(135deg, #7a9e87, #c4714a);
     transform: translateY(-50%) scale(1.05);
   }
 
@@ -292,7 +292,7 @@
   }
   .category-btn {
     padding: 8px 20px;
-    border: 1px solid rgba(6,182,212,0.1);
+    border: 1px solid rgba(196,113,74,0.1);
     border-radius: 20px;
     background: white;
     color: var(--text-mid);
@@ -302,7 +302,7 @@
   }
   .category-btn::before {
     content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.08), transparent);
+    background: linear-gradient(90deg, transparent, rgba(196,113,74,0.08), transparent);
     transition: left 0.4s;
   }
   .category-btn:hover::before {
@@ -314,10 +314,10 @@
     transform: translateY(-1px);
   }
   .category-btn.active {
-    background: linear-gradient(135deg, #06b6d4, #38bdf8);
+    background: linear-gradient(135deg, #c4714a, #e8a07a);
     color: white;
     border-color: var(--terracotta);
-    box-shadow: 0 4px 16px rgba(6,182,212,0.3);
+    box-shadow: 0 4px 16px rgba(196,113,74,0.3);
   }
 
   /* Brief List */
@@ -331,15 +331,15 @@
   .brief-card {
     background: white;
     border-radius: var(--radius);
-    border: 1px solid rgba(6,182,212,0.1);
-    box-shadow: 0 2px 12px rgba(6,182,212,0.06), 0 1px 3px rgba(0,0,0,0.04);
+    border: 1px solid rgba(196,113,74,0.1);
+    box-shadow: 0 2px 12px rgba(196,113,74,0.06), 0 1px 3px rgba(0,0,0,0.04);
     overflow: hidden;
     transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
   }
   .brief-card:hover {
     transform: translateY(-6px);
-    border-color: rgba(6,182,212,0.22);
-    box-shadow: 0 12px 32px rgba(6,182,212,0.12), 0 4px 8px rgba(0,0,0,0.04);
+    border-color: rgba(196,113,74,0.22);
+    box-shadow: 0 12px 32px rgba(196,113,74,0.12), 0 4px 8px rgba(0,0,0,0.04);
   }
   .brief-card-link {
     display: block;
@@ -421,12 +421,12 @@
     font-family: var(--font-serif);
     font-size: clamp(36px, 5vw, 60px);
     font-weight: 700; line-height: 1.25;
-    color: #000000;
+    color: var(--text-dark);
     margin-bottom: 30px;
     text-align: left;
   }
   .hero-title .accent { 
-    color: #0891b2;
+    color: var(--terracotta);
   }
   .hero-subtitle {
     font-size: 16px; color: var(--text-mid); line-height: 2;
@@ -447,16 +447,16 @@
     position: absolute; top: 40px; left: 50%; transform: translateX(-50%);
     width: 300px;
     background: white; border-radius: 28px;
-    border: 1px solid rgba(6,182,212,0.12);
-    box-shadow: 0 20px 60px rgba(6,182,212,0.14), 0 4px 16px rgba(0,0,0,0.06);
+    border: 1px solid rgba(196,113,74,0.12);
+    box-shadow: 0 20px 60px rgba(196,113,74,0.14), 0 4px 16px rgba(0,0,0,0.06);
     padding: 28px; overflow: hidden;
   }
   .hero-avatar-ring {
     width: 80px; height: 80px; border-radius: 50%;
-    background: linear-gradient(135deg, #e0f2fe, #06b6d4);
+    background: linear-gradient(135deg, #f5e0d4, #c4714a);
     display: flex; align-items: center; justify-content: center;
     font-size: 36px; margin: 0 auto 16px;
-    box-shadow: 0 8px 24px rgba(6,182,212,0.3);
+    box-shadow: 0 8px 24px rgba(196,113,74,0.3);
   }
   .hero-chat-bubble {
     background: var(--cream2); border-radius: 16px 16px 16px 4px;
@@ -471,8 +471,8 @@
 
   .hero-float-card {
     position: absolute; background: white; border-radius: 16px;
-    border: 1px solid rgba(6,182,212,0.1);
-    box-shadow: 0 8px 32px rgba(6,182,212,0.1), 0 2px 8px rgba(0,0,0,0.04);
+    border: 1px solid rgba(196,113,74,0.1);
+    box-shadow: 0 8px 32px rgba(196,113,74,0.1), 0 2px 8px rgba(0,0,0,0.04);
     padding: 14px 18px; font-size: 13px;
   }
   .hfc-agent { top: 0; right: 0; display: flex; align-items: center; gap: 8px; }
@@ -486,7 +486,7 @@
   /* Three Worlds Section */
   .three-worlds {
     padding: 80px;
-    background: linear-gradient(180deg, #ffffff 0%, #f0f9ff 100%);
+    background: linear-gradient(180deg, #ffffff 0%, #f3ece2 100%);
   }
   .section-header { text-align: center; margin-bottom: 56px; }
   .section-eyebrow {
@@ -496,9 +496,9 @@
   }
   .section-eyebrow::before, .section-eyebrow::after {
     content: ''; flex: 1; height: 1px;
-    background: linear-gradient(90deg, transparent, rgba(6,182,212,0.3));
+    background: linear-gradient(90deg, transparent, rgba(196,113,74,0.3));
   }
-  .section-eyebrow::after { background: linear-gradient(270deg, transparent, rgba(6,182,212,0.3)); }
+  .section-eyebrow::after { background: linear-gradient(270deg, transparent, rgba(196,113,74,0.3)); }
   .section-title { font-family: var(--font-serif); font-size: 36px; font-weight: 700; color: var(--text-dark); margin-bottom: 16px; }
   .section-subtitle { font-size: 15px; color: var(--text-mid); max-width: 500px; margin: 0 auto; line-height: 1.8; }
 
@@ -510,29 +510,29 @@
   }
   .world-card::before {
     content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-    background: linear-gradient(135deg, rgba(6,182,212,0.04), rgba(14,165,233,0.04));
+    background: linear-gradient(135deg, rgba(196,113,74,0.04), rgba(74,126,196,0.04));
     opacity: 0; transition: opacity 0.4s ease;
   }
   .world-card:hover { transform: translateY(-8px); }
   .world-card:hover::before { opacity: 1; }
   .wc-spirit {
-    background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
-    border: 1px solid rgba(6,182,212,0.18);
-    box-shadow: 0 4px 20px rgba(6,182,212,0.08);
+    background: linear-gradient(135deg, #f3ece2, #f5e0d4);
+    border: 1px solid rgba(196,113,74,0.18);
+    box-shadow: 0 4px 20px rgba(196,113,74,0.08);
   }
-  .wc-spirit:hover { box-shadow: 0 20px 48px rgba(6,182,212,0.18); border-color: rgba(6,182,212,0.3); }
+  .wc-spirit:hover { box-shadow: 0 20px 48px rgba(196,113,74,0.18); border-color: rgba(196,113,74,0.3); }
   .wc-digital {
-    background: linear-gradient(135deg, #f0f9ff, #dbeafe);
-    border: 1px solid rgba(14,165,233,0.18);
-    box-shadow: 0 4px 20px rgba(14,165,233,0.08);
+    background: linear-gradient(135deg, #f3ece2, #e0ecfa);
+    border: 1px solid rgba(74,126,196,0.18);
+    box-shadow: 0 4px 20px rgba(74,126,196,0.08);
   }
-  .wc-digital:hover { box-shadow: 0 20px 48px rgba(14,165,233,0.18); border-color: rgba(14,165,233,0.3); }
+  .wc-digital:hover { box-shadow: 0 20px 48px rgba(74,126,196,0.18); border-color: rgba(74,126,196,0.3); }
   .wc-physical {
-    background: linear-gradient(135deg, #ecfeff, #cffafe);
-    border: 1px solid rgba(6,182,212,0.2);
-    box-shadow: 0 4px 20px rgba(6,182,212,0.08);
+    background: linear-gradient(135deg, #deeee3, #deeee3);
+    border: 1px solid rgba(196,113,74,0.2);
+    box-shadow: 0 4px 20px rgba(196,113,74,0.08);
   }
-  .wc-physical:hover { box-shadow: 0 20px 48px rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.35); }
+  .wc-physical:hover { box-shadow: 0 20px 48px rgba(196,113,74,0.2); border-color: rgba(196,113,74,0.35); }
   .wc-icon { font-size: 48px; margin-bottom: 20px; }
   .wc-title { font-family: var(--font-serif); font-size: 22px; font-weight: 700; margin-bottom: 12px; }
   .wc-spirit .wc-title { color: var(--terracotta); }
@@ -549,29 +549,29 @@
     margin-top: 24px; display: inline-flex; align-items: center; gap: 6px;
     font-size: 13px; font-weight: 500; padding: 8px 18px; border-radius: 20px;
     border: none; cursor: pointer; transition: all 0.25s; color: white;
-    box-shadow: 0 4px 12px rgba(6,182,212,0.25);
+    box-shadow: 0 4px 12px rgba(196,113,74,0.25);
   }
-  .wc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(6,182,212,0.35); }
-  .wc-spirit .wc-btn { background: linear-gradient(135deg, #06b6d4, #38bdf8); }
-  .wc-digital .wc-btn { background: linear-gradient(135deg, #0ea5e9, #38bdf8); }
-  .wc-physical .wc-btn { background: linear-gradient(135deg, #06b6d4, #22d3ee); }
+  .wc-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(196,113,74,0.35); }
+  .wc-spirit .wc-btn { background: linear-gradient(135deg, #c4714a, #e8a07a); }
+  .wc-digital .wc-btn { background: linear-gradient(135deg, #4a7ec4, #e8a07a); }
+  .wc-physical .wc-btn { background: linear-gradient(135deg, #c4714a, #a8c4b0); }
 
   /* Home Features / Tech / CTA */
   .home-features { padding: 80px; background: var(--cream); }
   .features-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
   .feat-card {
     background: white; border-radius: var(--radius-sm); padding: 28px;
-    border: 1px solid rgba(6,182,212,0.1);
-    box-shadow: 0 2px 12px rgba(6,182,212,0.06), 0 1px 3px rgba(0,0,0,0.03);
+    border: 1px solid rgba(196,113,74,0.1);
+    box-shadow: 0 2px 12px rgba(196,113,74,0.06), 0 1px 3px rgba(0,0,0,0.03);
     transition: all 0.3s cubic-bezier(0.4,0,0.2,1);
     position: relative; overflow: hidden;
   }
   .feat-card::after {
     content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
-    background: linear-gradient(90deg, #06b6d4, #38bdf8);
+    background: linear-gradient(90deg, #c4714a, #e8a07a);
     opacity: 0; transition: opacity 0.3s;
   }
-  .feat-card:hover { transform: translateY(-5px); border-color: rgba(6,182,212,0.22); box-shadow: 0 12px 32px rgba(6,182,212,0.12), 0 4px 8px rgba(0,0,0,0.04); }
+  .feat-card:hover { transform: translateY(-5px); border-color: rgba(196,113,74,0.22); box-shadow: 0 12px 32px rgba(196,113,74,0.12), 0 4px 8px rgba(0,0,0,0.04); }
   .feat-card:hover::after { opacity: 1; }
   .feat-icon { font-size: 32px; margin-bottom: 16px; }
   .feat-title { font-size: 16px; font-weight: 600; margin-bottom: 8px; color: var(--text-dark); }
@@ -579,7 +579,7 @@
 
   .home-cta {
     padding: 80px; text-align: center;
-    background: linear-gradient(135deg, #0891b2 0%, #06b6d4 50%, #38bdf8 100%);
+    background: linear-gradient(135deg, #7a9e87 0%, #c4714a 50%, #e8a07a 100%);
     color: white; position: relative; overflow: hidden;
   }
   .home-cta::before {
@@ -599,7 +599,7 @@
   .home-cta p { font-size: 16px; opacity: 0.92; margin-bottom: 36px; }
   .cta-btns { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
   .btn-white {
-    background: rgba(255,255,255,0.95); color: #0891b2;
+    background: rgba(255,255,255,0.95); color: #7a9e87;
     box-shadow: 0 4px 20px rgba(0,0,0,0.12);
   }
   .btn-white:hover {
@@ -611,7 +611,7 @@
 
   /* ===== FOOTER ===== */
   .site-footer {
-    background: linear-gradient(135deg, #0c4a6e, #0e7490);
+    background: linear-gradient(135deg, #2c2420, #5a4a44);
     color: white;
     padding: 40px 80px; text-align: center; font-size: 13px;
     position: relative; overflow: hidden;
@@ -621,11 +621,11 @@
     background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="dots" width="20" height="20" patternUnits="userSpaceOnUse"><circle cx="10" cy="10" r="1" fill="rgba(255,255,255,0.04)"/></pattern></defs><rect width="100" height="100" fill="url(%23dots)"/></svg>');
   }
   .site-footer > * { position: relative; z-index: 1; }
-  .site-footer .footer-logo { font-family: var(--font-serif); font-size: 24px; color: #67e8f9; margin-bottom: 12px; }
+  .site-footer .footer-logo { font-family: var(--font-serif); font-size: 24px; color: #a8c4b0; margin-bottom: 12px; }
   .site-footer p { opacity: 0.5; }
   .footer-links { display: flex; gap: 24px; justify-content: center; margin: 16px 0; }
   .footer-links a { color: rgba(255,255,255,0.6); text-decoration: none; font-size: 13px; transition: color 0.2s; }
-  .footer-links a:hover { color: #67e8f9; }
+  .footer-links a:hover { color: #a8c4b0; }
 
   /* ===== RESPONSIVE ===== */
   @media (max-width: 1100px) {
@@ -649,9 +649,7 @@
   .fade-in { animation: fadeIn 0.5s ease both; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
 
-  /* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   PAGE 2: CHAT (COMPANION)
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+  /*PAGE 2: CHAT (COMPANION)*/
 #page-chat {
   display: none;
   flex-direction: row;
@@ -710,7 +708,7 @@
   transition: background .15s;
 }
 .hist-item:hover { background: var(--cream2); }
-.hist-item.active { background: rgba(6,182,212,.1); border-left: 2px solid var(--terracotta); }
+.hist-item.active { background: rgba(196,113,74,.1); border-left: 2px solid var(--terracotta); }
 .hist-name { font-size: 12.5px; font-weight: 500; color: var(--ink2); margin-bottom: 3px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .hist-meta { display: flex; justify-content: space-between; align-items: center; }
 .hist-time { font-size: 10.5px; color: var(--ink4); }
@@ -776,9 +774,9 @@
   position: absolute;
   top: 10px;
   right: 10px;
-  background: rgba(6,182,212,.15);
-  border: 1px solid rgba(6,182,212,.35);
-  color: #67e8f9;
+  background: rgba(196,113,74,.15);
+  border: 1px solid rgba(196,113,74,.35);
+  color: #a8c4b0;
   font-size: 9px;
   font-weight: 700;
   letter-spacing: .12em;
@@ -802,7 +800,7 @@
   position: absolute;
   left: 0; right: 0;
   height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(6,182,212,.5), transparent);
+  background: linear-gradient(90deg, transparent, rgba(196,113,74,.5), transparent);
   animation: scan 4s linear infinite;
 }
 @keyframes scan { 0%{top:0%} 100%{top:100%} }
@@ -859,9 +857,9 @@
   gap: 12px;
 }
 .chat-msgs::-webkit-scrollbar { width: 4px; }
-  .chat-msgs::-webkit-scrollbar-track { background: rgba(6,182,212,0.04); border-radius: 10px; }
-  .chat-msgs::-webkit-scrollbar-thumb { background: rgba(6,182,212,0.18); border-radius: 10px; transition: background 0.3s ease; }
-  .chat-msgs::-webkit-scrollbar-thumb:hover { background: rgba(6,182,212,0.35); }
+  .chat-msgs::-webkit-scrollbar-track { background: rgba(196,113,74,0.04); border-radius: 10px; }
+  .chat-msgs::-webkit-scrollbar-thumb { background: rgba(196,113,74,0.18); border-radius: 10px; transition: background 0.3s ease; }
+  .chat-msgs::-webkit-scrollbar-thumb:hover { background: rgba(196,113,74,0.35); }
 
 .msg { display: flex; gap: 8px; align-items: flex-end; animation: msgSlideIn 0.4s ease-out; }
   .msg.user { flex-direction: row-reverse; animation: msgSlideInRight 0.4s ease-out; }
@@ -939,7 +937,7 @@
   resize: none;
 }
 .chat-input::placeholder { color: var(--ink4); }
-  .chat-input:focus { background: white; box-shadow: 0 0 0 2px rgba(6,182,212,0.2); transform: scale(1.01); }
+  .chat-input:focus { background: white; box-shadow: 0 0 0 2px rgba(196,113,74,0.2); transform: scale(1.01); }
 .mic-btn {
   width: 34px; height: 34px;
   border-radius: 50%;
@@ -954,7 +952,7 @@
 }
 .mic-btn:hover { background: var(--warm); color: #fff; }
 .mic-btn.recording { background: var(--warm); color: #fff; animation: glow 1s infinite; }
-@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(6,182,212,.4)} 50%{box-shadow:0 0 0 8px rgba(6,182,212,0)} }
+@keyframes glow { 0%,100%{box-shadow:0 0 0 0 rgba(196,113,74,.4)} 50%{box-shadow:0 0 0 8px rgba(196,113,74,0)} }
 
 .send-btn {
   width: 34px; height: 34px;
@@ -970,9 +968,7 @@
 }
 .send-btn:hover { background: var(--warm-dk); }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   PAGE 3: AGENT
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/* PAGE 3: AGENT*/
 #page-agent {
   display: none;
   height: calc(100dvh - var(--nav-h));
@@ -980,11 +976,11 @@
 #page-agent.active { display: grid; grid-template-columns: 280px 1fr; overflow: hidden; }
 
 .agent-sidebar {
-  background: linear-gradient(180deg, #0c4a6e 0%, #0e7490 100%);
+  background: linear-gradient(180deg, #2c2420 0%, #5a4a44 100%);
   color: white;
   display: flex; flex-direction: column;
-  border-right: 1px solid rgba(6,182,212,0.2);
-  box-shadow: 2px 0 12px rgba(6,182,212,0.08);
+  border-right: 1px solid rgba(196,113,74,0.2);
+  box-shadow: 2px 0 12px rgba(196,113,74,0.08);
 }
 
 .agent-sidebar-head {
@@ -1006,15 +1002,15 @@
   transition: background 0.2s; margin-bottom: 4px;
   border: 1px solid transparent;
 }
-.task-item:hover { background: rgba(6,182,212,0.12); }
-.task-item.active { background: rgba(6,182,212,0.2); border-color: rgba(6,182,212,0.5); }
+.task-item:hover { background: rgba(196,113,74,0.12); }
+.task-item.active { background: rgba(196,113,74,0.2); border-color: rgba(196,113,74,0.5); }
 .task-name { font-size: 13px; font-weight: 500; margin-bottom: 6px; color: white; }
 .task-meta { display: flex; align-items: center; gap: 8px; font-size: 11px; opacity: 0.5; }
 .task-time { font-size: 11px; opacity: 0.5; color: #ffffff; }
 .task-status { padding: 2px 8px; border-radius: 20px; font-size: 11px; font-weight: 500; }
-.status-done { background: rgba(74,222,128,0.2); color: #4ade80; }
-.status-run { background: rgba(250,204,21,0.2); color: #facc15; }
-.status-wait { background: rgba(148,163,184,0.2); color: #94a3b8; }
+.status-done { background: rgba(122,158,135,0.2); color: #a8c4b0; }
+.status-run { background: rgba(232,160,122,0.2); color: #e8a07a; }
+.status-wait { background: rgba(160,144,128,0.2); color: #a09080; }
 
 .agent-main {
   display: flex;
@@ -1100,7 +1096,7 @@
 
 .exec-card-head {
   padding: 14px 18px;
-  background: linear-gradient(135deg,#0c4a6e,#164e63);
+  background: linear-gradient(135deg,#2c2420,#2c2420);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1128,8 +1124,8 @@
   font-weight: 700;
   flex-shrink: 0;
 }
-.step-done { background: rgba(6,182,212,.15); color: var(--sage); }
-.step-run { background: rgba(6,182,212,.15); color: var(--warm); animation: stepPulse 1s infinite; }
+.step-done { background: rgba(196,113,74,.15); color: var(--sage); }
+.step-run { background: rgba(196,113,74,.15); color: var(--warm); animation: stepPulse 1s infinite; }
 .step-pending { background: var(--cream2); color: var(--ink4); }
 @keyframes stepPulse { 0%,100%{opacity:1} 50%{opacity:.5} }
 
@@ -1142,16 +1138,16 @@
   max-height: 220px;
   overflow: auto;
   background:
-    radial-gradient(circle at top right, rgba(6,182,212,.08), transparent 28%),
-    linear-gradient(180deg,#060d1e,#071528 48%,#081832);
-  border: 1px solid rgba(6,182,212,.18);
+    radial-gradient(circle at top right, rgba(196,113,74,.08), transparent 28%),
+    linear-gradient(180deg,#140f0c,#2c2420 48%,#5a4a44);
+  border: 1px solid rgba(196,113,74,.18);
   border-radius: 10px;
   padding: 12px 14px;
   font-family: 'Courier New', monospace;
   font-size: 11px;
-  color: rgba(186,230,255,.82);
+  color: rgba(224,236,250,.82);
   line-height: 1.7;
-  box-shadow: inset 0 0 0 1px rgba(6,182,212,.06);
+  box-shadow: inset 0 0 0 1px rgba(196,113,74,.06);
 }
 .log-line {
   display: flex;
@@ -1159,7 +1155,7 @@
   align-items: flex-start;
   animation: fadeIn .25s ease both;
 }
-.log-time { color: rgba(125,211,252,.52); flex-shrink: 0; }
+.log-time { color: rgba(155,139,180,.52); flex-shrink: 0; }
 .log-badge {
   min-width: 46px;
   display: inline-flex;
@@ -1173,39 +1169,39 @@
 }
 .log-text {
   flex: 1;
-  color: rgba(186,230,255,.92);
+  color: rgba(224,236,250,.92);
   word-break: break-word;
 }
-.log-ok { color: #34d399; }
-.log-run { color: #7dd3fc; }
-.log-trace { color: #67e8f9; }
-.log-url { color: #38bdf8; }
-.log-dom { color: #a5f3fc; }
-.log-data { color: #fde68a; }
-.log-hit { color: #c4b5fd; }
-.log-warn { color: #fca5a5; }
+.log-ok { color: #7a9e87; }
+.log-run { color: #9b8bb4; }
+.log-trace { color: #a8c4b0; }
+.log-url { color: #e8a07a; }
+.log-dom { color: #7aaae0; }
+.log-data { color: #f5e0d4; }
+.log-hit { color: #9b8bb4; }
+.log-warn { color: #e8a07a; }
 .exec-card-success {
-  background: linear-gradient(180deg, rgba(224,242,254,.80), rgba(255,255,255,.98) 38%);
-  border: 1px solid rgba(6,182,212,.20);
-  box-shadow: 0 18px 42px rgba(6,182,212,.12);
+  background: linear-gradient(180deg, rgba(245,224,212,.80), rgba(255,255,255,.98) 38%);
+  border: 1px solid rgba(196,113,74,.20);
+  box-shadow: 0 18px 42px rgba(196,113,74,.12);
 }
 .exec-card-success .exec-card-head {
-  background: linear-gradient(135deg,#0c4a6e,#0e7490 70%,#0891b2);
+  background: linear-gradient(135deg,#2c2420,#5a4a44 70%,#7a9e87);
 }
 .status-ticket-success {
-  background: rgba(224,242,254,.95);
-  color: #0c4a6e;
-  box-shadow: inset 0 0 0 1px rgba(6,182,212,.15);
+  background: rgba(245,224,212,.95);
+  color: #2c2420;
+  box-shadow: inset 0 0 0 1px rgba(196,113,74,.15);
 }
 .exec-receipt {
   margin: 0 18px 18px;
   padding: 16px 18px;
   border-radius: 16px;
   background:
-    radial-gradient(circle at top right, rgba(6,182,212,.12), transparent 30%),
-    linear-gradient(135deg, rgba(255,255,255,.98), rgba(224,242,254,.90));
-  border: 1px solid rgba(6,182,212,.15);
-  box-shadow: 0 12px 28px rgba(6,182,212,.10);
+    radial-gradient(circle at top right, rgba(196,113,74,.12), transparent 30%),
+    linear-gradient(135deg, rgba(255,255,255,.98), rgba(245,224,212,.90));
+  border: 1px solid rgba(196,113,74,.15);
+  box-shadow: 0 12px 28px rgba(196,113,74,.10);
   animation: fadeIn .45s ease both;
 }
 .exec-receipt-head {
@@ -1238,8 +1234,8 @@
   gap: 12px;
   padding: 12px 14px;
   border-radius: 14px;
-  background: rgba(240,249,255,.92);
-  border: 1px dashed rgba(6,182,212,.20);
+  background: rgba(243,236,226,.92);
+  border: 1px dashed rgba(196,113,74,.20);
 }
 .exec-receipt-station {
   flex: 1;
@@ -1270,7 +1266,7 @@
 .exec-receipt-item {
   padding: 10px 12px;
   border-radius: 12px;
-  background: rgba(240,249,255,.88);
+  background: rgba(243,236,226,.88);
 }
 .exec-receipt-label {
   font-size: 10.5px;
@@ -1287,7 +1283,7 @@
 .exec-receipt-foot {
   margin-top: 12px;
   padding-top: 10px;
-  border-top: 1px dashed rgba(6,182,212,.15);
+  border-top: 1px dashed rgba(196,113,74,.15);
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -1304,11 +1300,10 @@
   color: var(--pw-teal);
 }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   PAGE 4: HEALTH
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/* PAGE 4: HEALTH*/
 #page-health {
   padding: 24px;
+  background: linear-gradient(135deg, #ffffff, #9b8bb4);
 }
 
 .health-grid {
@@ -1326,7 +1321,7 @@
   grid-row: 1 / 3;
   background: var(--white);
   border-radius: var(--r-xl);
-  box-shadow: var(--shadow);
+  box-shadow: 0 8px 32px rgba(196,113,74,0.2);
   display: flex;
   flex-direction: column;
   overflow: hidden;
@@ -1345,15 +1340,15 @@
   display: flex;
   align-items: center;
   gap: 5px;
-  background: rgba(239,68,68,.08);
-  color: #EF4444;
+  background: rgba(196,113,74,.08);
+  color: #c4714a;
   font-size: 10.5px;
   font-weight: 700;
   letter-spacing: .08em;
   padding: 4px 10px;
   border-radius: 99px;
 }
-.live-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #EF4444; animation: liveblink .8s infinite; }
+.live-badge-dot { width: 6px; height: 6px; border-radius: 50%; background: #c4714a; animation: liveblink .8s infinite; }
 @keyframes liveblink { 0%,100%{opacity:1} 50%{opacity:.2} }
 
 .camera-screen {
@@ -1436,7 +1431,7 @@
   background: var(--white);
   border-radius: var(--r-md);
   padding: 16px;
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 24px rgba(196,113,74,0.18);
   text-align: center;
 }
 .mini-stat-num { font-size: 26px; font-weight: 700; color: var(--warm); font-family: 'DM Sans', sans-serif; }
@@ -1445,7 +1440,7 @@
 .alert-list-card {
   background: var(--white);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 24px rgba(196,113,74,0.18);
   padding: 16px 18px;
 }
 
@@ -1473,49 +1468,43 @@
   padding: 2px 7px;
   border-radius: 99px;
 }
-.level-high { background: rgba(239,68,68,.1); color: #EF4444; }
-.level-med { background: rgba(234,179,8,.1); color: #CA8A04; }
-.level-low { background: rgba(122,158,142,.1); color: var(--sage); }
+.level-high { background: rgba(196,113,74,.1); color: #c4714a; }
+.level-med { background: rgba(232,160,122,.1); color: #965f2a; }
+.level-low { background: rgba(122,158,135,.1); color: var(--sage); }
 
 .tongue-card {
   grid-column: 2;
   grid-row: 2;
   background: var(--white);
   border-radius: var(--r-lg);
-  box-shadow: var(--shadow);
+  box-shadow: 0 6px 24px rgba(196,113,74,0.18);
   padding: 16px 18px;
   overflow: hidden;
 }
 
-.tongue-upload {
-  border: 2px dashed var(--cream3);
-  border-radius: var(--r-md);
-  padding: 20px;
-  text-align: center;
-  cursor: pointer;
-  transition: border-color .2s;
-  margin: 12px 0;
-}
-.tongue-upload:hover { border-color: var(--warm-lt); }
-.tongue-upload p { font-size: 12px; color: var(--ink3); }
-.tongue-result {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 8px;
+.tongue-video-wrap {
   margin-top: 12px;
+  border-radius: var(--r-md);
+  overflow: hidden;
+  background: linear-gradient(180deg, #2c2420, #5a4a44);
+  border: 1px solid rgba(196,113,74,0.12);
+  box-shadow: inset 0 0 0 1px rgba(255,255,255,0.05);
 }
-.tongue-tag {
-  padding: 8px 10px;
-  background: var(--cream2);
-  border-radius: 10px;
+.tongue-video-player {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  object-fit: cover;
+  background: #000;
+}
+.tongue-video-tip {
+  margin-top: 10px;
   font-size: 12px;
+  color: var(--ink3);
+  line-height: 1.6;
 }
-.tongue-tag-name { color: var(--ink3); font-size: 10.5px; margin-bottom: 2px; }
-.tongue-tag-val { color: var(--ink); font-weight: 600; }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   PAGE 5: REPORT
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/* PAGE 5: REPORT*/
 #page-report {
   padding: 24px;
 }
@@ -1537,26 +1526,7 @@
 }
 .report-title-block p { font-size: 12px; color: var(--ink3); }
 
-.period-tabs {
-  display: flex;
-  gap: 4px;
-  background: var(--cream2);
-  padding: 4px;
-  border-radius: 99px;
-}
-.period-tab {
-  padding: 5px 14px;
-  border-radius: 99px;
-  border: none;
-  font-family: inherit;
-  font-size: 12.5px;
-  font-weight: 500;
-  cursor: pointer;
-  background: transparent;
-  color: var(--ink3);
-  transition: all .15s;
-}
-.period-tab.active { background: var(--white); color: var(--ink); box-shadow: var(--shadow); }
+
 
 .report-kpis {
   display: grid;
@@ -1663,6 +1633,33 @@
 }
 .insight-icon { font-size: 18px; flex-shrink: 0; }
 .insight-text { font-size: 12.5px; color: var(--ink2); line-height: 1.5; }
+.insight-details {
+  display: none;
+  margin-top: 8px;
+  width: 665px;
+  background: white;
+  border-radius: var(--r-sm);
+  padding: 10px 14px;
+  box-shadow: var(--shadow);
+  font-size: 12.5px;
+  color: var(--ink2);
+  line-height: 1.5;
+}
+.insight-details-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.insight-details-content span {
+  white-space: nowrap;
+}
+.insight-item {
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.insight-item:hover {
+  background: var(--cream3);
+}
 
 .conv-list {
   display: flex;
@@ -1677,6 +1674,11 @@
   padding: 10px 12px;
   background: var(--cream2);
   border-radius: var(--r-sm);
+  cursor: pointer;
+  transition: background 0.2s;
+}
+.conv-row:hover {
+  background: var(--cream3);
 }
 .conv-emo { font-size: 16px; }
 .conv-body { flex: 1; }
@@ -1689,11 +1691,10 @@
   font-family: 'DM Sans', sans-serif;
 }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   PAGE 6: PROFILE
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/*PAGE 6: PROFILE*/
 #page-profile {
   padding: 24px;
+  background: linear-gradient(135deg, #faf6f1, #f3ece2);
 }
 
 .profile-layout {
@@ -1725,7 +1726,7 @@
   font-size: 28px;
   display: flex; align-items: center; justify-content: center;
   margin: 0 auto 12px;
-  box-shadow: 0 4px 16px rgba(6,182,212,.28);
+  box-shadow: 0 4px 16px rgba(196,113,74,.28);
 }
 .pf-name { font-size: 15px; font-weight: 600; color: var(--ink); }
 .pf-sub { font-size: 12px; color: var(--ink3); margin-top: 2px; }
@@ -1751,7 +1752,7 @@
 }
 .pf-nav-item:last-child { border-bottom: none; }
 .pf-nav-item:hover { background: var(--cream2); }
-.pf-nav-item.active { background: rgba(6,182,212,.08); color: var(--warm); font-weight: 500; }
+.pf-nav-item.active { background: rgba(196,113,74,.08); color: var(--warm); font-weight: 500; }
 .pf-nav-icon { font-size: 15px; }
 
 .profile-content {}
@@ -1847,14 +1848,12 @@
 .toggle-sw input:checked + .toggle-track { background: var(--warm); }
 .toggle-sw input:checked + .toggle-track::after { transform: translateX(16px); }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   EMOTION MODAL
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/*EMOTION MODAL*/
 .modal-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(15,52,96,.35);
+  background: rgba(44,36,32,.35);
   backdrop-filter: blur(6px);
   z-index: 200;
   align-items: center;
@@ -1884,9 +1883,7 @@
 }
 .modal-close-btn:hover { background: var(--cream3); }
 
-/* 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€
-   RESPONSIVE
-鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€*/
+/*RESPONSIVE*/
 @media (max-width: 900px) {
   .home-hero { grid-template-columns: 1fr; padding: 40px 28px 32px; }
   .hero-right { display: none; }
@@ -1926,8 +1923,8 @@
 <nav class="nav" id="mainNav">
   <div class="nav-logo" onclick="showPage('home')">蹇冭 <span>鏅鸿兘鎯呮劅闄姢绯荤粺</span></div>
   <div class="nav-links">
-    <button onclick="showPage('home')" class="active" id="nav-home">棣栭〉</button>
-    <button onclick="scrollToBrief()">馃摪 绠€璁?/button>
+    <button onclick="showPage('home')" class="active" id="nav-home">首页</button>
+    <button onclick="scrollToBrief()">📰 简讯</button>
   </div>
 </nav>
 
@@ -1942,11 +1939,11 @@
         <span class="badge badge-digital">智能助手</span>
         <span class="badge badge-physical">健康守护</span>
       </div>
-      <h1 class="hero-title">心语，陪伴<span class="accent">无处不在</span>的你</h1>
-      <p class="hero-subtitle">基于具身智能的三维空间情感陪护系统 — 融合数字人情感对话、AI Agent智能助手与健康监测感知，构建全面贴心的陪伴体系。</p>
+      <h1 class="hero-title">银龄通，陪伴<span class="accent">无处不在</span>的你</h1>
+      <p class="hero-subtitle">基于具身智能的三维空间情感陪护系统——融合数字人情感对话、GUI Agent 智能助手与硬件健康感知，构建全场景身心守护体系。</p>
       <div class="hero-btns">
         <button class="btn-companion" onclick="openCompanionChat()">
-          <span>馃</span>
+        <span>数字人陪伴对话</span>
           数字人陪伴对话
         </button>
       </div>
@@ -2008,9 +2005,9 @@
             <div class="brief-content">
                 <div class="brief-date">2026-03-15</div>
                 <h3 class="brief-title">3月健康讲座：老年人春季养生之道</h3>
-                <p class="brief-desc">颐和缘将于3月20日举办春季养生讲座，邀请知名中医专家讲解老年人春季养生知识，包括饮食调理、运动保健等内容。</p>
+                <p class="brief-desc">银龄通将于3月20日举办春季养生讲座，邀请知名中医专家讲解老年人春季养生知识，包括饮食调理、运动保健等内容。</p>
                 <div class="brief-footer">
-                    <span class="brief-source">来源：颐和缘健康中心</span>
+                    <span class="brief-source">来源：银龄通健康中心</span>
                     <span class="brief-category">活动通知</span>
                 </div>
             </div>
@@ -2064,10 +2061,10 @@
             <img src="https://images.unsplash.com/photo-1552664730-d307ca884978?w=600&h=300&fit=crop&crop=center" alt="数字人陪护系统" class="brief-image">
             <div class="brief-content">
                 <div class="brief-date">2026-03-01</div>
-                <h3 class="brief-title">颐和缘数字人陪护系统升级通知</h3>
-                <p class="brief-desc">颐和缘数字人陪护系统将于3月5日进行升级，新增语音识别、情感陪护等功能，为老年人提供更加智能、贴心的服务。</p>
+                <h3 class="brief-title">银龄通数字人陪护系统升级通知</h3>
+                <p class="brief-desc">银龄通数字人陪护系统将于3月5日进行升级，新增语音识别、情感陪护等功能，为老年人提供更加智能、贴心的服务。</p>
                 <div class="brief-footer">
-                    <span class="brief-source">来源：颐和缘技术部</span>
+                    <span class="brief-source">来源：银龄通技术部</span>
                     <span class="brief-category">活动通知</span>
                 </div>
             </div>
@@ -2089,270 +2086,15 @@
     </div>
   </section>
 
-  <!-- CTA -->
-  <section class="home-cta">
-    <h2>寮€鍚叏澶╁€欐櫤鑳介櫔鎶や箣鏃?/h2>
-    <p>璁╁績璇垚涓烘偍鐢熸椿涓殑鎯呮劅浼欎即銆佹櫤鑳藉姪鎵嬩笌鍋ュ悍瀹堟姢鑰?/p>
-    <div class="cta-btns">
-      <button class="btn btn-white" onclick="openCompanionChat()">寮€濮嬪璇?/button>
-      <button class="btn btn-outline-white" onclick="showPage('profile')">涓汉涓績</button>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <footer class="site-footer">
-    <div class="footer-logo">蹇冭</div>
-    <p>鍩轰簬鍏疯韩鏅鸿兘鐨勪笁缁寸┖闂存儏鎰熼櫔鎶ょ郴缁?/p>
-    <div class="footer-links">
-      <a href="#">鍏充簬鎴戜滑</a>
-      <a href="#">浣跨敤鎸囧崡</a>
-      <a href="#">闅愮鏀跨瓥</a>
-      <a href="#">鑱旂郴鎴戜滑</a>
-    </div>
-    <p>漏 2024 蹇冭鏅鸿兘. 淇濈暀鎵€鏈夋潈鍒?/p>
-  </footer>
 
-</div><!-- /page-home -->
-
-  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: CHAT
-  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
-  <div class="page" id="page-chat">
-
-    <!-- History Sidebar -->
-    <div class="chat-sidebar">
-      <div class="sidebar-head">
-        <span class="sidebar-title">瀵硅瘽璁板綍</span>
-        <button class="icon-btn" onclick="addHistory()" title="鏂板缓">锛?/button>
-      </div>
-      <div class="history-list" id="historyList">
-        <div class="hist-item active" onclick="selectHist(this)">
-          <div class="hist-name">鍏充簬鏈€杩戠殑鍘嬪姏</div>
-          <div class="hist-meta"><span class="hist-time">浠婂ぉ 14:32</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">骞抽潤</span></div>
-        </div>
-        <div class="hist-item" onclick="selectHist(this)">
-          <div class="hist-name">瀹朵汉鐩稿闂</div>
-          <div class="hist-meta"><span class="hist-time">鏄ㄥぉ</span><span class="hist-emo" style="background:rgba(6,182,212,.10);color:var(--warm)">鎰夋偊</span></div>
-        </div>
-        <div class="hist-item" onclick="selectHist(this)">
-          <div class="hist-name">宸ヤ綔涓殑鍥版儜</div>
-          <div class="hist-meta"><span class="hist-time">3澶╁墠</span><span class="hist-emo" style="background:rgba(234,179,8,.1);color:#CA8A04">鎬濊檻</span></div>
-        </div>
-        <div class="hist-item" onclick="selectHist(this)">
-          <div class="hist-name">瀵规湭鏉ョ殑鏈熷緟</div>
-          <div class="hist-meta"><span class="hist-time">涓婂懆</span><span class="hist-emo" style="background:rgba(155,142,196,.1);color:var(--mauve)">鏈熷緟</span></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Digital Human Center -->
-    <div class="chat-center">
-      <div class="dh-label"><span class="live-dot"></span>鏁板瓧浜哄疄鏃剁敾闈?/div>
-
-      <div class="dh-screen">
-        <video id="female-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
-        <video id="male-video" width="100%" height="100%" autoplay muted loop style="display: none;"></video>
-        <div class="dh-placeholder" id="dh-placeholder">
-          <div class="dh-icon">馃</div>
-          <p>鏁板瓧浜虹敾闈㈡帴鍏ュ尯<br><span style="font-size:9px;opacity:.6">鏇挎崲涓?&lt;video&gt; 鏍囩鎺ュ叆瀹炴椂娴?/span></p>
-        </div>
-        <div class="dh-corner-badge">READY</div>
-      </div>
-
-      <div class="emo-badge-row">
-        <div class="emo-badge" onclick="openModal()">馃幁 鎰夋偊 路 72 <span style="font-size:10px;color:var(--ink4)">鈻?/span></div>
-        <div class="emo-badge" style="cursor:default">馃帳 <span id="micStatus" style="font-size:11px;color:var(--ink3)">寰呮満涓?/span></div>
-      </div>
-
-      <div style="display: flex; gap: 10px; margin-top: 16px;">
-        <button class="btn btn-primary" onclick="selectDigitalHuman('female')">濂虫暟瀛椾汉</button>
-        <button class="btn btn-outline" onclick="selectDigitalHuman('male')">鐢锋暟瀛椾汉</button>
-      </div>
-    </div>
-
-    <!-- Chat Panel -->
-    <div class="chat-panel">
-      <div class="chat-head">
-        <div>
-          <div class="chat-head-title">涓庡績璇璇?/div>
-          <div class="chat-head-sub">浠婃棩绗?3 娆″璇?路 宸叉寔缁?12 鍒嗛挓</div>
-        </div>
-      </div>
-
-      <div class="chat-msgs" id="chatMsgs">
-        <div class="msg ai">
-          <div class="msg-avatar ai">馃</div>
-          <div class="msg-bubble">浣犲ソ锛佹垜鏄績璇紝浠婂ぉ鏈変粈涔堟兂鑱婄殑鍚楋紵馃槉</div>
-        </div>
-        <div class="msg user">
-          <div class="msg-avatar user-av">馃懁</div>
-          <div class="msg-bubble">鏈€杩戝伐浣滃帇鍔涙湁鐐瑰ぇ锛岀潯鐪犱篃涓嶅お濂?/div>
-        </div>
-        <div class="msg ai">
-          <div class="msg-avatar ai">馃</div>
-          <div class="msg-bubble">鎴戠悊瑙ｏ紝宸ヤ綔鍘嬪姏褰卞搷鐫＄湢鏄緢甯歌鐨勩€傝兘鍛婅瘔鎴戞槸浠€涔堣浣犳劅鍒扮壒鍒揣寮犲悧锛?/div>
-        </div>
-      </div>
-
-      <div class="quick-chips">
-        <button class="chip" onclick="sendChip(this)">馃様 蹇冩儏涓嶅ソ</button>
-        <button class="chip" onclick="sendChip(this)">馃挱 鎯冲€捐瘔</button>
-        <button class="chip" onclick="sendChip(this)">馃槾 鐫＄湢鍥版壈</button>
-        <button class="chip" onclick="sendChip(this)">馃専 鍒嗕韩濂戒簨</button>
-      </div>
-
-      <div class="chat-input-row">
-        <button class="mic-btn" id="micBtn" onclick="toggleMic()" title="璇煶杈撳叆">馃帳</button>
-        <input class="chat-input" id="chatInput" placeholder="璇寸偣浠€涔堚€? onkeydown="if(event.key==='Enter')sendMsg()" />
-        <button class="send-btn" onclick="sendMsg()">鈫?/button>
-      </div>
-    </div>
-
-  </div><!-- /page-chat -->
-
-  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: AGENT
-  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
-  <div class="page" id="page-agent">
-
-    <div class="agent-sidebar">
-      <div class="agent-sidebar-head">
-        <div class="agent-sidebar-title">浠诲姟鍘嗗彶</div>
-        <div class="agent-sidebar-sub">杩?7 澶╁叡 12 鏉′换鍔?/div>
-      </div>
-      <div class="task-list">
-        <div class="task-item active">
-          <div class="task-name">鏌ヨ鏄庡ぉ澶╂皵骞舵彁閱掑嚭琛?/div>
-          <div class="task-meta"><span class="task-time">浠婂ぉ 14:20</span><span class="task-status status-run">杩涜涓?/span></div>
-        </div>
-        <div class="task-item">
-          <div class="task-name">甯垜璁粖鏅氱殑澶栧崠</div>
-          <div class="task-meta"><span class="task-time">浠婂ぉ 12:05</span><span class="task-status status-done">宸插畬鎴?/span></div>
-        </div>
-        <div class="task-item">
-          <div class="task-name">棰勭害鍛ㄤ簲鐨勭ぞ鍖哄尰闄?/div>
-          <div class="task-meta"><span class="task-time">鏄ㄥぉ</span><span class="task-status status-done">宸插畬鎴?/span></div>
-        </div>
-        <div class="task-item">
-          <div class="task-name">鍙戦€佽妭鏃ラ棶鍊欑粰瀹朵汉</div>
-          <div class="task-meta"><span class="task-time">3澶╁墠</span><span class="task-status status-done">宸插畬鎴?/span></div>
-        </div>
-        <div class="task-item">
-          <div class="task-name">鏌ョ湅閾惰璐﹀崟</div>
-          <div class="task-meta"><span class="task-time">4澶╁墠</span><span class="task-status status-done">宸插畬鎴?/span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="agent-main">
-      <div class="agent-head">
-        <div class="agent-head-title">馃 GUI Agent 路 鏅鸿兘浠诲姟鍔╂墜</div>
-        <div class="agent-head-sub">鐢ㄨ嚜鐒惰瑷€鎻忚堪浠诲姟锛屽績璇嚜鍔ㄥ畬鎴愮晫闈㈡搷浣?/div>
-      </div>
-
-      <div class="agent-input-area">
-        <div class="agent-input-wrap">
-          <input class="agent-input" id="agentInput" placeholder="鍛婅瘔鎴戜綘鎯冲仛浠€涔堬紝姣斿锛氬府鎴戞煡鏄庡ぉ鐨勫ぉ姘斺€? />
-          <button class="btn btn-primary" onclick="runAgent()">鎵ц 鈫?/button>
-        </div>
-        <div class="shortcut-tags">
-          <button class="stag" onclick="fillAgent(this)">馃嵄 鐐瑰鍗?/button>
-          <button class="stag" onclick="fillAgent(this)">馃彞 棰勭害鎸傚彿</button>
-          <button class="stag" onclick="fillAgent(this)">鈽侊笍 鏌ヨ澶╂皵</button>
-          <button class="stag" onclick="fillAgent(this)">馃拰 鍙戦€佹秷鎭?/button>
-          <button class="stag" onclick="fillAgent(this)">馃棐 鏌ョ湅鏃ュ巻</button>
-          <button class="stag" onclick="fillAgent(this)">馃洅 缃戜笂璐墿</button>
-        </div>
-      </div>
-
-      <div class="agent-body" id="agentBody">
-
-        <div class="exec-card">
-          <div class="exec-card-head">
-            <span class="exec-task-name">鈿?鏌ヨ鏄庡ぉ澶╂皵骞舵彁閱掑嚭琛?/span>
-            <span class="exec-badge status-run">杩涜涓?/span>
-          </div>
-
-          <div class="exec-steps">
-            <div class="step-row">
-              <div class="step-num step-done">鉁?/div>
-              <div class="step-body">
-                <div class="step-name">瑙ｆ瀽浠诲姟鎰忓浘</div>
-                <div class="step-desc">璇嗗埆涓恒€屽ぉ姘旀煡璇?+ 鍑鸿鎻愰啋銆嶏紝瀹氫綅鐩爣搴旂敤锛氬ぉ姘斻€佹棩鍘?/div>
-              </div>
-            </div>
-            <div class="step-row">
-              <div class="step-num step-done">鉁?/div>
-              <div class="step-body">
-                <div class="step-name">鎵撳紑澶╂皵搴旂敤</div>
-                <div class="step-desc">宸插畾浣嶅ぉ姘?App锛岀偣鍑汇€屾槑澶┿€嶆爣绛捐幏鍙栭鎶?/div>
-              </div>
-            </div>
-            <div class="step-row">
-              <div class="step-num step-run">鉄?/div>
-              <div class="step-body">
-                <div class="step-name">鐢熸垚鍑鸿寤鸿</div>
-                <div class="step-desc">鏄庡ぉ灏忛洦锛屾皵娓?14鈥?0掳C锛屾鍦ㄧ敓鎴愮┛琛ｅ拰鍑鸿鎻愰啋鈥?/div>
-              </div>
-            </div>
-            <div class="step-row">
-              <div class="step-num step-pending">4</div>
-              <div class="step-body">
-                <div class="step-name">鍐欏叆鏃ュ巻鎻愰啋</div>
-                <div class="step-desc">绛夊緟鐢熸垚瀹屾垚鍚庤嚜鍔ㄥ垱寤烘彁閱掍簨浠?/div>
-              </div>
-            </div>
-          </div>
-
-          <div class="log-area">
-            <div class="log-line"><span class="log-time">14:20:06</span><span class="log-run">[RUN]</span><span>鐢熸垚鍑鸿寤鸿涓€?/span></div>
-          </div>
-        </div>
-
-        <div class="exec-card" style="opacity:.6">
-          <div class="exec-card-head">
-            <span class="exec-task-name">鉁?甯垜璁粖鏅氱殑澶栧崠</span>
-            <span class="exec-badge status-done">宸插畬鎴?/span>
-          </div>
-          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸叉垚鍔熷湪缇庡洟鐐瑰崟锛氱暘鑼勯浮铔嬬洊楗?脳 1锛岄璁?18:40 閫佽揪銆?/div>
-        </div>
-
-        <div class="exec-card" style="opacity:.6">
-          <div class="exec-card-head">
-            <span class="exec-task-name">鉁?棰勭害鍛ㄤ簲鐨勭ぞ鍖哄尰闄?/span>
-            <span class="exec-badge status-done">宸插畬鎴?/span>
-          </div>
-          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸茶仈绯荤ぞ鍖哄尰闄㈡寕鍙峰彴锛屾垚鍔熼绾﹀懆浜斾笂鍗?10:00 涓撳鍙枫€?/div>
-        </div>
-
-        <div class="exec-card" style="opacity:.6">
-          <div class="exec-card-head">
-            <span class="exec-task-name">鉁?鍙戦€佽妭鏃ラ棶鍊欑粰瀹朵汉</span>
-            <span class="exec-badge status-done">宸插畬鎴?/span>
-          </div>
-          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸查€氳繃寰俊缇ゅ彂绁濈璇苟闄勪笂瀹跺涵鍚堢収锛屽浜哄凡鍥炲鈥滄敹鍒帮紝澶俯鏆栦簡鈥濄€?/div>
-        </div>
-
-        <div class="exec-card" style="opacity:.6">
-          <div class="exec-card-head">
-            <span class="exec-task-name">鉁?鏌ョ湅閾惰璐﹀崟</span>
-            <span class="exec-badge status-done">宸插畬鎴?/span>
-          </div>
-          <div style="padding:14px 18px;font-size:12.5px;color:var(--ink3)">宸叉墦寮€閾惰 APP锛岀瓫閫夋湰鏈堣处鍗曞苟鐢熸垚鏀嚭鍒嗘瀽鎶ュ憡銆?/div>
-        </div>
-
-      </div>
-    </div>
-
-  </div><!-- /page-agent -->
-
-  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: HARDWARE
-  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
   <div class="page" id="page-hardware">
     <div class="health-grid">
 
       <!-- Camera card -->
       <div class="camera-card">
         <div class="camera-head">
-          <div class="camera-title">馃摗 鎽斿€掓娴?路 瀹炴椂鐩戞帶</div>
+          <div class="camera-title">📹 摔倒检测 📹 实时监控</div>
           <div class="live-badge"><span class="live-badge-dot"></span>LIVE</div>
         </div>
         <div class="camera-screen">
@@ -2362,8 +2104,8 @@
           <div class="cam-corner br"></div>
           <video src="摔倒检测.mp4" width="100%" height="100%" autoplay muted loop style="object-fit:cover;"></video>
           <div class="cam-status-bar">
-            <div class="cam-status-text"><span class="cam-ok-dot"></span>AI 妫€娴嬪凡灏辩华 路 鏈娴嬪埌寮傚父</div>
-            <div style="font-size:10px;color:rgba(255,255,255,.3)">1920脳1080 路 30fps</div>
+            <div class="cam-status-text"><span class="cam-ok-dot"></span>AI 检测已就绪 📶 未检测到异常</div>
+            <div style="font-size:10px;color:rgba(255,255,255,.3)"></div>
           </div>
         </div>
       </div>
@@ -2373,98 +2115,82 @@
         <div class="alert-stat-row">
           <div class="mini-stat">
             <div class="mini-stat-num">0</div>
-            <div class="mini-stat-label">浠婃棩鍛婅</div>
+            <div class="mini-stat-label">今日警报</div>
           </div>
           <div class="mini-stat">
             <div class="mini-stat-num">3</div>
-            <div class="mini-stat-label">鏈湀鍛婅</div>
+            <div class="mini-stat-label">本月警报</div>
           </div>
         </div>
 
         <div class="alert-list-card">
-          <div class="section-label">鍘嗗彶鍛婅璁板綍</div>
+          <div class="section-label">历史警报记录</div>
           <div class="alert-items">
             <div class="alert-row">
-              <div class="alert-icon">鈿狅笍</div>
+              <div class="alert-icon"></div>
               <div class="alert-body">
-                <div class="alert-name">鐤戜技鎽斿€?/div>
-                <div class="alert-time">2024-03-15 路 瀹㈠巺 路 宸茬‘璁ゅ畨鍏?/div>
+                <div class="alert-name">疑似摔倒/div>
+                <div class="alert-time">2024-03-15📍 客厅 📍 已确认处理/div>
               </div>
-              <div class="alert-level level-med">涓骇</div>
+              <div class="alert-level level-med">中级</div>
             </div>
             <div class="alert-row">
-              <div class="alert-icon">馃敶</div>
+              <div class="alert-icon"></div>
               <div class="alert-body">
-                <div class="alert-name">纭鎽斿€掑憡璀?/div>
-                <div class="alert-time">2024-03-08 路 鍗敓闂?路 宸查€氱煡瀹朵汉</div>
+                <div class="alert-name">确认摔倒警报/div>
+                <div class="alert-time">2024-03-08 📍 卧室 📍 已通知家人</div>
               </div>
-              <div class="alert-level level-high">绱ф€?/div>
+              <div class="alert-level level-high">高级/div>
             </div>
             <div class="alert-row">
-              <div class="alert-icon">鈩癸笍</div>
+              <div class="alert-icon"></div>
               <div class="alert-body">
-                <div class="alert-name">寮傚父濮挎€佹彁绀?/div>
-                <div class="alert-time">2024-02-27 路 鍗у 路 璇姤</div>
+                <div class="alert-name">异常行为提醒/div>
+                <div class="alert-time">2024-02-27 📍 厨房 📍 已上报</div>
               </div>
-              <div class="alert-level level-low">浣庣骇</div>
+              <div class="alert-level level-low">低级</div>
             </div>
           </div>
-          <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:12px" onclick="alert('妯℃嫙鎽斿€掑憡璀﹁Е鍙戯紒')">馃И 妯℃嫙鍛婅娴嬭瘯</button>
+          <button class="btn btn-ghost" style="width:100%;margin-top:10px;font-size:12px" onclick="alert('🚨 模拟警报测试')">🚨 模拟警报测试</button>
         </div>
       </div>
 
       <!-- Tongue diagnosis -->
       <div class="tongue-card">
-        <div class="section-label">馃尶 AI 鑸岃瘖鍒嗘瀽</div>
-        <div class="tongue-upload" onclick="handleTongueClick()">
-          <div style="font-size:28px;margin-bottom:6px">馃摲</div>
-          <p>鐐瑰嚮鎷嶆憚鎴栦笂浼犺垖鑻斿浘鐗?br>AI 绉掔骇鍒嗘瀽浣撹川鐘舵€?/p>
+        <div class="section-label">👅 AI 舌诊分析</div>
+        <div class="tongue-video-wrap">
+          <video class="tongue-video-player" src="舌苔.mp4" autoplay muted loop playsinline controls preload="metadata"></video>
         </div>
-        <div id="tongueResult" style="display:none">
-          <div class="tongue-result">
-            <div class="tongue-tag"><div class="tongue-tag-name">鑸岃壊</div><div class="tongue-tag-val">娣＄孩</div></div>
-            <div class="tongue-tag"><div class="tongue-tag-name">鑸岃嫈</div><div class="tongue-tag-val">钖勭櫧鑻?/div></div>
-            <div class="tongue-tag"><div class="tongue-tag-name">浣撹川</div><div class="tongue-tag-val">姘旇櫄璐?/div></div>
-            <div class="tongue-tag"><div class="tongue-tag-name">璋冪悊</div><div class="tongue-tag-val">鍋ヨ劸鐩婃皵</div></div>
-          </div>
-          <div style="margin-top:10px;padding:10px 12px;background:rgba(122,158,142,.08);border-radius:10px;font-size:12px;color:var(--ink2);line-height:1.6">
-            馃挕 寤鸿閫傚綋澧炲姞灞辫嵂銆佺孩鏋ｇ瓑鍋ヨ劸椋熸潗锛岄伩鍏嶈繃搴﹀姵绱紝淇濊瘉鍏呰冻鐫＄湢銆?          </div>
-        </div>
+        <div class="tongue-video-tip">播放本地舌苔示例视频，便于在健康守护页面直接查看舌诊演示内容。</div>
       </div>
 
     </div>
   </div><!-- /page-hardware -->
 
-  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: REPORT
-  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
   <div class="page" id="page-report">
 
     <div class="report-header">
       <div class="report-title-block">
-        <h2>鎯呯华鍋ュ悍鎶ュ憡</h2>
-        <p>鍩轰簬瀵硅瘽涓庤涓虹殑澶氱淮鍒嗘瀽</p>
+        <h2>情绪健康报告</h2>
+        <p>基于对话与行为的多维分析</p>
       </div>
-      <div class="period-tabs">
-        <button class="period-tab active" onclick="setPeriod(this,'week')">鏈懆</button>
-        <button class="period-tab" onclick="setPeriod(this,'month')">鏈湀</button>
-        <button class="period-tab" onclick="setPeriod(this,'quarter')">杩戜笁鏈?/button>
-      </div>
+  
     </div>
 
     <div class="report-kpis">
-      <div class="kpi-card"><div class="kpi-icon">馃槉</div><div><div class="kpi-num">82</div><div class="kpi-label">骞冲潎骞哥鎰?/div><div class="kpi-delta delta-up">鈫?5.2 杈冧笂鍛?/div></div></div>
-      <div class="kpi-card"><div class="kpi-icon">馃挰</div><div><div class="kpi-num">24</div><div class="kpi-label">鏈懆瀵硅瘽娆℃暟</div><div class="kpi-delta delta-up">鈫?3 杈冧笂鍛?/div></div></div>
-      <div class="kpi-card"><div class="kpi-icon">鈴?/div><div><div class="kpi-num">3.2h</div><div class="kpi-label">绱闄即鏃堕暱</div><div class="kpi-delta delta-up">鈫?0.8h</div></div></div>
-      <div class="kpi-card"><div class="kpi-icon">馃専</div><div><div class="kpi-num">68%</div><div class="kpi-label">绉瀬鎯呯华鍗犳瘮</div><div class="kpi-delta delta-dn">鈫?2% 杈冧笂鍛?/div></div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div><div class="kpi-num">82</div><div class="kpi-label">平均开心指数</div><div class="kpi-delta delta-up">↑ 5.2 较上周</div></div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div><div class="kpi-num">24</div><div class="kpi-label">本周对话次数</div><div class="kpi-delta delta-up">↑ 3 较上周</div></div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div><div class="kpi-num">3.2h</div><div class="kpi-label">累计陪伴时长</div><div class="kpi-delta delta-up">↑ 0.8h 较上周</div></div></div>
+      <div class="kpi-card"><div class="kpi-icon"></div><div><div class="kpi-num">68%</div><div class="kpi-label">积极情绪占比</div><div class="kpi-delta delta-dn">↓ 2% 较上周</div></div></div>
     </div>
 
     <div class="report-charts">
       <div class="chart-card">
-        <div class="chart-card-title">鎯呯华瓒嬪娍</div>
+        <div class="chart-card-title">开心指数趋势</div>
         <div class="trend-wrap"><canvas id="trendChart"></canvas></div>
       </div>
       <div class="chart-card">
-        <div class="chart-card-title">鎯呯华鍒嗗竷</div>
+        <div class="chart-card-title">情绪分布</div>
         <div class="donut-wrap">
           <div class="donut-canvas-wrap"><canvas id="donutChart"></canvas></div>
           <div class="donut-legend" id="donutLegend"></div>
@@ -2474,50 +2200,81 @@
 
     <div class="report-bottom">
       <div class="chart-card">
-        <div class="chart-card-title">馃挕 鏅鸿兘娲炲療</div>
+        <div class="chart-card-title">智能洞察</div>
         <div class="insights-list">
-          <div class="insight-item"><div class="insight-icon">馃搱</div><div class="insight-text">鏈懆鎯呯华鏁翠綋鍚戝ソ锛屽懆涓夊嚭鐜版槑鏄句綆璋凤紝鍙兘涓庡伐浣滃帇鍔涙湁鍏炽€?/div></div>
-          <div class="insight-item"><div class="insight-icon">馃寵</div><div class="insight-text">浣犻€氬父鍦ㄦ櫄涓?9鈥?0 鐐规儏缁渶浣筹紝寤鸿鍦ㄦ鏃舵杩涜鏀炬澗瀵硅瘽銆?/div></div>
-          <div class="insight-item"><div class="insight-icon">馃尶</div><div class="insight-text">鏈懆鐒﹁檻鎸囨暟鏈夋墍涓嬮檷锛岄櫔浼村璇濆鎯呯华璋冭妭鏁堟灉鏄捐憲銆?/div></div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">📈</div>
+            <div class="insight-text">本周情绪整体向好，周三出现明显低落，可能与工作压力有关</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>周三情绪低谷原因：</span>
+              <span>• 工作任务繁重</span>
+              <span>• 截止日期临近</span>
+              <span>• 缺乏休息时间</span>
+            </div>
+          </div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">🌙</div>
+            <div class="insight-text">您通常在晚上 9-10 点状态最佳，建议在此时间段进行放松对话</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>放松对话内容建议：</span>
+              <span>• 温和的音乐欣赏</span>
+              <span>• 冥想呼吸练习</span>
+              <span>• 愉快的回忆分享</span>
+            </div>
+          </div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">🧘</div>
+            <div class="insight-text">本周焦虑指数有所下降，冥想对话对情绪调节效果显著。</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>焦虑指数变化：</span>
+              <span>• 上周：65</span>
+              <span>• 本周：42</span>
+              <span>• 下降幅度：35%</span>
+            </div>
+          </div>
         </div>
       </div>
 
       <div class="chart-card">
-        <div class="chart-card-title">馃搵 杩戞湡瀵硅瘽</div>
+        <div class="chart-card-title">近期对话</div>
         <div class="conv-list">
-          <div class="conv-row"><div class="conv-emo">馃槉</div><div class="conv-body"><div class="conv-title">鍏充簬宸ヤ綔鍘嬪姏鐨勫璇?/div><div class="conv-meta"><span>浠婂ぉ</span><span>18鍒嗛挓</span></div></div><div class="conv-score">88</div></div>
-          <div class="conv-row"><div class="conv-emo">馃槍</div><div class="conv-body"><div class="conv-title">瀹朵汉鐩稿闂</div><div class="conv-meta"><span>鏄ㄥぉ</span><span>12鍒嗛挓</span></div></div><div class="conv-score">74</div></div>
-          <div class="conv-row"><div class="conv-emo">馃</div><div class="conv-body"><div class="conv-title">瀵规湭鏉ョ殑鍥版儜</div><div class="conv-meta"><span>3澶╁墠</span><span>25鍒嗛挓</span></div></div><div class="conv-score">62</div></div>
-          <div class="conv-row"><div class="conv-emo">馃槃</div><div class="conv-body"><div class="conv-title">鍒嗕韩浠婃棩寮€蹇冧簨</div><div class="conv-meta"><span>4澶╁墠</span><span>8鍒嗛挓</span></div></div><div class="conv-score">95</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span></span><span></span></div></div><div class="conv-score">88</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span></span><span></span></div></div><div class="conv-score">74</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">对未来的担忧</div><div class="conv-meta"><span></span><span></span></div></div><div class="conv-score">62</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">分享今日开心事</div><div class="conv-meta"><span></span><span></span></div></div><div class="conv-score">95</div></div>
         </div>
       </div>
     </div>
 
   </div><!-- /page-report -->
 
-  <!-- 鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?       PAGE: PROFILE
-  鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺愨晲鈺?-->
   <div class="page" id="page-profile">
     <div class="profile-layout">
 
       <div class="profile-sidebar">
         <div class="profile-avatar-card">
-          <div class="pf-avatar">馃槉</div>
-          <div class="pf-name">灏忔潕</div>
-          <div class="pf-sub">鍔犲叆 42 澶?路 姘旇櫄璐ㄤ綋璐?/div>
+          <div class="pf-avatar"></div>
+          <div class="pf-name">小李</div>
+          <div class="pf-sub">加入 42 天 📅 身心健康</div>
           <div class="pf-badges">
-            <span class="pf-badge" title="杩炵画鎵撳崱">馃敟</span>
-            <span class="pf-badge" title="鎯呯华杈句汉">馃幁</span>
-            <span class="pf-badge" title="鍋ュ悍鍏堥攱">馃尶</span>
+            <span class="pf-badge" title="连续打卡"></span>
+            <span class="pf-badge" title="情绪达人"></span>
+            <span class="pf-badge" title="健康先锋"></span>
           </div>
         </div>
 
         <div class="profile-nav-list">
-          <div class="pf-nav-item active" onclick="showPfPanel('info',this)"><span class="pf-nav-icon">馃懁</span>涓汉璧勬枡</div>
-          <div class="pf-nav-item" onclick="showPfPanel('hist',this)"><span class="pf-nav-icon">馃挰</span>瀵硅瘽鍘嗗彶</div>
-          <div class="pf-nav-item" onclick="showPfPanel('ach',this)"><span class="pf-nav-icon">馃弲</span>鎴戠殑鎴愬氨</div>
-          <div class="pf-nav-item" onclick="showPfPanel('pref',this)"><span class="pf-nav-icon">鈿欙笍</span>鍋忓ソ璁剧疆</div>
-          <div class="pf-nav-item" onclick="showPfPanel('dh',this)"><span class="pf-nav-icon">馃</span>鏁板瓧浜洪厤缃?/div>
+          <div class="pf-nav-item active" onclick="showPfPanel('info',this)"><span class="pf-nav-icon"></span>个人资料</div>
+          <div class="pf-nav-item" onclick="showPfPanel('hist',this)"><span class="pf-nav-icon"></span>对话记录</div>
+          <div class="pf-nav-item" onclick="showPfPanel('ach',this)"><span class="pf-nav-icon"></span>成就记录</div>
+          <div class="pf-nav-item" onclick="showPfPanel('pref',this)"><span class="pf-nav-icon"></span>偏好设置</div>
+          <div class="pf-nav-item" onclick="showPfPanel('dh',this)"><span class="pf-nav-icon"></span>数字人设置</div>
         </div>
       </div>
 
@@ -2526,31 +2283,31 @@
         <!-- Info Panel -->
         <div class="pf-panel active" id="pfpanel-info">
           <div class="info-form">
-            <div class="section-label" style="margin-bottom:18px">鍩烘湰淇℃伅</div>
+            <div class="section-label" style="margin-bottom:18px">基本信息</div>
             <div class="form-grid">
-              <div class="form-field"><div class="form-label">鏄电О</div><input class="form-input" value="灏忔潕" /></div>
-              <div class="form-field"><div class="form-label">骞撮緞</div><input class="form-input" value="67" /></div>
-              <div class="form-field"><div class="form-label">鑱旂郴鐢佃瘽</div><input class="form-input" value="138****8888" /></div>
-              <div class="form-field"><div class="form-label">绱ф€ヨ仈绯讳汉</div><input class="form-input" value="鏉庢槑锛堝効瀛愶級" /></div>
+              <div class="form-field"><div class="form-label">姓名</div><input class="form-input" value="小李" /></div>
+              <div class="form-field"><div class="form-label">年龄</div><input class="form-input" value="67" /></div>
+              <div class="form-field"><div class="form-label">手机号</div><input class="form-input" value="138****8888" /></div>
+              <div class="form-field"><div class="form-label">紧急联系人</div><input class="form-input" value="男" /></div>
             </div>
-            <div class="section-label" style="margin-top:22px;margin-bottom:8px">鎯呮劅鐢诲儚</div>
+            <div class="section-label" style="margin-top:22px;margin-bottom:8px">情绪画像</div>
             <div class="radar-wrap"><canvas id="radarChart"></canvas></div>
-            <button class="btn btn-primary" style="margin-top:16px">淇濆瓨淇敼</button>
+            <button class="btn btn-primary" style="margin-top:16px">保存修改</button>
           </div>
         </div>
 
         <!-- Hist Panel -->
         <div class="pf-panel" id="pfpanel-hist">
           <div class="card">
-            <div class="section-label">鍏ㄩ儴瀵硅瘽璁板綍</div>
+            <div class="section-label">全部对话记录</div>
             <div style="display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap">
-              <input class="form-input" style="flex:1;min-width:160px" placeholder="鎼滅储鍏抽敭璇嶁€? />
-              <select class="form-input" style="width:120px"><option>鍏ㄩ儴鎯呯华</option><option>鎰夋偊</option><option>骞抽潤</option><option>鐒﹁檻</option></select>
+              <input class="form-input" style="flex:1;min-width:160px" placeholder="搜索关键词" />
+              <select class="form-input" style="width:120px"><option>全部情绪</option><option>开心</option><option>平静</option><option>焦虑</option></select>
             </div>
             <div class="conv-list">
-              <div class="conv-row"><div class="conv-emo">馃槉</div><div class="conv-body"><div class="conv-title">鍏充簬宸ヤ綔鍘嬪姏鐨勫璇?/div><div class="conv-meta"><span>2024-03-18</span><span>18鍒嗛挓</span><span style="color:var(--sage)">鎰夋偊</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
-              <div class="conv-row"><div class="conv-emo">馃槍</div><div class="conv-body"><div class="conv-title">瀹朵汉鐩稿闂</div><div class="conv-meta"><span>2024-03-17</span><span>12鍒嗛挓</span><span style="color:var(--sage)">骞抽潤</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
-              <div class="conv-row"><div class="conv-emo">馃</div><div class="conv-body"><div class="conv-title">瀵规湭鏉ョ殑鍥版儜</div><div class="conv-meta"><span>2024-03-15</span><span>25鍒嗛挓</span><span style="color:#CA8A04">鎬濊檻</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+              <div class="conv-row"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>2024-03-18</span><span>18分钟</span><span style="color:var(--sage)">鎰夋偊</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+              <div class="conv-row"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>2024-03-17</span><span>12分钟</span><span style="color:var(--sage)">骞抽潤</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
+              <div class="conv-row"><div class="conv-emo"></div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>2024-03-15</span><span>25分钟</span><span style="color:#965f2a">鎬濊檻</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="缁х画">鈻?/button><button class="icon-btn" title="鍒犻櫎">馃棏</button></div></div>
             </div>
           </div>
         </div>
@@ -2597,32 +2354,32 @@
         <!-- DH Panel -->
         <div class="pf-panel" id="pfpanel-dh">
           <div class="card">
-            <div class="section-label">閫夋嫨鏁板瓧浜哄舰璞?/div>
+            <div class="section-label">选择数字伴侣形象</div>
             <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
               <div style="border:2px solid var(--warm);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer">
-                <div style="font-size:28px;margin-bottom:6px">馃</div>
-                <div style="font-size:12px;font-weight:600;color:var(--ink)">鏆栨殩</div>
-                <div style="font-size:10px;color:var(--ink3)">娓╂煍鑰愬績鍨?/div>
+                <div style="font-size:28px;margin-bottom:6px"></div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">小暖</div>
+                <div style="font-size:10px;color:var(--ink3)">温暖治愈型</div>
               </div>
               <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
-                <div style="font-size:28px;margin-bottom:6px">馃</div>
-                <div style="font-size:12px;font-weight:600;color:var(--ink)">闈欏績</div>
-                <div style="font-size:10px;color:var(--ink3)">鍐烽潤鐞嗘€у瀷</div>
+                <div style="font-size:28px;margin-bottom:6px"></div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">小安</div>
+                <div style="font-size:10px;color:var(--ink3)">温柔理智型</div>
               </div>
               <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
-                <div style="font-size:28px;margin-bottom:6px">馃専</div>
-                <div style="font-size:12px;font-weight:600;color:var(--ink)">鏄熷疂</div>
-                <div style="font-size:10px;color:var(--ink3)">娲绘臣寮€鏈楀瀷</div>
+                <div style="font-size:28px;margin-bottom:6px"></div>
+                <div style="font-size:12px;font-weight:600;color:var(--ink)">活泼</div>
+                <div style="font-size:10px;color:var(--ink3)">热情开朗型</div>
               </div>
             </div>
-            <div class="section-label">瀵硅瘽椋庢牸</div>
+            <div class="section-label">对话风格</div>
             <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px">
-              <button class="chip" style="border:1.5px solid var(--warm);color:var(--warm)">娓╂煍鍛垫姢</button>
-              <button class="chip">鐞嗘€у垎鏋?/button>
-              <button class="chip">骞介粯椋庤叮</button>
-              <button class="chip">绠€娲侀珮鏁?/button>
+              <button class="chip" style="border:1.5px solid var(--warm);color:var(--warm)">温暖陪伴</button>
+              <button class="chip">理性分析</button>
+              <button class="chip">幽默风趣</button>
+              <button class="chip">效率优先</button>
             </div>
-            <button class="btn btn-primary">淇濆瓨閰嶇疆</button>
+            <button class="btn btn-primary">保存设置</button>
           </div>
         </div>
 
@@ -2636,14 +2393,14 @@
 <!-- Emotion Modal -->
 <div class="modal-overlay" id="emoModal" onclick="if(event.target===this)closeModal()">
   <div class="modal-box">
-    <div class="modal-title">馃幁 褰撳墠鎯呯华闆疯揪</div>
+    <div class="modal-title">当前情绪概览</div>
     <div class="modal-radar-wrap"><canvas id="modalRadar"></canvas></div>
-    <button class="modal-close-btn" onclick="closeModal()">鍏抽棴</button>
+    <button class="modal-close-btn" onclick="closeModal()">关闭</button>
   </div>
 </div>
 
 <script>
-/* 鈹€鈹€鈹€ PAGE ROUTING 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/*PAGE ROUTING*/
 const CHART_PAGES = new Set();
 const COMPANION_CHAT_SERVER_PATH = '/batch_video.html?v=20260415-home-entry';
 
@@ -2656,16 +2413,13 @@ function showPage(name) {
     p.classList.remove('active');
     p.scrollTop = 0;
   });
-  document.querySelectorAll('.nav-links button').forEach(b => b.classList.remove('active'));
+  
+  // 动态更新导航栏
+  updateNavbar(name);
 
   const page = document.getElementById('page-' + name);
   if (page) {
     page.classList.add('active');
-  }
-  
-  const navButton = document.getElementById('nav-' + name);
-  if (navButton) {
-    navButton.classList.add('active');
   }
 
   // 每次切换到图表页面时都重新初始化，因为页面内容可能被重建
@@ -2677,7 +2431,69 @@ function showPage(name) {
   }
 }
 
-/* 鈹€鈹€鈹€ CHAT 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+function updateNavbar(currentPage) {
+  const navLinks = document.querySelector('.nav-links');
+  
+  // 清除现有导航按钮
+  navLinks.innerHTML = '';
+  
+  // 添加首页按钮
+  const homeButton = document.createElement('button');
+  homeButton.onclick = () => showPage('home');
+  homeButton.id = 'nav-home';
+  homeButton.textContent = '首页';
+  if (currentPage === 'home') {
+    homeButton.classList.add('active');
+  }
+  navLinks.appendChild(homeButton);
+  
+  // 添加简介按钮
+  const briefButton = document.createElement('button');
+  briefButton.onclick = scrollToBrief;
+  briefButton.innerHTML = '📰 简讯';
+  navLinks.appendChild(briefButton);
+  
+  // 非首页时添加额外按钮
+  if (currentPage !== 'home') {
+    // 添加数字人按钮
+    const dhButton = document.createElement('button');
+    dhButton.onclick = openCompanionChat;
+    dhButton.innerHTML = '🤖 数字人';
+    navLinks.appendChild(dhButton);
+    
+    // 添加健康守护按钮
+    const healthButton = document.createElement('button');
+    healthButton.onclick = () => showPage('hardware');
+    healthButton.id = 'nav-hardware';
+    healthButton.innerHTML = '🏥 健康守护';
+    if (currentPage === 'hardware') {
+      healthButton.classList.add('active');
+    }
+    navLinks.appendChild(healthButton);
+    
+    // 添加情绪报告按钮
+    const reportButton = document.createElement('button');
+    reportButton.onclick = () => showPage('report');
+    reportButton.id = 'nav-report';
+    reportButton.innerHTML = '📊 情绪报告';
+    if (currentPage === 'report') {
+      reportButton.classList.add('active');
+    }
+    navLinks.appendChild(reportButton);
+    
+    // 添加个人中心按钮
+    const profileButton = document.createElement('button');
+    profileButton.onclick = () => showPage('profile');
+    profileButton.id = 'nav-profile';
+    profileButton.innerHTML = '👤 个人中心';
+    if (currentPage === 'profile') {
+      profileButton.classList.add('active');
+    }
+    navLinks.appendChild(profileButton);
+  }
+}
+
+/*CHAT*/
 const aiReplies = [
   '我理解你的感受，可以继续告诉我更多。',
   '辛苦了，我们一步一步来，我会陪着你。',
@@ -2745,7 +2561,7 @@ function addHistory() {
   const div = document.createElement('div');
   div.className = 'hist-item';
   div.onclick = function(){ selectHist(this); };
-  div.innerHTML = `<div class="hist-name">新的对话</div><div class="hist-meta"><span class="hist-time">刚刚</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">开始</span></div>`;
+  div.innerHTML = `<div class="hist-name">新的对话</div><div class="hist-meta"><span class="hist-time">刚刚</span><span class="hist-emo" style="background:rgba(122,158,135,.12);color:var(--sage)">开始</span></div>`;
   list.prepend(div);
   selectHist(div);
 }
@@ -2755,7 +2571,7 @@ function selectHist(el) {
   el.classList.add('active');
 }
 
-/* 鈹€鈹€鈹€ EMOTION MODAL 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/*EMOTION MODAL*/
 let modalRadarInst;
 function openModal() {
   if (typeof Chart === 'undefined') {
@@ -2771,15 +2587,15 @@ function openModal() {
         labels: ['愉悦','平静','活力','专注','安全','满足','放松'],
         datasets: [{
           data: [72,58,44,65,80,55,68],
-          backgroundColor: 'rgba(6,182,212,.15)',
-          borderColor: '#C4715E',
-          pointBackgroundColor: '#C4715E',
+          backgroundColor: 'rgba(196,113,74,.15)',
+          borderColor: '#c4714a',
+          pointBackgroundColor: '#c4714a',
           borderWidth: 2,
         }]
       },
       options: {
         responsive: true, maintainAspectRatio: true,
-        scales: { r: { suggestedMin: 0, suggestedMax: 100, grid:{ color:'rgba(0,0,0,.06)' }, ticks:{ display:false }, pointLabels:{ font:{ size:11 }, color:'#5A4A44' } } },
+        scales: { r: { suggestedMin: 0, suggestedMax: 100, grid:{ color:'rgba(0,0,0,.06)' }, ticks:{ display:false }, pointLabels:{ font:{ size:11 }, color:'#6b5b52' } } },
         plugins: { legend:{ display:false } }
       }
     });
@@ -2789,7 +2605,7 @@ function closeModal() {
   document.getElementById('emoModal').classList.remove('open');
 }
 
-/* 鈹€鈹€鈹€ AGENT 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
+/*AGENT*/
 const AGENT_API_BASE = 'http://localhost:3010';
 const AGENT_DEMO_PROMPT = '请帮我订 2026-05-01 10:00 从北京到上海的高铁二等座';
 const AGENT_STATUS_LABELS = {
@@ -3477,8 +3293,8 @@ function updateAgentBadge(session, status) {
   }
 
   if (status === 'failed' || status === 'cancelled' || status === 'expired') {
-    session.badgeEl.style.background = 'rgba(239,68,68,.15)';
-    session.badgeEl.style.color = '#ef4444';
+    session.badgeEl.style.background = 'rgba(196,113,74,.15)';
+    session.badgeEl.style.color = '#c4714a';
     return;
   }
 
@@ -4173,7 +3989,7 @@ function selectDigitalHuman(gender) {
       placeholderText.innerHTML = `${message}<br><span style="font-size:9px;opacity:.6">当前未接入数字人实时视频流，可先体验智能助手与 12306 任务链路。</span>`;
     }
   };
-  
+
   // 鍋滄骞堕噸缃墍鏈夎棰?  femaleVideo.pause();
   maleVideo.pause();
   femaleVideo.currentTime = 0;
@@ -4182,7 +3998,7 @@ function selectDigitalHuman(gender) {
   // 闅愯棌鎵€鏈夎棰戝拰鍗犱綅绗?  femaleVideo.style.display = 'none';
   maleVideo.style.display = 'none';
   placeholder.style.display = 'none';
-  
+
   // 鏄剧ず閫変腑鐨勮棰戝苟灏濊瘯鎾斁
   const selectedVideo = gender === 'female' ? femaleVideo : maleVideo;
   const label = gender === 'female' ? '女数字人画面暂未接入' : '男数字人画面暂未接入';
@@ -4203,31 +4019,9 @@ function selectDigitalHuman(gender) {
   });
 }
 
-/* 鈹€鈹€鈹€ HEALTH 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
-function showTongueResult() {
-  const tongueResult = document.getElementById('tongueResult');
-  if (tongueResult) {
-    tongueResult.style.display = 'block';
-  }
-}
-
-function handleTongueClick() {
-  const uploadDiv = document.querySelector('#page-hardware .tongue-upload');
-  const tongueResult = document.getElementById('tongueResult');
-  if (uploadDiv && !uploadDiv.querySelector('img')) {
-    uploadDiv.innerHTML = '<img src="舌苔.jpg" alt="舌苔图片" style="width:100%; height:auto; border-radius:10px;">';
-    if (tongueResult) {
-      tongueResult.style.display = 'none';
-    }
-    return;
-  }
-  showTongueResult();
-}
-
-/* 鈹€鈹€鈹€ REPORT CHARTS 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 function initReportCharts() {
   console.log('开始初始化图表...');
-  
+
   if (typeof Chart === 'undefined') {
     console.error('Chart.js 未加载');
     alert('当前未加载 Chart.js，情绪报告图表暂不可用。请联网后刷新页面再试。');
@@ -4235,25 +4029,25 @@ function initReportCharts() {
   } else {
     console.log('Chart.js 加载成功');
   }
-  
+
   // 检查必要元素是否存在
   const trendCanvas = document.getElementById('trendChart');
   const donutCanvas = document.getElementById('donutChart');
   const donutLegend = document.getElementById('donutLegend');
-  
+
   console.log('图表元素检查:', {
     trendCanvas: !!trendCanvas,
     donutCanvas: !!donutCanvas,
     donutLegend: !!donutLegend
   });
-  
+
   if (!trendCanvas || !donutCanvas || !donutLegend) {
     console.warn('图表元素未找到，可能页面结构尚未稳定');
     // 延迟重试
     setTimeout(initReportCharts, 100);
     return;
   }
-  
+
   // 确保元素在DOM中
   if (!document.body.contains(trendCanvas) || !document.body.contains(donutCanvas)) {
     console.warn('图表元素不在DOM中，可能被移动');
@@ -4261,9 +4055,9 @@ function initReportCharts() {
     setTimeout(initReportCharts, 100);
     return;
   }
-  
+
   console.log('图表元素准备就绪，开始创建图表');
-  
+
   // 清除可能存在的旧图表实例
   const existingTrend = Chart.getChart('trendChart');
   if (existingTrend) {
@@ -4275,7 +4069,7 @@ function initReportCharts() {
     console.log('清除旧的环形图实例');
     existingDonut.destroy();
   }
-  
+
   // Trend
   const tCtx = trendCanvas.getContext('2d');
   new Chart(tCtx, {
@@ -4283,9 +4077,9 @@ function initReportCharts() {
     data: {
       labels: ['周一','周二','周三','周四','周五','周六','周日'],
       datasets: [
-        { label:'愉悦值', data:[65,70,55,72,80,78,82], borderColor:'#06b6d4', backgroundColor:'rgba(6,182,212,.08)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
-        { label:'平静值', data:[58,60,50,65,68,70,66], borderColor:'#0891b2', backgroundColor:'rgba(8,145,178,.06)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
-        { label:'焦虑值', data:[42,38,55,30,28,25,20], borderColor:'#7dd3fc', backgroundColor:'rgba(125,211,252,.05)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+        { label:'愉悦值', data:[65,70,55,72,80,78,82], borderColor:'#c4714a', backgroundColor:'rgba(196,113,74,.1)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+        { label:'平静值', data:[58,60,50,65,68,70,66], borderColor:'#7a9e87', backgroundColor:'rgba(122,158,135,.1)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
+        { label:'焦虑值', data:[42,38,55,30,28,25,20], borderColor:'#9b8bb4', backgroundColor:'rgba(133,101,188,.1)', tension:.4, pointRadius:3, borderWidth:2, fill:true },
       ]
     },
     options: {
@@ -4300,7 +4094,7 @@ function initReportCharts() {
 
   // Donut
   const dCtx = donutCanvas.getContext('2d');
-  const dColors = ['#06b6d4','#0891b2','#7dd3fc','#38bdf8','#cffafe'];
+  const dColors = ['#c4714a','#7a9e87','#9b8bb4','#e8a07a','#a8c4b0'];
   const dLabels = ['愉悦','平静','激活','焦虑','其他'];
   const dData = [38,25,18,12,7];
   new Chart(dCtx, {
@@ -4320,14 +4114,22 @@ function initReportCharts() {
     r.innerHTML = `<span class="legend-dot" style="background:${dColors[i]}"></span><span class="legend-name">${l}</span><span class="legend-pct">${dData[i]}%</span>`;
     donutLegend.appendChild(r);
   });
-  
+
   console.log('图表初始化完成');
 }
 
-function setPeriod(btn) {
-  document.querySelectorAll('.period-tab').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
+function toggleInsightDetails(element) {
+  const details = element.nextElementSibling;
+  if (details && details.classList.contains('insight-details')) {
+    if (details.style.display === 'block') {
+      details.style.display = 'none';
+    } else {
+      details.style.display = 'block';
+    }
+  }
 }
+
+
 
 /* 鈹€鈹€鈹€ RADAR (PROFILE) 鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€鈹€ */
 function initRadar() {
@@ -4335,17 +4137,17 @@ function initRadar() {
     alert('当前未加载 Chart.js，个人画像图表暂不可用。请联网后刷新页面再试。');
     return;
   }
-  
+
   // 检查必要元素是否存在
   const radarCanvas = document.getElementById('radarChart');
-  
+
   if (!radarCanvas) {
     console.warn('雷达图元素未找到，可能页面结构尚未稳定');
     // 延迟重试
     setTimeout(initRadar, 100);
     return;
   }
-  
+
   // 确保元素在DOM中
   if (!document.body.contains(radarCanvas)) {
     console.warn('雷达图元素不在DOM中，可能被移动');
@@ -4353,11 +4155,11 @@ function initRadar() {
     setTimeout(initRadar, 100);
     return;
   }
-  
+
   // 清除可能存在的旧图表实例
   const existingRadar = Chart.getChart('radarChart');
   if (existingRadar) existingRadar.destroy();
-  
+
   const ctx = radarCanvas.getContext('2d');
   new Chart(ctx, {
     type: 'radar',
@@ -4365,15 +4167,15 @@ function initRadar() {
       labels: ['社交', '情绪稳定', '自我调节', '积极性', '专注力', '共情'],
       datasets: [{
         data: [68,75,60,82,55,78],
-        backgroundColor: 'rgba(6,182,212,.15)',
-        borderColor: '#7A9E8E',
-        pointBackgroundColor: '#7A9E8E',
+        backgroundColor: 'rgba(196,113,74,.15)',
+        borderColor: '#7a9e87',
+        pointBackgroundColor: '#7a9e87',
         borderWidth: 2,
       }]
     },
     options: {
       responsive: true, maintainAspectRatio: true,
-      scales: { r: { suggestedMin:0, suggestedMax:100, grid:{color:'rgba(0,0,0,.06)'}, ticks:{display:false}, pointLabels:{font:{size:10},color:'#5A4A44'} } },
+      scales: { r: { suggestedMin:0, suggestedMax:100, grid:{color:'rgba(0,0,0,.06)'}, ticks:{display:false}, pointLabels:{font:{size:10},color:'#6b5b52'} } },
       plugins: { legend:{display:false} }
     }
   });
@@ -4565,15 +4367,15 @@ function rebuildHomeStaticSections() {
   const footer = document.querySelector('#page-home .site-footer');
   if (footer) {
     footer.innerHTML = `
-      <div class="footer-logo">颐和缘</div>
-      <p>开拓立体式agent的数字人老年陪护方案</p>
+      <div class="footer-logo">银龄通</div>
+      <p>基于具身智能的三维空间情感陪护系统</p>
       <div class="footer-links">
         <a href="#">关于我们</a>
         <a href="#">使用指南</a>
         <a href="#">隐私政策</a>
         <a href="#">联系我们</a>
       </div>
-      <p>© 2026 颐和缘 · 保留所有权利</p>
+      <p>© 2026 银龄通 · 保留所有权利</p>
     `;
   }
 }
@@ -4589,19 +4391,19 @@ function rebuildChatStaticSections() {
       <div class="history-list" id="historyList">
         <div class="hist-item active" onclick="selectHist(this)">
           <div class="hist-name">关于最近的压力</div>
-          <div class="hist-meta"><span class="hist-time">今天 14:32</span><span class="hist-emo" style="background:rgba(122,158,142,.12);color:var(--sage)">平静</span></div>
+          <div class="hist-meta"><span class="hist-time">今天 14:32</span><span class="hist-emo" style="background:rgba(122,158,135,.12);color:var(--sage)">平静</span></div>
         </div>
         <div class="hist-item" onclick="selectHist(this)">
           <div class="hist-name">家人相处问题</div>
-          <div class="hist-meta"><span class="hist-time">昨天</span><span class="hist-emo" style="background:rgba(6,182,212,.10);color:var(--warm)">愉悦</span></div>
+          <div class="hist-meta"><span class="hist-time">昨天</span><span class="hist-emo" style="background:rgba(196,113,74,.10);color:var(--warm)">愉悦</span></div>
         </div>
         <div class="hist-item" onclick="selectHist(this)">
           <div class="hist-name">工作中的困惑</div>
-          <div class="hist-meta"><span class="hist-time">3 天前</span><span class="hist-emo" style="background:rgba(234,179,8,.1);color:#CA8A04">思虑</span></div>
+          <div class="hist-meta"><span class="hist-time">3 天前</span><span class="hist-emo" style="background:rgba(232,160,122,.1);color:#965f2a">思虑</span></div>
         </div>
         <div class="hist-item" onclick="selectHist(this)">
           <div class="hist-name">对未来的期待</div>
-          <div class="hist-meta"><span class="hist-time">上周</span><span class="hist-emo" style="background:rgba(155,142,196,.1);color:var(--mauve)">期待</span></div>
+          <div class="hist-meta"><span class="hist-time">上周</span><span class="hist-emo" style="background:rgba(155,139,180,.1);color:var(--mauve)">期待</span></div>
         </div>
       </div>
     `;
@@ -4636,14 +4438,14 @@ function rebuildChatStaticSections() {
     chatPanel.innerHTML = `
       <div class="chat-head">
         <div>
-          <div class="chat-head-title">与心语对话</div>
+          <div class="chat-head-title">与银龄通对话</div>
           <div class="chat-head-sub">今天第 3 次对话 · 已持续 12 分钟</div>
         </div>
       </div>
       <div class="chat-msgs" id="chatMsgs">
         <div class="msg ai">
           <div class="msg-avatar ai">🤖</div>
-          <div class="msg-bubble">你好！我是心语，今天有什么想聊的吗？</div>
+          <div class="msg-bubble">你好！我是银龄通，今天有什么想聊的吗？</div>
         </div>
         <div class="msg user">
           <div class="msg-avatar user-av">👤</div>
@@ -4727,21 +4529,10 @@ function rebuildHardwareStaticSections() {
   if (tongueCard) {
     tongueCard.innerHTML = `
       <div class="section-label">👅 AI 舌诊分析</div>
-      <div class="tongue-upload" onclick="handleTongueClick()">
-        <div style="font-size:28px;margin-bottom:6px">📷</div>
-        <p>点击拍摄或上传舌苔图片<br>AI 将快速分析体质状态</p>
+      <div class="tongue-video-wrap">
+        <video class="tongue-video-player" src="舌苔.mp4" autoplay muted loop playsinline controls preload="metadata"></video>
       </div>
-      <div id="tongueResult" style="display:none">
-        <div class="tongue-result">
-          <div class="tongue-tag"><div class="tongue-tag-name">舌色</div><div class="tongue-tag-val">淡红</div></div>
-          <div class="tongue-tag"><div class="tongue-tag-name">舌苔</div><div class="tongue-tag-val">薄白苔</div></div>
-          <div class="tongue-tag"><div class="tongue-tag-name">体质</div><div class="tongue-tag-val">气虚体质</div></div>
-          <div class="tongue-tag"><div class="tongue-tag-name">调理</div><div class="tongue-tag-val">健脾益气</div></div>
-        </div>
-        <div style="margin-top:10px;padding:10px 12px;background:rgba(122,158,142,.08);border-radius:10px;font-size:12px;color:var(--ink2);line-height:1.6">
-          💡 建议适当增加山药、红枣等健脾食材，避免过度劳累，并保持充足睡眠。
-        </div>
-      </div>
+      <div class="tongue-video-tip">播放本地舌苔示例视频，便于在健康守护页面直接查看舌诊演示内容。</div>
     `;
   }
 }
@@ -4763,25 +4554,58 @@ function rebuildReportStaticSections() {
       </div>
     `;
   }
-  
+
   const reportBottom = document.querySelector('#page-report .report-bottom');
   if (reportBottom) {
     reportBottom.innerHTML = `
       <div class="chart-card">
         <div class="chart-card-title">💡 智能洞察</div>
         <div class="insights-list">
-          <div class="insight-item"><div class="insight-icon">📈</div><div class="insight-text">本周情绪整体向好，周三出现短暂低谷，可能与工作压力有关。</div></div>
-          <div class="insight-item"><div class="insight-icon">🌙</div><div class="insight-text">你通常在晚间 9 点到 10 点更适合进行放松对话，可安排为固定舒缓时段。</div></div>
-          <div class="insight-item"><div class="insight-icon">🧘</div><div class="insight-text">焦虑指数较上周下降，说明持续陪伴对情绪调节已经产生明显效果。</div></div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">📈</div>
+            <div class="insight-text">本周情绪整体向好，周三出现短暂低谷，可能与工作压力有关。</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>周三情绪低谷原因：</span>
+              <span>• 工作任务繁重</span>
+              <span>• 截止日期临近</span>
+              <span>• 缺乏休息时间</span>
+            </div>
+          </div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">🌙</div>
+            <div class="insight-text">你通常在晚间 9 点到 10 点更适合进行放松对话，可安排为固定舒缓时段。</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>放松对话内容建议：</span>
+              <span>• 温和的音乐欣赏</span>
+              <span>• 冥想呼吸练习</span>
+              <span>• 愉快的回忆分享</span>
+            </div>
+          </div>
+          <div class="insight-item" onclick="toggleInsightDetails(this)">
+            <div class="insight-icon">🧘</div>
+            <div class="insight-text">焦虑指数较上周下降，说明持续陪伴对情绪调节已经产生明显效果。</div>
+          </div>
+          <div class="insight-details">
+            <div class="insight-details-content">
+              <span>焦虑指数变化：</span>
+              <span>• 上周：65</span>
+              <span>• 本周：42</span>
+              <span>• 下降幅度：35%</span>
+            </div>
+          </div>
         </div>
       </div>
       <div class="chart-card">
         <div class="chart-card-title">📝 近期对话</div>
         <div class="conv-list">
-          <div class="conv-row"><div class="conv-emo">😊</div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>今天</span><span>18 分钟</span></div></div><div class="conv-score">88</div></div>
-          <div class="conv-row"><div class="conv-emo">😌</div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>昨天</span><span>12 分钟</span></div></div><div class="conv-score">74</div></div>
-          <div class="conv-row"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>3 天前</span><span>25 分钟</span></div></div><div class="conv-score">62</div></div>
-          <div class="conv-row"><div class="conv-emo">🎉</div><div class="conv-body"><div class="conv-title">分享今天的开心事</div><div class="conv-meta"><span>4 天前</span><span>8 分钟</span></div></div><div class="conv-score">95</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo">😊</div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>今天</span><span>18 分钟</span></div></div><div class="conv-score">88</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo">😌</div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>昨天</span><span>12 分钟</span></div></div><div class="conv-score">74</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>3 天前</span><span>25 分钟</span></div></div><div class="conv-score">62</div></div>
+          <div class="conv-row" onclick="openCompanionChat()"><div class="conv-emo">🎉</div><div class="conv-body"><div class="conv-title">分享今天的开心事</div><div class="conv-meta"><span>4 天前</span><span>8 分钟</span></div></div><div class="conv-score">95</div></div>
         </div>
       </div>
     `;
@@ -4841,7 +4665,7 @@ function rebuildProfileStaticSections() {
           <div class="conv-list">
             <div class="conv-row"><div class="conv-emo">😊</div><div class="conv-body"><div class="conv-title">关于工作压力的对话</div><div class="conv-meta"><span>2024-03-18</span><span>18 分钟</span><span style="color:var(--sage)">愉悦</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
             <div class="conv-row"><div class="conv-emo">😌</div><div class="conv-body"><div class="conv-title">家人相处问题</div><div class="conv-meta"><span>2024-03-17</span><span>12 分钟</span><span style="color:var(--sage)">平静</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
-            <div class="conv-row"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>2024-03-15</span><span>25 分钟</span><span style="color:#CA8A04">思虑</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
+            <div class="conv-row"><div class="conv-emo">🤔</div><div class="conv-body"><div class="conv-title">对未来的困惑</div><div class="conv-meta"><span>2024-03-15</span><span>25 分钟</span><span style="color:#965f2a">思虑</span></div></div><div style="display:flex;gap:6px"><button class="icon-btn" title="继续">▶</button><button class="icon-btn" title="删除">🗑</button></div></div>
           </div>
         </div>
       </div>
@@ -4886,12 +4710,12 @@ function rebuildProfileStaticSections() {
           <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:20px">
             <div style="border:2px solid var(--warm);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer">
               <div style="font-size:28px;margin-bottom:6px">👩</div>
-              <div style="font-size:12px;font-weight:600;color:var(--ink)">暖暖</div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink)">小暖</div>
               <div style="font-size:10px;color:var(--ink3)">温柔耐心型</div>
             </div>
             <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
               <div style="font-size:28px;margin-bottom:6px">🧑</div>
-              <div style="font-size:12px;font-weight:600;color:var(--ink)">静心</div>
+              <div style="font-size:12px;font-weight:600;color:var(--ink)">小安</div>
               <div style="font-size:10px;color:var(--ink3)">冷静理性型</div>
             </div>
             <div style="border:2px solid var(--cream3);border-radius:var(--r-md);padding:16px;text-align:center;cursor:pointer;opacity:.7">
@@ -4933,9 +4757,9 @@ function repairVisibleText() {
     });
   };
 
-  document.title = '颐和缘——开拓立体式agent的数字人老年陪护方案';
+  document.title = '银龄通——基于具身智能的三维空间情感陪护系统';
 
-  setHTML('.nav-logo', '颐和缘 <span>智能情感陪护系统</span>');
+  setHTML('.nav-logo', '银龄通 <span>智能情感陪护系统</span>');
   setText('#nav-home', '首页');
   setText('.nav-links button:nth-child(2)', '📘 简介');
   setText('#nav-chat', '💬 陪伴对话');
@@ -4945,14 +4769,14 @@ function repairVisibleText() {
   setText('#nav-profile', '👤 个人中心');
 
   setTexts('.hero-eyebrow .badge', ['情感陪伴', '智能助手', '健康守护']);
-  setHTML('.hero-title', '<span class="accent">颐和缘</span>，陪伴<span class="accent">无处不在</span>的你');
-  setText('.hero-subtitle', '开拓立体式agent的数字人老年陪护方案——融合数字人情感对话、GUI Agent 智能助手与硬件健康感知，构建全场景身心守护体系。');
+  setHTML('.hero-title', '<span class="accent">银龄通</span>，陪伴<span class="accent">无处不在</span>的你');
+  setText('.hero-subtitle', '基于具身智能的三维空间情感陪护系统——融合数字人情感对话、GUI Agent 智能助手与硬件健康感知，构建全场景身心守护体系。');
   setText('.btn-companion', '数字人陪伴对话');
   setTexts('.hero-stat-label', ['融合维度', '全天守护', '情绪维度', '驱动引擎']);
 
   setText('.three-worlds .section-eyebrow', '三位一体解决方案');
   setText('.three-worlds .section-title', '陪伴 · 助手 · 守护，全域关怀');
-  setText('.three-worlds .section-subtitle', '颐和缘将情感陪护延伸至生活的每一个维度，让科技真正感知、理解并服务于你。');
+  setText('.three-worlds .section-subtitle', '银龄通将情感陪护延伸至生活的每一个维度，让科技真正感知、理解并服务于你。');
   setTexts('.world-card .wc-title', ['情感陪伴', '智能助手', '健康守护']);
   setTexts('.world-card .wc-desc', [
     '通过多模态拟真交互，提供深度情感陪伴与心理支持，让用户感受到真实、温暖且持续的理解。',
@@ -4984,10 +4808,10 @@ function repairVisibleText() {
   ]);
 
   setText('.home-cta h2', '开启全天候智能陪护之旅');
-  setText('.home-cta p', '让颐和缘成为您生活中的情感伙伴、智能助手与健康守护者。');
+  setText('.home-cta p', '让银龄通成为您生活中的情感伙伴、智能助手与健康守护者。');
   setTexts('.home-cta .btn', ['开始对话', '个人中心']);
-  setText('.footer-logo', '颐和缘');
-  setTexts('.site-footer p', ['开拓立体式agent的数字人老年陪护方案', '© 2024 颐和缘智能 · 保留所有权利']);
+  setText('.footer-logo', '银龄通');
+  setTexts('.site-footer p', ['基于具身智能的三维空间情感陪护系统', '© 2024 银龄通智能 · 保留所有权利']);
   setTexts('.footer-links a', ['关于我们', '使用指南', '隐私政策', '联系我们']);
 
   setText('.sidebar-title', '对话记录');
@@ -4996,7 +4820,7 @@ function repairVisibleText() {
   setHTML('.dh-placeholder p', '数字人画面接入区<br><span style="font-size:9px;opacity:.6">后续可替换为实时数字人视频流或 WebRTC 画面。</span>');
   setText('#micStatus', '待机中');
   setTexts('.chat-center .btn', ['女数字人', '男数字人']);
-  setText('.chat-head-title', '与心语对话');
+  setText('.chat-head-title', '与银龄通对话');
   setText('.chat-head-sub', '今天第 3 次对话 · 已持续 12 分钟');
   setTexts('#historyList .hist-name', ['关于最近的压力', '家人相处问题', '工作中的困惑', '对未来的期待']);
   setTexts('#historyList .hist-time', ['今天 14:32', '昨天', '3 天前', '上周']);
@@ -5006,7 +4830,7 @@ function repairVisibleText() {
   if (chatInput) chatInput.placeholder = '说点什么…';
   setText('.send-btn', '→');
   setTexts('#chatMsgs .msg-bubble', [
-    '你好！我是心语，今天有什么想聊的吗？',
+    '你好！我是银龄通，今天有什么想聊的吗？',
     '最近工作压力有点大，睡眠也不太好。',
     '我理解，工作压力影响睡眠很常见。能告诉我是什么让你感到特别紧张吗？'
   ]);
@@ -5018,7 +4842,7 @@ function repairVisibleText() {
   setTexts('.task-status', ['进行中', '已完成', '已完成', '已完成', '已完成']);
 
   setText('.agent-head-title', '🎯 GUI Agent · 智能任务助手');
-  setText('.agent-head-sub', '用自然语言描述任务，心语会调用后端 API 并实时展示执行过程。');
+  setText('.agent-head-sub', '用自然语言描述任务，银龄通会调用后端 API 并实时展示执行过程。');
   const agentInput = document.getElementById('agentInput');
   if (agentInput) agentInput.placeholder = '告诉我你想做什么，比如：帮我订高铁票';
   setText('.agent-input-wrap .btn', '执行 →');
@@ -5032,7 +4856,7 @@ function repairVisibleText() {
 
   setText('#page-report .report-title-block h2', '情绪健康报告');
   setText('#page-report .report-title-block p', '基于对话与行为的多维分析');
-  setTexts('#page-report .period-tab', ['本周', '本月', '近三月']);
+
   setTexts('#page-report .chart-card-title', ['情绪趋势', '情绪分布', '💡 智能洞察', '📝 近期对话']);
 
   setText('#page-profile .pf-name', '小李');
@@ -5076,7 +4900,7 @@ setTimeout(() => {
   } else {
     showPage('home');
   }
-  
+
   // 额外延迟确保页面结构完全稳定
   setTimeout(() => {
     // 如果当前页面是 report 或 profile，重新初始化图表
@@ -5092,7 +4916,6 @@ setTimeout(() => {
 </script>
 </body>
 </html>
-
 
 
 

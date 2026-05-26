@@ -158,7 +158,7 @@ class GPTSoVITSTTS:
         # 根据情感获取参考音频
         ref_audio, ref_text = self._get_ref_audio(emotion)
 
-        logger.info(f"[GPT-SoVITS] Starting generation for text: {text[:50]}...")
+        logger.info(f"[GPT-SoVITS] Starting generation, text length: {len(text)}")
         logger.info(f"[GPT-SoVITS] Server URL: {self.server_url}")
         logger.info(f"[GPT-SoVITS] Avatar: {self.avatar_id}, Emotion: {emotion}")
         logger.info(f"[GPT-SoVITS] Ref audio: {ref_audio}")
@@ -578,7 +578,7 @@ def preprocess_text_for_tts(text: str) -> str:
         return text
 
     original_text = text
-    logger.info(f"[TTS Preprocess] Input: {repr(text[:100])}")
+    logger.info(f"[TTS Preprocess] Input length: {len(text)}")
 
     # 使用简单直接的方式移除 emoji：逐字符过滤
     # emoji 通常在 Unicode 的 Supplementary Planes (U+10000 及以上)
@@ -611,7 +611,7 @@ def preprocess_text_for_tts(text: str) -> str:
         result_chars.append(char)
 
     text = ''.join(result_chars)
-    logger.info(f"[TTS Preprocess] After emoji removal: {repr(text[:100])}")
+    logger.info(f"[TTS Preprocess] After emoji removal length: {len(text)}")
 
     # 规范化空白字符：多个换行/空格变成一个空格
     text = re.sub(r'\s+', ' ', text)
@@ -631,7 +631,7 @@ def preprocess_text_for_tts(text: str) -> str:
         logger.warning(f"[TTS Preprocess] Text became empty after processing, using original")
         text = original_text
 
-    logger.info(f"[TTS Preprocess] Final: {repr(text[:100])}")
+    logger.info(f"[TTS Preprocess] Final length: {len(text)}")
     logger.info(f"[TTS Preprocess] Length: {len(original_text)} -> {len(text)}")
 
     return text
@@ -883,7 +883,8 @@ class DigitalHumanBatchPipeline:
                 result = await self.psy_mind.process_message(
                     user_text,
                     session_id or "default",
-                    emotion_context  # 传递情绪上下文
+                    emotion_context,  # 传递情绪上下文
+                    avatar_id=avatar_id or self.current_avatar_id
                 )
                 response_text = result.get("response", "")
                 emotion = result.get("emotion", "default")
@@ -1020,8 +1021,6 @@ class DigitalHumanBatchPipeline:
 
         # 预处理文本（移除表情符号、规范化换行等）
         processed_text = preprocess_text_for_tts(text)
-        logger.info(f"[TTS] Original text: {text}")
-        logger.info(f"[TTS] Processed text: {processed_text}")
         logger.info(f"[TTS] Text length: {len(text)} -> {len(processed_text)}")
 
         # 验证处理后的文本不为空
@@ -1029,7 +1028,7 @@ class DigitalHumanBatchPipeline:
             logger.error(f"[TTS] Text became empty after preprocessing!")
             # 使用原始文本作为备选
             processed_text = text
-            logger.info(f"[TTS] Falling back to original text: {processed_text}")
+            logger.info("[TTS] Falling back to original text")
 
         logger.info(f"[TTS] Emotion: {emotion}, Avatar: {self.current_avatar_id}")
 

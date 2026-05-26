@@ -27,6 +27,11 @@ DEFAULT_PATHS = {
     "output": str(PROJECT_ROOT / "output"),
 }
 
+AVATAR_NAME_OVERRIDES = {
+    "human_1": "小暖",
+    "human_2": "小安",
+}
+
 
 def _load_avatar_config() -> Dict[str, Any]:
     """加载数字人配置文件"""
@@ -276,7 +281,7 @@ class AvatarConfig:
         for avatar_id, info in avatars_data.items():
             self._avatars[avatar_id] = AvatarInfo(
                 id=avatar_id,
-                name=info.get("name", avatar_id),
+                name=AVATAR_NAME_OVERRIDES.get(avatar_id, info.get("name", avatar_id)),
                 source_image=info.get("source_image", ""),
                 idle_video=info.get("idle_video"),
                 listening_video=info.get("listening_video"),

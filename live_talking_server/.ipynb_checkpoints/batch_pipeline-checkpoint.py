@@ -883,7 +883,8 @@ class DigitalHumanBatchPipeline:
                 result = await self.psy_mind.process_message(
                     user_text,
                     session_id or "default",
-                    emotion_context  # 传递情绪上下文
+                    emotion_context,  # 传递情绪上下文
+                    avatar_id=avatar_id or self.current_avatar_id
                 )
                 response_text = result.get("response", "")
                 emotion = result.get("emotion", "default")

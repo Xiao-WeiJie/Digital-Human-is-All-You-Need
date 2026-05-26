@@ -1,0 +1,22 @@
+[Unit]
+Description=Digital Human Batch Video Server
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+Type=simple
+User=root
+WorkingDirectory=/root/autodl-tmp
+Environment=HOME=/root
+Environment=PYTHONUNBUFFERED=1
+Environment=PATH=/root/miniconda3/envs/portrait/bin:/root/miniconda3/bin:/usr/local/node/bin:/usr/local/bin:/usr/local/nvidia/bin:/usr/local/cuda/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/TensorRT-8.6.1.6/bin
+ExecStart=/root/miniconda3/envs/portrait/bin/python /root/autodl-tmp/start_batch_server.py --host 0.0.0.0 --port 8010
+Restart=always
+RestartSec=10
+KillSignal=SIGINT
+TimeoutStopSec=60
+StandardOutput=append:/root/autodl-tmp/logs/batch_server.log
+StandardError=append:/root/autodl-tmp/logs/batch_server_error.log
+
+[Install]
+WantedBy=multi-user.target
